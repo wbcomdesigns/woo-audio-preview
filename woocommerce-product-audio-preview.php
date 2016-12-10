@@ -25,7 +25,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-	die;
+ die;
 }
 
 /**
@@ -33,8 +33,8 @@ if ( ! defined( 'WPINC' ) ) {
  * This action is documented in includes/class-wc-audio-preview-activator.php
  */
 function activate_wc_audio_preview() {
-	require_once 'includes/class-wc-audio-preview-activator.php';
-	Wc_Audio_Preview_Activator::activate();
+ require_once 'includes/class-wc-audio-preview-activator.php';
+ Wc_Audio_Preview_Activator::activate();
 }
 
 /**
@@ -42,18 +42,18 @@ function activate_wc_audio_preview() {
  * This action is documented in includes/class-wc-audio-preview-deactivator.php
  */
 function deactivate_wc_audio_preview() {
-	require_once 'includes/class-wc-audio-preview-deactivator.php';
-	Wc_Audio_Preview_Deactivator::deactivate();
+ require_once 'includes/class-wc-audio-preview-deactivator.php';
+ Wc_Audio_Preview_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_wc_audio_preview' );
-register_deactivation_hook( __FILE__, 'deactivate_wc_audio_preview' );
+register_activation_hook(__FILE__, 'activate_wc_audio_preview');
+register_deactivation_hook(__FILE__, 'deactivate_wc_audio_preview');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wc-audio-preview.php';
+require plugin_dir_path(__FILE__) . 'includes/class-wc-audio-preview.php';
 
 /**
  * Begins execution of the plugin.
@@ -66,8 +66,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wc-audio-preview.php';
  */
 function run_wc_audio_preview() {
 
-	$plugin = new Wc_Audio_Preview();
-	$plugin->run();
+ $plugin = new Wc_Audio_Preview();
+ $plugin->run();
 
 }
 run_wc_audio_preview();

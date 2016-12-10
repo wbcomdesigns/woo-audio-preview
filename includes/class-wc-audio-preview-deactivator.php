@@ -22,15 +22,15 @@
  */
 class Wc_Audio_Preview_Deactivator {
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function deactivate() {
+ /**
+  * Short Description. (use period)
+  *
+  * Long Description.
+  *
+  * @since    1.0.0
+  */
+ public static function deactivate() {
 
-	}
+ }
 
 }

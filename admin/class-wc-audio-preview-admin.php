@@ -178,8 +178,8 @@ class Wc_Audio_Preview_Admin {
         }
 
         if (isset($_POST['post_type']) && $_POST['post_type'] == 'product') {
-            $wcap_audio_names = sanitize_text_field( $_POST['wcap_audio_names'] );
-            if ('' == $wcap_audio_names ) {
+            $wcap_audio_names = sanitize_text_field($_POST['wcap_audio_names']);
+            if ('' == $wcap_audio_names) {
                 $file_name = explode('.', $_FILES['wcap_preview_attachment']['name']);
                 $_POST['wcap_audio_names'] = $file_name[0];
             }
@@ -198,7 +198,7 @@ class Wc_Audio_Preview_Admin {
                     if (in_array($uploaded_type, $supported_types)) {
                         // Use the WordPress API to upload the file
                         if (!function_exists('wp_handle_upload')) {
-                            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+                            require_once(ABSPATH . 'wp-admin/includes/file.php');
                         }
                         $uploadedfile = $_FILES['wcap_preview_attachment'];
                         $upload_overrides = array('test_form' => false);
@@ -208,7 +208,7 @@ class Wc_Audio_Preview_Admin {
                         remove_filter('upload_dir', array($this, 'wcap_set_upload_dir'));
 
                         if ($movefile && !isset($movefile['error'])) {
-                            $movefile['name'] = sanitize_text_field( $_POST['wcap_audio_names'] );
+                            $movefile['name'] = sanitize_text_field($_POST['wcap_audio_names']);
                             add_post_meta($post_id, 'wcap_preview_attachment', $movefile);
                             update_post_meta($post_id, 'wcap_preview_attachment', $movefile);
                         } else {
@@ -228,8 +228,8 @@ class Wc_Audio_Preview_Admin {
                         $uploaded_type = $arr_file_type['type'];
                         if (in_array($uploaded_type, $supported_types)) {
                             $mp3url = array();
-                            $mp3url['name'] = sanitize_text_field( $_POST['wcap_audio_names'] );
-                            $mp3url['url'] = sanitize_text_field( $_POST['wcap_audio_urls'] );
+                            $mp3url['name'] = sanitize_text_field($_POST['wcap_audio_names']);
+                            $mp3url['url'] = sanitize_text_field($_POST['wcap_audio_urls']);
                             add_post_meta($post_id, 'wcap_preview_attachment', $mp3url);
                             update_post_meta($post_id, 'wcap_preview_attachment', $mp3url);
                         } else {
@@ -243,8 +243,8 @@ class Wc_Audio_Preview_Admin {
 
     function wcap_delete_audio_ajax() {
         if (isset($_POST)) {
-            $post_id = sanitize_text_field( $_POST['p_id'] );
-            $fileurl = sanitize_text_field( $_POST['file_url'] );
+            $post_id = sanitize_text_field($_POST['p_id']);
+            $fileurl = sanitize_text_field($_POST['file_url']);
             $filename = basename($fileurl);
             $upload_dir = wp_upload_dir();
             $upload_path = $upload_dir["basedir"];
