@@ -101,11 +101,11 @@ class Wc_Audio_Preview_Public {
         if (!empty($wcap_preview)):
             ?>
             <div class='product_meta wcap-preview-btn-div'>
-                <a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset($wcap_preview['name'])?$wcap_preview['name']:''; ?></a>
+                <a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset($wcap_preview['name']) ? $wcap_preview['name'] : ''; ?></a>
             </div>
             <div class="wcap-player-cl" id="wcap-player-id">
                 <audio controls="controls" id="audio_player" preload="auto">
-                    <source src="<?php echo isset($wcap_preview['url'])?$wcap_preview['url']:''; ?>" type="audio/mpeg" />
+                    <source src="<?php echo isset($wcap_preview['url']) ? $wcap_preview['url'] : ''; ?>" type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>
             </div>
