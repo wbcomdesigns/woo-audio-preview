@@ -1,0 +1,21 @@
+.wcap-preview-btn-div .wcap-preview-btn {
+    color: #fff;
+    box-shadow: none !important;
+}
+.entry-summary .wcap-preview-btn-div a.wcap-preview-btn {
+    text-decoration: unset !important;
+}
+.summary.entry-summary .wcap-preview-btn-div {
+    padding: 10px;
+    vertical-align: middle;
+    background-color: #a46497;
+    cursor: pointer;
+    text-align: center;
+}
+.wcap-player-cl {
+    display: none;
+    padding: 10px 45px;
+    background: #242021;
+    vertical-align: middle;
+    line-height: 1px;
+}

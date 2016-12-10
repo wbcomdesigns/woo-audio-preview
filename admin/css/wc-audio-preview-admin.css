@@ -1,0 +1,14 @@
+.wcap-required-span {
+    font-size: 10px;
+    color: red;
+}
+.preview_files p.wcap-del-msg{
+    color: red;
+    display: none;
+}
+.wcap-audio-file td.file_url #wcap_audio_urls.focused {
+   border: 1px solid red;
+}
+.wcap-audio-file .file_url_choose #wcap_preview_attachment.focused {
+   border: 1px solid red;
+}
