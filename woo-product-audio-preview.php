@@ -11,7 +11,7 @@
  * @package           Wc_Audio_Preview
  *
  * @wordpress-plugin
- * Plugin Name:       WC Audio Preview
+ * Plugin Name:       WooCommerce Audio Preview
  * Plugin URI:        http://wbcomdesigns.com
  * Description:       This plugin will add an extended feature to the big name “ WooCommerce ” that will allow you to add audio preview feature in single product page.
  * Version:           1.0.0
@@ -25,29 +25,12 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
- die;
+	die;
 }
 
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-wc-audio-preview-activator.php
- */
-function activate_wc_audio_preview() {
- require_once 'includes/class-wc-audio-preview-activator.php';
- Wc_Audio_Preview_Activator::activate();
+if( !defined( 'WCAP_TEXT_DOMAIN' ) ) {
+	define( 'WCAP_TEXT_DOMAIN', 'wc-audio-preview' );
 }
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-wc-audio-preview-deactivator.php
- */
-function deactivate_wc_audio_preview() {
- require_once 'includes/class-wc-audio-preview-deactivator.php';
- Wc_Audio_Preview_Deactivator::deactivate();
-}
-
-register_activation_hook(__FILE__, 'activate_wc_audio_preview');
-register_deactivation_hook(__FILE__, 'deactivate_wc_audio_preview');
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -65,9 +48,30 @@ require plugin_dir_path(__FILE__) . 'includes/class-wc-audio-preview.php';
  * @since    1.0.0
  */
 function run_wc_audio_preview() {
-
- $plugin = new Wc_Audio_Preview();
- $plugin->run();
-
+	$plugin = new Wc_Audio_Preview();
+	$plugin->run();
 }
-run_wc_audio_preview();
+
+/**
+ * Check plugin requirement on plugins loaded
+ * this plugin requires WooCommerce to be installed and active
+ */
+add_action('plugins_loaded', 'wcap_plugin_init');
+function wcap_plugin_init() {
+	$wc_active = in_array('woocommerce/woocommerce.php', get_option('active_plugins'));
+	if ( current_user_can('activate_plugins') && $wc_active !== true ) {
+		add_action('admin_notices', 'wcap_plugin_admin_notice');
+	} else {
+		run_wc_audio_preview();
+	}
+}
+
+function wcap_plugin_admin_notice() {
+	$wcap_plugin = 'WooCommerce Audio Preview';
+	$wc_plugin = 'WooCommerce';
+
+	echo '<div class="error"><p>'
+	. sprintf( '%1$s is ineffective now as it requires %2$s to function correctly.', '<strong>' . esc_html($wcap_plugin) . '</strong>', '<strong>' . esc_html($wc_plugin) . '</strong>')
+	. '</p></div>';
+	if (isset($_GET['activate'])) unset($_GET['activate']);
+}
