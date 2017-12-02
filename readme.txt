@@ -1,16 +1,16 @@
-=== WC Audio Preview ===
+=== Woo Audio Preview ===
 
 Contributors: vapvarun,wbcomdesigns
 
 Donate link: https://wbcomdesigns.com/donate/
 
-Tags: woocommerce, audio player, audio preview
+Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 
 Requires at least: 3.0.1
 
-Tested up to: 4.7
+Tested up to: 4.9.1
 
-Stable tag: 4.7
+Stable tag: 4.0.1
 
 License: GPLv2 or later
 
@@ -21,8 +21,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 
 
-
-This plugin will add an extended feature to the big name “ WooCommerce ” that will allow you to add audio preview feature in single product page.
+Allows playing the audio files in sample mode to prevent unauthorized downloading of the audio files. It helps to display sample files at single product page.
 
 
 
@@ -47,15 +46,15 @@ If you need additional help you can contact us for [Custom Development](https://
 
 = 
 
-= Does This plugin requires WooCommerce =
+= Do we need to activate WooCommerce ? =
 
 Yes, It needs you to have WooCommerce installed and activated.
 
 
 
-= Where Do I Ask for support? =
+= How can i get support answers? =
 
-Please visit [wbcomdesigns] (http://wbcomdesigns.com/) for any query related to plugin and WooCommerce.
+Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query related to plugin and WooCommerce.
 
 
 
@@ -71,5 +70,7 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/) for any query related to 
 
 == Changelog ==
 = 
+1.0.1 =
+* Plugin Testing with current version of the WordPress and WooCommerce.
 1.0.0 =
 * first version.
