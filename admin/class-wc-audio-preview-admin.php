@@ -120,13 +120,13 @@ class Wc_Audio_Preview_Admin {
 				<thead>
 					<tr>
 						<th class="sort">&nbsp;</th>
-						<th><?php _e( 'Name', 'wc-audio-preview' ); ?> <span class="woocommerce-help-tip"></span></th>
-						<th colspan="2"><?php _e( 'Audio URL', 'wc-audio-preview' ); ?> <span class="woocommerce-help-tip"></span></th>
+						<th><?php esc_attr_e( 'Name', 'wc-audio-preview' ); ?> <span class="woocommerce-help-tip"></span></th>
+						<th colspan="2"><?php esc_attr_e( 'Audio URL', 'wc-audio-preview' ); ?> <span class="woocommerce-help-tip"></span></th>
 						<th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody class="ui-sortable wcap_preview-tr">
-				<p class="wcap-del-msg"><?php _e( 'Error', 'wc-audio-preview' ); ?></p>
+				<p class="wcap-del-msg"><?php esc_attr_e( 'Error', 'wc-audio-preview' ); ?></p>
 				<?php
 				$preview_data = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
 				?>
@@ -185,18 +185,18 @@ class Wc_Audio_Preview_Admin {
 			}
 			if ( isset( $_POST[ 'wcap_audio_names' ] ) && !empty( $_POST[ 'wcap_audio_names' ] ) ) {
 
-				// Make sure the file array isn't empty
+				// Make sure the file array isn't empty.
 				if ( !empty( $_FILES[ 'wcap_preview_attachment' ][ 'name' ] ) ) {
 
 					// Setup the array of supported file types. In this case, it's just PDF.
 					$supported_types = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
 
-					// Get the file type of the upload
+					// Get the file type of the upload.
 					$arr_file_type	 = wp_check_filetype( basename( $_FILES[ 'wcap_preview_attachment' ][ 'name' ] ) );
 					$uploaded_type	 = $arr_file_type[ 'type' ];
 					// Check if the type is supported. If not, throw an error.
 					if ( in_array( $uploaded_type, $supported_types ) ) {
-						// Use the WordPress API to upload the file
+						// Use the WordPress API to upload the file.
 						if ( !function_exists( 'wp_handle_upload' ) ) {
 							require_once(ABSPATH . 'wp-admin/includes/file.php');
 						}
@@ -219,8 +219,8 @@ class Wc_Audio_Preview_Admin {
 							echo $movefile[ 'error' ];
 						}
 					} else {
-						//Error Message
-					} // end if/else
+						//Error Message.
+					} // end if/else.
 				} else {
 					if ( isset( $_POST[ 'wcap_audio_urls' ] ) && !empty( $_POST[ 'wcap_audio_urls' ] ) ) {
 						$supported_types = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
@@ -233,7 +233,7 @@ class Wc_Audio_Preview_Admin {
 							add_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
 							update_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
 						} else {
-							//Error Message
+							//Error Message.
 						}
 					}
 				}
