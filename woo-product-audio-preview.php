@@ -13,7 +13,7 @@
  * Plugin Name:       Woo Audio Preview
  * Plugin URI:        http://wbcomdesigns.com
  * Description:       This plugin will add an extended feature to the big name “ WooCommerce ” that will allow you to add audio preview feature in single product page.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Wbcom Designs <admin@wbcomdesigns.com>
  * Author URI:        http://wbcomdesigns.com
  * License:           GPL-2.0+
@@ -66,8 +66,8 @@ function wcap_plugin_init() {
 }
 
 function wcap_plugin_admin_notice() {
-	$wcap_plugin = 'WooCommerce Audio Preview';
-	$wc_plugin = 'WooCommerce';
+	$wcap_plugin = esc_html__( 'WooCommerce Audio Preview', 'wc-audio-preview' );
+	$wc_plugin   = esc_html__( 'WooCommerce', 'wc-audio-preview' );
 
 	echo '<div class="error"><p>'
 	. sprintf( '%1$s is ineffective now as it requires %2$s to function correctly.', '<strong>' . esc_html($wcap_plugin) . '</strong>', '<strong>' . esc_html($wc_plugin) . '</strong>')
