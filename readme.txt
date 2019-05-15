@@ -8,9 +8,9 @@ Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 
 Requires at least: 3.0.1
 
-Tested up to: 5.0.1
+Tested up to: 5.2
 
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 License: GPLv2 or later
 
@@ -70,6 +70,8 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 == Changelog ==
 
+= 1.0.4 =
+* Fix - WooCommerce 3.6.2 Compatible. #4
 = 1.0.3 =
 * Fix - WooCommerce 3.5.2 Compatible. #2
 = 1.0.2 =
