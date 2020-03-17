@@ -27,7 +27,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-if( !defined( 'WCAP_TEXT_DOMAIN' ) ) {
+if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
 	define( 'WCAP_TEXT_DOMAIN', 'wc-audio-preview' );
 }
 
@@ -35,7 +35,7 @@ if( !defined( 'WCAP_TEXT_DOMAIN' ) ) {
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path(__FILE__) . 'includes/class-wc-audio-preview.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-wc-audio-preview.php';
 
 /**
  * Begins execution of the plugin.
@@ -55,13 +55,21 @@ function run_wc_audio_preview() {
  * Check plugin requirement on plugins loaded
  * this plugin requires WooCommerce to be installed and active
  */
-add_action('plugins_loaded', 'wcap_plugin_init');
+add_action( 'plugins_loaded', 'wcap_plugin_init' );
 function wcap_plugin_init() {
-	$wc_active = in_array('woocommerce/woocommerce.php', get_option('active_plugins'));
-	if ( current_user_can('activate_plugins') && $wc_active !== true ) {
-		add_action('admin_notices', 'wcap_plugin_admin_notice');
-	} else {
-		run_wc_audio_preview();
+	run_wc_audio_preview();
+}
+
+/**
+ * Check plugin requirement on plugins loaded
+ * this plugin requires WooCommerce to be installed and active
+ */
+add_action( 'admin_init', 'wcap_check_require_plugins' );
+function wcap_check_require_plugins() {
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		unset( $_GET['activate'] );
 	}
 }
 
@@ -70,7 +78,9 @@ function wcap_plugin_admin_notice() {
 	$wc_plugin   = esc_html__( 'WooCommerce', 'wc-audio-preview' );
 
 	echo '<div class="error"><p>'
-	. sprintf( '%1$s is ineffective now as it requires %2$s to function correctly.', '<strong>' . esc_html($wcap_plugin) . '</strong>', '<strong>' . esc_html($wc_plugin) . '</strong>')
+	. sprintf( '%1$s is ineffective now as it requires %2$s to function correctly.', '<strong>' . esc_html( $wcap_plugin ) . '</strong>', '<strong>' . esc_html( $wc_plugin ) . '</strong>' )
 	. '</p></div>';
-	if (isset($_GET['activate'])) unset($_GET['activate']);
+	if ( isset( $_GET['activate'] ) ) {
+		unset( $_GET['activate'] );
+	}
 }
