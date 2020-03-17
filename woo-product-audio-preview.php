@@ -31,6 +31,13 @@ if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
 	define( 'WCAP_TEXT_DOMAIN', 'wc-audio-preview' );
 }
 
+if ( ! defined( 'WCAP_PLUGIN_URI' ) ) {
+	define( 'WCAP_PLUGIN_URI', plugin_dir_url( __FILE__ ) );
+}
+if ( ! defined( 'WCAP_PLUGIN_DIR' ) ) {
+	define( 'WCAP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+}
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
