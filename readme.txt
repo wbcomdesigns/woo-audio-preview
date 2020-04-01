@@ -8,9 +8,9 @@ Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 
 Requires at least: 3.0.1
 
-Tested up to: 5.2
+Tested up to: 5.4.0
 
-Stable tag: 1.0.4
+Stable tag: trunk
 
 License: GPLv2 or later
 
@@ -44,7 +44,7 @@ If you need additional help you can contact us for [Custom Development](https://
 
 == Frequently Asked Questions ==
 
-= 
+=
 
 = Do we need to activate WooCommerce ? =
 
@@ -70,12 +70,14 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 == Changelog ==
 
+= 1.1.0 =
+* Fix - WooCommerce v4.0.0 Compatible. #4
 = 1.0.4 =
-* Fix - WooCommerce 3.6.2 Compatible. #4
+* Fix - WooCommerce v3.6.2 Compatible. #4
 = 1.0.3 =
-* Fix - WooCommerce 3.5.2 Compatible. #2
+* Fix - WooCommerce v3.5.2 Compatible. #2
 = 1.0.2 =
-* Fix - Compatible with latest wordpress.
+* Fix - Compatible with latest WordPress.
 = 1.0.1 =
 * Plugin Testing with current version of the WordPress and WooCommerce.
 = 1.0.0 =
