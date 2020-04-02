@@ -29,23 +29,32 @@
      * practising this, we should strive to set a better example in our own work.
      */
     $(function () {
-        $('.wcap-delete-audio-cl').on('click', function () {
-            $('.preview_files p.wcap-del-msg').text('');
-            var file_url = $(this).data().file;
-            var p_id = $(this).data().p_id;
-            var data = {
-                'action': 'wcap_delete_audio_ajax',
-                'file_url': file_url,
-                'p_id': p_id,
-            };
-            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-            $.post(wcap_ajax_object.ajax_url, data, function (response) {
-                $('.wcap_preview-tr .wcap-audio-file .file_url .input_text').val('');
-                $('.wcap_preview-tr .wcap-audio-file .file_name .input_text').val('');
-                if (response != '') {
-                    $('.preview_files p.wcap-del-msg').text('File Removed Successfully.').show();
-                }
-            });
+		$('.wcap-add-audio-cl').live('click', function () {
+            var woo_audio_tr = '<tr class="wcap-audio-file"><td class="sort"></td><td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="" type="text" ></td><td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="" type="text"></td><td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="" size="25"/></td><td width="15%"><a href="javascript:void(0)"  class="wcap-add-audio-cl">Add</a>&nbsp;<a href="javascript:void(0)" class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td></tr>'; 
+			$('.woo-audio-preview-table tbody').append(woo_audio_tr);			
+        });
+		
+        $('.wcap-delete-audio-cl').live('click', function () {
+			
+			$(this).parents('tr').remove();
+			/*
+				$('.preview_files p.wcap-del-msg').text('');
+				var file_url = $(this).data().file;
+				var p_id = $(this).data().p_id;
+				var data = {
+					'action': 'wcap_delete_audio_ajax',
+					'file_url': file_url,
+					'p_id': p_id,
+				};
+				// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+				$.post(wcap_ajax_object.ajax_url, data, function (response) {
+					$('.wcap_preview-tr .wcap-audio-file .file_url .input_text').val('');
+					$('.wcap_preview-tr .wcap-audio-file .file_name .input_text').val('');
+					if (response != '') {
+						$('.preview_files p.wcap-del-msg').text('File Removed Successfully.').show();
+					}
+				});
+			*/
         });
         $('body.post-type-product form#post').on('submit',function () {
             if ($('#wcap_preview_attachment').val() != '') {
