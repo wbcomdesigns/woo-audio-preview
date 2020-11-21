@@ -1,33 +1,20 @@
 === Woo Audio Preview ===
 
 Contributors: vapvarun,wbcomdesigns
-
 Donate link: https://wbcomdesigns.com/donate/
-
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
-
 Requires at least: 3.0.1
-
-Tested up to: 5.4.0
-
+Tested up to: 5.5.3
 Stable tag: trunk
-
 License: GPLv2 or later
-
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
 
 
 == Description ==
 
-
 Allows playing the audio files in sample mode to prevent unauthorized downloading of the audio files. It helps to display sample files at single product page.
 
-
-
 == Installation ==
-
-
 
 1. Download the zip file and extract it.
 
@@ -41,7 +28,6 @@ Allows playing the audio files in sample mode to prevent unauthorized downloadin
 If you need additional help you can contact us for [Custom Development](https://wbcomdesigns.com/hire-us/).
 
 
-
 == Frequently Asked Questions ==
 
 =
@@ -51,16 +37,11 @@ If you need additional help you can contact us for [Custom Development](https://
 Yes, It needs you to have WooCommerce installed and activated.
 
 
-
 = How can i get support answers? =
 
 Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query related to plugin and WooCommerce.
 
-
-
 == Screenshots ==
-
-
 
 1. It is displaying Meta Box Field under specific product post screenshot-1.png
 
@@ -69,16 +50,24 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 
 == Changelog ==
+= 1.2.0 =
+* Fix - Fixed #12 - Add link is not clickable
+* Fix - Fixed #14 - Notices and warnings 
 
 = 1.1.0 =
-* Fix - WooCommerce v4.0.0 Compatible. #4
+* Fix - WooCommerce v4.0.0 Compatible.
+
 = 1.0.4 =
-* Fix - WooCommerce v3.6.2 Compatible. #4
+* Fix - WooCommerce v3.6.2 Compatible.
+
 = 1.0.3 =
-* Fix - WooCommerce v3.5.2 Compatible. #2
+* Fix - WooCommerce v3.5.2 Compatible.
+
 = 1.0.2 =
 * Fix - Compatible with latest WordPress.
+
 = 1.0.1 =
 * Plugin Testing with current version of the WordPress and WooCommerce.
+
 = 1.0.0 =
 * first version.
