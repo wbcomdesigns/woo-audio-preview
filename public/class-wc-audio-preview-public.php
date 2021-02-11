@@ -21,115 +21,116 @@
  */
 class Wc_Audio_Preview_Public {
 
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
-    private $plugin_name;
+	/**
+	 * The ID of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $plugin_name    The ID of this plugin.
+	 */
+	private $plugin_name;
 
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
-    private $version;
+	/**
+	 * The version of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $version    The current version of this plugin.
+	 */
+	private $version;
 
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @since    1.0.0
-     * @param      string    $plugin_name       The name of the plugin.
-     * @param      string    $version    The version of this plugin.
-     */
-    public function __construct($plugin_name, $version) {
+	/**
+	 * Initialize the class and set its properties.
+	 *
+	 * @since    1.0.0
+	 * @param      string $plugin_name       The name of the plugin.
+	 * @param      string $version    The version of this plugin.
+	 */
+	public function __construct( $plugin_name, $version ) {
 
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-    }
+		$this->plugin_name = $plugin_name;
+		$this->version     = $version;
+	}
 
-    /**
-     * Register the stylesheets for the public-facing side of the site.
-     *
-     * @since    1.0.0
-     */
-    public function enqueue_styles() {
+	/**
+	 * Register the stylesheets for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_styles() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Wc_Audio_Preview_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Wc_Audio_Preview_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/wc-audio-preview-public.css', array(), $this->version, 'all');
-    }
+		/**
+		 * This function is provided for demonstration purposes only.
+		 *
+		 * An instance of this class should be passed to the run() function
+		 * defined in Wc_Audio_Preview_Loader as all of the hooks are defined
+		 * in that particular class.
+		 *
+		 * The Wc_Audio_Preview_Loader will then create the relationship
+		 * between the defined hooks and the functions defined in this
+		 * class.
+		 */
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wc-audio-preview-public.css', array(), $this->version, 'all' );
+	}
 
-    /**
-     * Register the JavaScript for the public-facing side of the site.
-     *
-     * @since    1.0.0
-     */
-    public function enqueue_scripts() {
+	/**
+	 * Register the JavaScript for the public-facing side of the site.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_scripts() {
 
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in Wc_Audio_Preview_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The Wc_Audio_Preview_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wc-audio-preview-public.js', array('jquery'), $this->version, false);
-    }
+		/**
+		 * This function is provided for demonstration purposes only.
+		 *
+		 * An instance of this class should be passed to the run() function
+		 * defined in Wc_Audio_Preview_Loader as all of the hooks are defined
+		 * in that particular class.
+		 *
+		 * The Wc_Audio_Preview_Loader will then create the relationship
+		 * between the defined hooks and the functions defined in this
+		 * class.
+		 */
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-public.js', array( 'jquery' ), $this->version, false );
+	}
 
-    public function wcap_add_preview_field() {
-        global $post;
+	public function wcap_add_preview_field() {
+		global $post;
 
-        $wcap_preview = get_post_meta($post->ID, 'wcap_preview_attachment', true);
-        $wcap_audio = get_post_meta($post->ID, 'wcap_audio', true);
-        if (!empty($wcap_preview) && empty($wcap_audio) ):
-            ?>
-            <div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id">
-                <a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset($wcap_preview['name']) ? esc_attr( $wcap_preview['name'] ) : ''; ?></a>
-            </div>
-            <div class="wcap-player-cl" id="wcap-player-id">
-                <audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
-                    <source src="<?php echo isset($wcap_preview['url']) ? esc_attr( $wcap_preview['url'] ) : ''; ?>" type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
-            <?php
-        endif;
-		
-		if ( !empty($wcap_audio) ) :
-			foreach( $wcap_audio['wcap_audio_names'] as $key=>$value) {?>
-				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr($key)?>">
-					<a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset($wcap_audio['wcap_audio_names'][$key]) ? esc_attr( $wcap_audio['wcap_audio_names'][$key] ) : ''; ?></a>
+		$wcap_preview = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
+		$wcap_audio   = get_post_meta( $post->ID, 'wcap_audio', true );
+		if ( ! empty( $wcap_preview ) && empty( $wcap_audio ) ) :
+			?>
+			<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id">
+				<a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset( $wcap_preview['name'] ) ? esc_attr( $wcap_preview['name'] ) : ''; ?></a>
+			</div>
+			<div class="wcap-player-cl" id="wcap-player-id">
+				<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
+					<source src="<?php echo isset( $wcap_preview['url'] ) ? esc_attr( $wcap_preview['url'] ) : ''; ?>" type="audio/mpeg" />
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+			<?php
+		endif;
+
+		if ( ! empty( $wcap_audio ) ) :
+			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
+				?>
+				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
+					<a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?></a>
 				</div>
-				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr($key)?>">
+				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
 					<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
-						<source src="<?php echo isset($wcap_audio['wcap_audio_urls'][$key]) ? esc_attr( $wcap_audio['wcap_audio_urls'][$key] ) : ''; ?>" type="audio/mpeg" />
+						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="audio/mpeg" />
 						Your browser does not support the audio element.
 					</audio>
 				</div>
 				
-			<?php	
+				<?php
 			}
 		endif;
-		
-        return true;
-    }
+
+		return true;
+	}
 
 }
