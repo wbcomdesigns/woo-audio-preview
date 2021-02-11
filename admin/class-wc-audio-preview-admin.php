@@ -137,23 +137,23 @@ class Wc_Audio_Preview_Admin {
 						<?php foreach( $wcap_audio['wcap_audio_names'] as $key=>$value):?>
 							<tr class="wcap-audio-file">
 								<td class="sort"></td>
-								<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $wcap_audio['wcap_audio_names'][$key] ) ? $wcap_audio['wcap_audio_names'][$key] : ''; ?>" type="text" ></td>
-								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][$key] ) ? $wcap_audio['wcap_audio_urls'][$key] : ''; ?>" type="text"></td>
-								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? $preview_data['file'] : ''; ?>" size="25"/></td>
+								<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $wcap_audio['wcap_audio_names'][$key] ) ? esc_attr( $wcap_audio['wcap_audio_names'][$key] ) : '' ; ?>" type="text" ></td>
+								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][$key] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][$key] ) : ''; ?>" type="text"></td>
+								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 								<td width="15%">
 								<a href="javascript:void(0)"  class="wcap-add-audio-cl">Add</a>&nbsp;
-								<a href="javascript:void(0)" data-p_id="<?php echo $post->ID; ?>" data-file="<?php echo isset( $preview_data['file'] ) ? $preview_data['file'] : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
+								<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
 							</tr>
 						<?php endforeach;?>
 					<?php else :?>
 						<tr class="wcap-audio-file">
 							<td class="sort"></td>
-							<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $preview_data['name'] ) ? $preview_data['name'] : ''; ?>" type="text" ></td>
-							<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $preview_data['url'] ) ? $preview_data['url'] : ''; ?>" type="text"></td>
-							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? $preview_data['file'] : ''; ?>" size="25"/></td>
+							<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $preview_data['name'] ) ? esc_attr( $preview_data['name'] ) : ''; ?>" type="text" ></td>
+							<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $preview_data['url'] ) ? esc_attr( $preview_data['url'] ) : ''; ?>" type="text"></td>
+							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 							<td width="15%">
 							<a href="javascript:void(0)"  class="wcap-add-audio-cl">Add</a>&nbsp;
-							<a href="javascript:void(0)" data-p_id="<?php echo $post->ID; ?>" data-file="<?php echo isset( $preview_data['file'] ) ? $preview_data['file'] : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
+							<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
 						</tr>
 					<?php endif;?>
 					
@@ -270,7 +270,7 @@ class Wc_Audio_Preview_Admin {
 								 *
 								 * @see _wp_handle_upload() in wp-admin/includes/file.php
 								 */
-								echo $movefile['error'];
+								echo $movefile['error']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							}
 						} else {
 							// Error Message.

@@ -268,7 +268,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 			<div class="notice updated wc-audio-preview-notice">
 				<div class="wc-audio-preview-notice-inner">
 					<div class="wc-audio-preview-notice-icon">
-						<img src="<?php echo WCAP_PLUGIN_URI . '/admin/images/wbcom.png'; ?>" alt="<?php echo esc_attr__( 'Woo Audio Preview', 'wc-audio-preview' ); ?>" />
+						<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Woo Audio Preview', 'wc-audio-preview' ); ?>" />
 					</div>
 					<div class="wc-audio-preview-notice-content">
 						<h3><?php echo esc_html__( 'Are you enjoying Woo Audio Preview?', 'wc-audio-preview' ); ?></h3>
