@@ -114,8 +114,8 @@ class Wc_Audio_Preview_Admin {
 	function wcap_display_callback( $post ) {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
-		
-		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );		
+
+		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
 		?>
 		<div class="form-field preview_files">
 			<table class="widefat woo-audio-preview-table">
@@ -133,19 +133,19 @@ class Wc_Audio_Preview_Admin {
 				$preview_data = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
 				?>
 				
-					<?php if ( !empty($wcap_audio) ) :?>
-						<?php foreach( $wcap_audio['wcap_audio_names'] as $key=>$value):?>
+					<?php if ( ! empty( $wcap_audio ) ) : ?>
+						<?php foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) : ?>
 							<tr class="wcap-audio-file">
 								<td class="sort"></td>
-								<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $wcap_audio['wcap_audio_names'][$key] ) ? esc_attr( $wcap_audio['wcap_audio_names'][$key] ) : '' ; ?>" type="text" ></td>
-								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][$key] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][$key] ) : ''; ?>" type="text"></td>
+								<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?>" type="text" ></td>
+								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="text"></td>
 								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 								<td width="15%">
 								<a href="javascript:void(0)"  class="wcap-add-audio-cl">Add</a>&nbsp;
 								<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
 							</tr>
-						<?php endforeach;?>
-					<?php else :?>
+						<?php endforeach; ?>
+					<?php else : ?>
 						<tr class="wcap-audio-file">
 							<td class="sort"></td>
 							<td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $preview_data['name'] ) ? esc_attr( $preview_data['name'] ) : ''; ?>" type="text" ></td>
@@ -155,7 +155,7 @@ class Wc_Audio_Preview_Admin {
 							<a href="javascript:void(0)"  class="wcap-add-audio-cl">Add</a>&nbsp;
 							<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
 						</tr>
-					<?php endif;?>
+					<?php endif; ?>
 					
 				
 				</tbody>
@@ -199,11 +199,11 @@ class Wc_Audio_Preview_Admin {
 			return;
 		}
 
-		if ( isset( $_POST['post_type'] ) && $_POST['post_type'] == 'product' ) {			
-			if ( isset($_POST['wcap_audio']) && !empty($_POST['wcap_audio']) ) {
-				if ( isset($_FILES['wcap_audio']['name']) && !empty($_FILES['wcap_audio']['name'])) {
+		if ( isset( $_POST['post_type'] ) && $_POST['post_type'] == 'product' ) {
+			if ( isset( $_POST['wcap_audio'] ) && ! empty( $_POST['wcap_audio'] ) ) {
+				if ( isset( $_FILES['wcap_audio']['name'] ) && ! empty( $_FILES['wcap_audio']['name'] ) ) {
 					$supported_types = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
-					foreach ($_FILES['wcap_audio']['name']['wcap_preview_attachment'] as $key=>$value ) {
+					foreach ( $_FILES['wcap_audio']['name']['wcap_preview_attachment'] as $key => $value ) {
 						$arr_file_type = wp_check_filetype( basename( $value ) );
 						$uploaded_type = $arr_file_type['type'];
 						if ( in_array( $uploaded_type, $supported_types ) ) {
@@ -211,26 +211,26 @@ class Wc_Audio_Preview_Admin {
 							if ( ! function_exists( 'wp_handle_upload' ) ) {
 								require_once ABSPATH . 'wp-admin/includes/file.php';
 							}
-							
-							$uploadedfile['name']     	= $_FILES['wcap_audio']['name']['wcap_preview_attachment'][$key];
-							$uploadedfile['type']     	= $_FILES['wcap_audio']['type']['wcap_preview_attachment'][$key];
-							$uploadedfile['tmp_name']	= $_FILES['wcap_audio']['tmp_name']['wcap_preview_attachment'][$key];
-							$uploadedfile['error']		= $_FILES['wcap_audio']['error']['wcap_preview_attachment'][$key];
-							$uploadedfile['size']     	= $_FILES['wcap_audio']['size']['wcap_preview_attachment'][$key];
-							$upload_overrides = array( 'test_form' => false );
+
+							$uploadedfile['name']     = $_FILES['wcap_audio']['name']['wcap_preview_attachment'][ $key ];
+							$uploadedfile['type']     = $_FILES['wcap_audio']['type']['wcap_preview_attachment'][ $key ];
+							$uploadedfile['tmp_name'] = $_FILES['wcap_audio']['tmp_name']['wcap_preview_attachment'][ $key ];
+							$uploadedfile['error']    = $_FILES['wcap_audio']['error']['wcap_preview_attachment'][ $key ];
+							$uploadedfile['size']     = $_FILES['wcap_audio']['size']['wcap_preview_attachment'][ $key ];
+							$upload_overrides         = array( 'test_form' => false );
 
 							add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
 							$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
 							remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-							$_POST['wcap_audio']['wcap_audio_urls'][$key] = $movefile['url'];
-							
-						} 
+							$_POST['wcap_audio']['wcap_audio_urls'][ $key ] = $movefile['url'];
+
+						}
 					}
 					update_post_meta( $post_id, 'wcap_audio', $_POST['wcap_audio'] );
 				}
-			}			
-			
-			if ( isset($_POST['wcap_audio_names']) ) {
+			}
+
+			if ( isset( $_POST['wcap_audio_names'] ) ) {
 				$wcap_audio_names = sanitize_text_field( $_POST['wcap_audio_names'] );
 				if ( '' == $wcap_audio_names ) {
 					$file_name                 = explode( '.', $_FILES['wcap_preview_attachment']['name'] );
