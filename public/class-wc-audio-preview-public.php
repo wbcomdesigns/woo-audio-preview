@@ -115,17 +115,19 @@ class Wc_Audio_Preview_Public {
 
 		if ( ! empty( $wcap_audio ) ) :
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-				?>
+				if ( ! empty( $value ) ) {
+					?>
+
 				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
 					<a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?></a>
 				</div>
+				<?php } ?>
 				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
 					<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
 						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="audio/mpeg" />
 						Your browser does not support the audio element.
 					</audio>
 				</div>
-				
 				<?php
 			}
 		endif;

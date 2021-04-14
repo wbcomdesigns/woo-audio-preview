@@ -132,8 +132,7 @@ class Wc_Audio_Preview_Admin {
 				<?php
 				$preview_data = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
 				?>
-				
-					<?php if ( ! empty( $wcap_audio ) ) : ?>
+				<?php if ( ! empty( $wcap_audio ) ) : ?>
 						<?php foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) : ?>
 							<tr class="wcap-audio-file">
 								<td class="sort"></td>
@@ -156,11 +155,8 @@ class Wc_Audio_Preview_Admin {
 							<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td>
 						</tr>
 					<?php endif; ?>
-					
-				
-				</tbody>
-				
-			</table>
+					</tbody>
+				</table>
 		</div>
 		<?php
 	}
