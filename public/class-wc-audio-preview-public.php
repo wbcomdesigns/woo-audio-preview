@@ -94,6 +94,9 @@ class Wc_Audio_Preview_Public {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-public.js', array( 'jquery' ), $this->version, false );
 	}
 
+	/**
+	 * WCAP Display Audio Preview.
+	 */
 	public function wcap_add_preview_field() {
 		global $post;
 

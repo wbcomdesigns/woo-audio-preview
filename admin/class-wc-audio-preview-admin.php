@@ -95,6 +95,9 @@ class Wc_Audio_Preview_Admin {
 		wp_localize_script( $this->plugin_name, 'wcap_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	}
 
+	/**
+	 * Update edit form enctype.
+	 */
 	public function update_edit_form() {
 		echo ' enctype="multipart/form-data"';
 	}
@@ -140,7 +143,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
-	function wcap_display_callback( $post ) {
+	public function wcap_display_callback( $post ) {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
 
@@ -194,9 +197,9 @@ class Wc_Audio_Preview_Admin {
 	/**
 	 * Save meta box content.
 	 *
-	 * @param int $post_id Post ID
+	 * @param int $post_id Post ID Get a Post ID.
 	 */
-	function wcap_save_meta_box( $post_id ) {
+	public function wcap_save_meta_box( $post_id ) {
 		// Add nonce for security and authentication.
 		$nonce_name   = isset( $_POST['wcap_nonce'] ) ? $_POST['wcap_nonce'] : '';
 		$nonce_action = 'wcap_nonce_action';
@@ -327,7 +330,12 @@ class Wc_Audio_Preview_Admin {
 		}
 	}
 
-	function wcap_delete_audio_ajax() {
+	/**
+	 * Function contains the audio delete functionality.
+	 *
+	 * @return void
+	 */
+	public function wcap_delete_audio_ajax() {
 		if ( isset( $_POST ) ) {
 			$post_id       = sanitize_text_field( $_POST['p_id'] );
 			$fileurl       = sanitize_text_field( $_POST['file_url'] );
