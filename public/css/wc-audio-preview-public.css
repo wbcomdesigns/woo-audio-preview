@@ -24,3 +24,29 @@
   line-height: 1px;
   margin-bottom: 10px;
 }
+
+.wcap-audio-playlist-row {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  zoom: 1;
+}
+.wcap-audio-small-toggle-btn {
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 20px;
+}
+.wcap-audio-number {
+  display: inline-block;
+}
+.wcap-audio-title {
+  display: inline-block;
+}

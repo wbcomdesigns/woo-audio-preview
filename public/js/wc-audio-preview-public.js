@@ -10,5 +10,16 @@ jQuery( document ).ready(
 				$( "#" + id ).slideToggle( "slow" );
 			}
 		);
+    $(document).on(
+      'click',
+      '.wcap-audio-title #wcap_select_audio',
+      function () {
+        var links = $(this).data('audio');
+        $("#audio_player").attr('src', links);
+        
+      }
+    );
+  
+    
 	}
 );

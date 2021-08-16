@@ -103,7 +103,36 @@ class Wc_Audio_Preview_Admin {
 	 * Register meta box(es).
 	 */
 	public function wcap_register_meta_boxes() {
+		global $post;
 		add_meta_box( 'wc-preview-audio-mata-id', __( 'Preview Item <span class="wcap-required-span"> ( Only MP3 allowed here. )</span>', $this->plugin_name ), array( $this, 'wcap_display_callback' ), 'product' );
+		add_meta_box( 'wc-display-audio-players', __( 'Display Audio Player', $this->plugin_name ), array( $this, 'wcap_display_audio_player' ), 'product' );
+
+	}
+
+	/**
+	 * Audio Player Meta box display callback.
+	 *
+	 * @param WP_Post $post Current post object.
+	 */
+	public function wcap_display_audio_player( $post ) {
+		// Add nonce for security and authentication.
+		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
+		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
+		?>
+					<tr>
+						<td class="sort"></td>
+						<td>
+						<input type="checkbox" name="wcap_audio[wcap_display_audio_players]" id="wcap-display-audio-player" value="yes" 
+						<?php ( isset( $wcap_audio['wcap_display_audio_players'] ) ) ? checked( $wcap_audio['wcap_display_audio_players'], 'yes' ) : ''; ?>
+							/>
+						</td>
+						<th scope="row">
+							<label for="wcap-display-audio-playlist">
+								<?php esc_html_e( 'Enable this option if you want to display player', ' wc-audio-preview' ); ?>
+							</label>
+						</th>
+					</tr>
+			<?php
 	}
 
 	/**
@@ -118,7 +147,7 @@ class Wc_Audio_Preview_Admin {
 		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
 		?>
 		<div class="form-field preview_files">
-			<table class="widefat woo-audio-preview-table">
+			<table class="widefat woo-audio-preview-table" id="wcap-audio-table">
 				<thead>
 					<tr>
 						<th class="sort">&nbsp;</th>
@@ -131,6 +160,7 @@ class Wc_Audio_Preview_Admin {
 				<p class="wcap-del-msg"><?php esc_attr_e( 'Error', 'wc-audio-preview' ); ?></p>
 				<?php
 				$preview_data = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
+
 				?>
 				<?php if ( ! empty( $wcap_audio ) ) : ?>
 						<?php foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) : ?>
@@ -288,6 +318,11 @@ class Wc_Audio_Preview_Admin {
 						}
 					}
 				}
+			}
+			if ( isset( $_POST['wcap_display_audio_players'] ) ) {
+				update_post_meta( $post_id, 'wcap_display_audio_players', 'yes' );
+			} else {
+				update_post_meta( $post_id, 'wcap_display_audio_players', 'no' );
 			}
 		}
 	}
