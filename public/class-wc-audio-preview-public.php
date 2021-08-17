@@ -142,7 +142,7 @@ class Wc_Audio_Preview_Public {
 				</div>
 						<?php
 
-		} else {
+		} elseif ( ! empty( $wcap_audio ) ) {
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) ) {
 					?>
