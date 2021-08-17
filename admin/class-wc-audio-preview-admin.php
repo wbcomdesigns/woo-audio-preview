@@ -107,8 +107,8 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_register_meta_boxes() {
 		global $post;
-		add_meta_box( 'wc-preview-audio-mata-id', __( 'Preview Item <span class="wcap-required-span"> ( Only MP3 allowed here. )</span>', $this->plugin_name ), array( $this, 'wcap_display_callback' ), 'product' );
-		add_meta_box( 'wc-display-audio-players', __( 'Display Audio Player', $this->plugin_name ), array( $this, 'wcap_display_audio_player' ), 'product' );
+		add_meta_box( 'wc-preview-audio-mata-id', __( 'Preview Item <span class="wcap-required-span"> ( Only MP3 allowed here. )</span>', 'wc-audio-preview' ), array( $this, 'wcap_display_callback' ), 'product' );
+		add_meta_box( 'wc-display-audio-players', __( 'Display Audio Player', 'wc-audio-preview' ), array( $this, 'wcap_display_audio_player' ), 'product' );
 
 	}
 
@@ -131,7 +131,7 @@ class Wc_Audio_Preview_Admin {
 						</td>
 						<th scope="row">
 							<label for="wcap-display-audio-playlist">
-								<?php esc_html_e( 'Enable this option if you want to display player', ' wc-audio-preview' ); ?>
+								<?php esc_html_e( 'Enable this option if you want to display player', 'wc-audio-preview' ); ?>
 							</label>
 						</th>
 					</tr>
