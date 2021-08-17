@@ -62,16 +62,14 @@ function run_wc_audio_preview() {
  * Check plugin requirement on plugins loaded
  * this plugin requires WooCommerce to be installed and active
  */
-add_action( 'plugins_loaded', 'wcap_plugin_init' );
 function wcap_plugin_init() {
 	run_wc_audio_preview();
 }
-
+add_action( 'plugins_loaded', 'wcap_plugin_init' );
 /**
  * Check plugin requirement on plugins loaded
  * this plugin requires WooCommerce to be installed and active
  */
-add_action( 'admin_init', 'wcap_check_require_plugins' );
 function wcap_check_require_plugins() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
@@ -79,7 +77,10 @@ function wcap_check_require_plugins() {
 		unset( $_GET['activate'] );
 	}
 }
-
+add_action( 'admin_init', 'wcap_check_require_plugins' );
+/**
+ * Required Plugin Admin Notice.
+ */
 function wcap_plugin_admin_notice() {
 	$wcap_plugin = esc_html__( 'WooCommerce Audio Preview', 'wc-audio-preview' );
 	$wc_plugin   = esc_html__( 'WooCommerce', 'wc-audio-preview' );

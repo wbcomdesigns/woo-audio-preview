@@ -111,7 +111,7 @@ class Wc_Audio_Preview_Public {
 			<div class="wcap-player-cl" id="wcap-player-id">
 				<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
 					<source src="<?php echo isset( $wcap_preview['url'] ) ? esc_attr( $wcap_preview['url'] ) : ''; ?>" type="audio/mpeg" />
-					Your browser does not support the audio element.
+					<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
 				</audio>
 			</div>
 			<?php
@@ -154,7 +154,7 @@ class Wc_Audio_Preview_Public {
 				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
 					<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
 						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="audio/mpeg" />
-						Your browser does not support the audio element.
+						<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
 					</audio>
 				</div>
 							<?php
