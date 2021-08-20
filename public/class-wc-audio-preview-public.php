@@ -117,7 +117,8 @@ class Wc_Audio_Preview_Public {
 			<?php
 			endif;
 
-		if ( ! empty( $wcap_audio ) && 'yes' == $wcap_audio_display_playlist ) {
+		if ( ! empty( $wcap_audio['wcap_audio_names'][0] ) && 'yes' == $wcap_audio_display_playlist ) {
+
 			?>
 				<audio controls="controls" id="audio_player" autoplay preload="auto" controlsList="nodownload">
 					<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
