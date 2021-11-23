@@ -122,6 +122,8 @@ class Wc_Audio_Preview {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wc-audio-preview-public.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/wbcom/wbcom-admin-settings.php';
+
 		$this->loader = new Wc_Audio_Preview_Loader();
 	}
 
@@ -159,6 +161,8 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'post_edit_form_tag', $plugin_admin, 'update_edit_form' );
 		$this->loader->add_action( 'wp_ajax_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'wp_ajax_nopriv_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'woo_audio_preview_init_plugin_settings' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'woo_audio_preview_views_add_admin_settings' );
 	}
 
 	/**

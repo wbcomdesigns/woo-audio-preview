@@ -92,3 +92,17 @@ function wcap_plugin_admin_notice() {
 		unset( $_GET['activate'] );
 	}
 }
+
+add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings' );
+/**
+ * woo_document_preview_activation_activation_redirect_settings
+ *
+ * @param  string $plugin plugin.
+ * @return void
+ */
+function woo_audio_preview_activation_redirect_settings( $plugin ) {
+
+		wp_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings&tab=woo-audio-preview-welcome' ) );
+		exit;
+
+}

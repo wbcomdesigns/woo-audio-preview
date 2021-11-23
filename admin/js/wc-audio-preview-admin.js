@@ -31,47 +31,47 @@
 	$(
 		function () {
 
-			$( document ).on(
+			$(document).on(
 				"click",
-				".wcap-add-audio-cl" ,
-				function(e){
+				".wcap-add-audio-cl",
+				function (e) {
 					var woo_audio_tr = '<tr class="wcap-audio-file"><td class="sort"></td><td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="" type="text" ></td><td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="" type="text"></td><td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="" size="25"/></td><td width="15%"><a href="javascript:void(0)"  class="wcap-add-audio-cl">Add</a>&nbsp;<a href="javascript:void(0)" class="wcap-delete-audio-cl" id="wcap-delete-audio-id">Remove</a></td></tr>';
-					$( '.woo-audio-preview-table tbody' ).append( woo_audio_tr );
+					$('.woo-audio-preview-table tbody').append(woo_audio_tr);
 				}
 			);
 
-			$( document ).on(
+			$(document).on(
 				"click",
-				".wcap-delete-audio-cl" ,
-				function(e){
-					$( this ).parents( 'tr' ).remove();
+				".wcap-delete-audio-cl",
+				function (e) {
+					$(this).parents('tr').remove();
 				}
 			);
-			$( 'body.post-type-product form#post' ).on(
+			$('body.post-type-product form#post').on(
 				'submit',
 				function () {
-					if ($( '#wcap_preview_attachment' ).val() != '') {
-						var ext = $( '#wcap_preview_attachment' ).val().split( '.' ).pop().toLowerCase();
-						if ($.inArray( ext, ['mp3'] ) == -1) {
-							$( '.preview_files p.wcap-del-msg' ).text( "The audio type that you've uploaded is invalid. Please upload given audio type." ).show();
-							 $( ".wcap-audio-file .file_url_choose #wcap_preview_attachment" ).addClass( "focused" );
-							$( 'html, body' ).animate(
+					if ($('#wcap_preview_attachment').val() != '') {
+						var ext = $('#wcap_preview_attachment').val().split('.').pop().toLowerCase();
+						if ($.inArray(ext, ['mp3']) == -1) {
+							$('.preview_files p.wcap-del-msg').text("The audio type that you've uploaded is invalid. Please upload given audio type.").show();
+							$(".wcap-audio-file .file_url_choose #wcap_preview_attachment").addClass("focused");
+							$('html, body').animate(
 								{
-									scrollTop: ($( '#wcap_preview_attachment' ).offset().top)
+									scrollTop: ($('#wcap_preview_attachment').offset().top)
 								},
 								500
 							);
 							return false;
 						}
 					}
-					if ($( '#wcap_audio_urls' ).val() != '') {
-						var ext = $( '#wcap_audio_urls' ).val().split( '.' ).pop().toLowerCase();
-						if ($.inArray( ext, ['mp3'] ) == -1) {
-							$( '.preview_files p.wcap-del-msg' ).text( "The audio type that you've uploaded is invalid. Please upload given audio type." ).show();
-							$( ".wcap-audio-file td.file_url #wcap_audio_urls" ).addClass( "focused" );
-							$( 'html, body' ).animate(
+					if ($('#wcap_audio_urls').val() != '') {
+						var ext = $('#wcap_audio_urls').val().split('.').pop().toLowerCase();
+						if ($.inArray(ext, ['mp3']) == -1) {
+							$('.preview_files p.wcap-del-msg').text("The audio type that you've uploaded is invalid. Please upload given audio type.").show();
+							$(".wcap-audio-file td.file_url #wcap_audio_urls").addClass("focused");
+							$('html, body').animate(
 								{
-									scrollTop: ($( '#wcap_audio_urls' ).offset().top)
+									scrollTop: ($('#wcap_audio_urls').offset().top)
 								},
 								500
 							);
@@ -81,6 +81,22 @@
 
 				}
 			);
+			/*faq tab accordion*/
+			var wb_ads_elmt = document.getElementsByClassName("woo-audio-preview-accordion");
+			var k;
+			var wb_ads_elmt_len = wb_ads_elmt.length;
+			for (k = 0; k < wb_ads_elmt_len; k++) {
+				wb_ads_elmt[k].onclick = function () {
+					this.classList.toggle("active");
+					var panel = this.nextElementSibling;
+					if (panel.style.maxHeight) {
+						panel.style.maxHeight = null;
+					} else {
+						panel.style.maxHeight = panel.scrollHeight + "px";
+					}
+				}
+			}
 		}
 	);
-})( jQuery );
+
+})(jQuery);

@@ -96,6 +96,104 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
+	 * Actions performed to create a submenu page content.
+	 *
+	 * @since    1.0.0
+	 * @access public
+	 */
+	public function woo_audio_preview_admin_options_page() {
+		global $allowedposttags;
+		$tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
+		?>
+	<div class="wrap">
+		<div class="wbcom-wrap">
+			<div class="bupr-header">
+				<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
+				<hr class="wp-header-end">
+				<h1 class="wbcom-plugin-heading">
+					<?php esc_html_e( 'Woo Audio Preview', 'wc-audio-preview' ); ?>
+				</h1>
+			</div>
+			<div class="wbcom-admin-settings-page">
+				<?php
+				settings_errors();
+				$this->woo_audio_preview_plugin_settings_tabs();
+				settings_fields( $tab );
+				do_settings_sections( $tab );
+				?>
+			</div>
+		</div>
+	</div>
+		<?php
+	}
+
+	/**
+	 * Actions performed on loading plugin settings
+	 *
+	 * @since    1.0.9
+	 * @access   public
+	 * @author   Wbcom Designs
+	 */
+	public function woo_audio_preview_init_plugin_settings() {
+		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'wc-audio-preview' );
+		register_setting( 'woo_audio_preview_admin_welcome_options', 'woo_audio_preview_admin_welcome_options' );
+		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'woo_audio_preview_admin_welcome_content' ), 'woo-audio-preview-welcome' );
+
+		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'wc-audio-preview' );
+		register_setting( 'woo_audio_preview_general_options', 'woo_audio_preview_general_options' );
+		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'woo_audio_preview_general_options_content' ), 'woo-audio-preview-faq' );
+	}
+
+	/**
+	 * Actions performed to create tabs on the sub menu page.
+	 */
+	public function woo_audio_preview_plugin_settings_tabs() {
+		$current_tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
+		// xprofile setup tab.
+		echo '<div class="wbcom-tabs-section"><div class="nav-tab-wrapper"><div class="wb-responsive-menu"><span>' . esc_html( 'Menu' ) . '</span><input class="wb-toggle-btn" type="checkbox" id="wb-toggle-btn"><label class="wb-toggle-icon" for="wb-toggle-btn"><span class="wb-icon-bars"></span></label></div><ul>';
+		foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
+			$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
+			echo '<li><a class="nav-tab ' . esc_attr( $active ) . '" id="' . esc_attr( $tab_key ) . '-tab" href="?page=woo-audio-preview-settings&tab=' . esc_attr( $tab_key ) . '">' . esc_attr( $tab_caption ) . '</a></li>';
+		}
+		echo '</div></ul></div>';
+	}
+
+	/**
+	 * woo_audio_preview_admin_welcome_content
+	 *
+	 * @return void
+	 */
+	public function woo_audio_preview_admin_welcome_content() {
+		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-welcome-page.php';
+	}
+
+	/**
+	 * woo_audio_preview_general_options_content
+	 *
+	 * @return void
+	 */
+	public function woo_audio_preview_general_options_content() {
+		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-faq.php';
+	}
+
+	/**
+	 * Actions performed on loading admin_menu.
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 * @author   Wbcom Designs
+	 */
+	public function woo_audio_preview_views_add_admin_settings() {
+		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
+			add_menu_page( esc_html__( 'WB Plugins', 'wc-audio-preview' ), esc_html__( 'WB Plugins', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'woo_audio_preview_admin_options_page' ), 'dashicons-lightbulb', 59 );
+			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcomw', 'wc-audio-preview' ), esc_html__( 'Welcome', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins' );
+
+		}
+		add_submenu_page( 'wbcomplugins', esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'woo_audio_preview_admin_options_page' ) );
+	}
+
+
+	/**
 	 * Update edit form enctype.
 	 */
 	public function update_edit_form() {
