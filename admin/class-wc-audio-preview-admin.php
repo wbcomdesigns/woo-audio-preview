@@ -284,7 +284,9 @@ class Wc_Audio_Preview_Admin {
 								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 								<td width="15%">
 								<a href="javascript:void(0)"  class="wcap-add-audio-cl"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?></a>&nbsp;
+								<?php if ( count( $wcap_audio['wcap_audio_names'] ) > 1 ) : ?>
 								<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id"><?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?></a></td>
+								<?php endif; ?>
 							</tr>
 						<?php endforeach; ?>
 					<?php else : ?>
@@ -295,7 +297,6 @@ class Wc_Audio_Preview_Admin {
 							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 							<td width="15%">
 							<a href="javascript:void(0)"  class="wcap-add-audio-cl"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?></a>&nbsp;
-							<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id"><?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?></a></td>
 						</tr>
 					<?php endif; ?>
 					</tbody>

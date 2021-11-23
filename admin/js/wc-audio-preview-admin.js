@@ -45,6 +45,9 @@
 				".wcap-delete-audio-cl",
 				function (e) {
 					$(this).parents('tr').remove();
+					if ($('tr.wcap-audio-file').length < 2) {
+						$('a.wcap-delete-audio-cl').remove();
+					}
 				}
 			);
 			$('body.post-type-product form#post').on(
