@@ -142,6 +142,9 @@ class Wc_Audio_Preview_Admin {
 		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'wc-audio-preview' );
 		register_setting( 'woo_audio_preview_general_options', 'woo_audio_preview_general_options' );
 		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'woo_audio_preview_general_options_content' ), 'woo-audio-preview-faq' );
+
+		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'wc-audio-preview' );
+		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'woo_audio_preview_general_pro' ), 'woo-audio-preview-pro' );
 	}
 
 	/**
@@ -174,6 +177,15 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function woo_audio_preview_general_options_content() {
 		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-faq.php';
+	}
+
+	/**
+	 * woo_audio_preview_general_pro
+	 *
+	 * @return void
+	 */
+	public function woo_audio_preview_general_pro() {
+		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-general-pro.php';
 	}
 
 	/**
