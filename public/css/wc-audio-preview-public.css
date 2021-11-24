@@ -1,52 +1,84 @@
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Global
+--------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------
+# Global
+--------------------------------------------------------------*/
 .wcap-preview-btn-div .wcap-preview-btn {
-  color: #fff;
-  box-shadow: none !important;
+    color: #fff;
+    box-shadow: none !important;
 }
 
-.entry-summary .wcap-preview-btn-div a.wcap-preview-btn {
-  text-decoration: unset !important;
+.wcap-preview-btn-div a.wcap-preview-btn {
+    text-decoration: none !important;
 }
 
 .summary.entry-summary .wcap-preview-btn-div {
-  padding: 10px;
-  vertical-align: middle;
-  background-color: #a46497;
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 10px;
+    margin: 10px 0 0 !important;
+    padding: 10px;
+    vertical-align: middle;
+    background-color: #a46497;
+    cursor: pointer;
+    text-align: center;
 }
 
 .wcap-player-cl {
-  display: none;
-  padding: 10px 45px;
-  background: #242021;
-  vertical-align: middle;
-  line-height: 1px;
-  margin-bottom: 10px;
+    display: none;
+    margin-bottom: 10px;
+    padding: 15px 25px;
+    text-align: center;
+    background: #242021;
+    vertical-align: middle;
+    line-height: 1px;
+}
+
+.wcap-player-cl audio {
+    width: calc(100% - 50px);
+    margin: auto;
 }
 
 .wcap-audio-playlist-row {
-  display: block;
-  margin: 10px 0;
-  width: 100%;
-  zoom: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    margin: 10px 0;
+    width: 100%;
 }
+
+.wcap-audio-small-toggle-btn .dashicons {
+    padding-left: 2px;
+}
+
 .wcap-audio-small-toggle-btn {
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  cursor: pointer;
-  display: inline-block;
-  height: 20px;
-  margin: 0 auto;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
-  vertical-align: middle;
-  width: 20px;
+    cursor: pointer;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+    border: 1px solid #d9d9d9;
 }
+
 .wcap-audio-number {
-  display: inline-block;
+    margin: 0 5px 0 0;
 }
+
 .wcap-audio-title {
-  display: inline-block;
+    display: inline-block;
 }
