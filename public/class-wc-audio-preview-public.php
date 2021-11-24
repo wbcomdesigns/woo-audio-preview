@@ -126,7 +126,7 @@ class Wc_Audio_Preview_Public {
 						$wcap_count_number = 1;
 					foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 						?>
-						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" data-track-number="<?php esc_html_e( '0', 'woo-audio-preview-pro' ); ?><?php echo esc_attr( $wcap_count_number ); ?>">
+						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" data-track-number="<?php esc_html_e( '0', 'wc-audio-preview' ); ?><?php echo esc_attr( $wcap_count_number ); ?>">
 					<?php $wcap_count_number++; } ?>
 				</audio>
 				<div class="wcap-audio-playlist">
