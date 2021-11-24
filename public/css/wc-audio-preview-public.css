@@ -19,11 +19,12 @@
 
 .summary.entry-summary .wcap-preview-btn-div {
     margin: 10px 0 0 !important;
-    padding: 10px;
-    vertical-align: middle;
-    background-color: #a46497;
-    cursor: pointer;
+}
+
+.summary.entry-summary .wcap-preview-btn-div .button {
+    width: 100%;
     text-align: center;
+    border-radius: 0;
 }
 
 .wcap-player-cl {

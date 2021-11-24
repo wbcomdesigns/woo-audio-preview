@@ -106,7 +106,7 @@ class Wc_Audio_Preview_Public {
 		if ( ! empty( $wcap_preview ) && empty( $wcap_audio ) ) :
 			?>
 			<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id">
-				<a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset( $wcap_preview['name'] ) ? esc_attr( $wcap_preview['name'] ) : ''; ?></a>
+				<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $wcap_preview['name'] ) ? esc_attr( $wcap_preview['name'] ) : ''; ?></a>
 			</div>
 			<div class="wcap-player-cl" id="wcap-player-id">
 				<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
@@ -149,7 +149,7 @@ class Wc_Audio_Preview_Public {
 					?>
 
 				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
-					<a class="wcap-preview-btn" href="javascript:void(0)"><?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?></a>
+					<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?></a>
 				</div>
 						<?php } ?>
 				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
