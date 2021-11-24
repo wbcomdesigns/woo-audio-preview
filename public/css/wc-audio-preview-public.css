@@ -87,3 +87,19 @@
 .woocommerce div.product form.cart {
     margin-top: 1em;
 }
+
+span#wcap_icon_select_audio {
+    font-size: 16px;
+    display: inline-block;
+    cursor: pointer;
+    line-height: 23px;
+    position: relative;
+    width: 23px;
+    background: #eaeaea;
+    height: 23px;
+}
+
+#audio_player{
+    width:100%;
+    border-bottom: 1px solid #bfbfbf;
+}
