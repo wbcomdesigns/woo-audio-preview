@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="col">
 						<h3><span class="dashicons dashicons-book"></span><?php esc_html_e( 'Documentation', 'wc-audio-preview' ); ?></h3>
 						<p><?php esc_html_e( 'Woo Audio Preview provides a button on the single product page which will allow you to preview the Audio. The plugin provides a simple meta box to add sample audio file which can be previewed.', 'wc-audio-preview' ); ?></p>
-						<a href="<?php echo esc_url( 'https://wbcomdesigns.com/downloads/wc-audio-preview/' ); ?>" class="button button-primary button-welcome-support" target="_blank"><?php esc_html_e( 'Read Documentation', 'wc-audio-preview' ); ?></a>
+						<a href="<?php echo esc_url( 'https://wbcomdesigns.com/docs/woo-addons/woo-audio-preview/' ); ?>" class="button button-primary button-welcome-support" target="_blank"><?php esc_html_e( 'Read Documentation', 'wc-audio-preview' ); ?></a>
 					</div>
 
 					<div class="col">
