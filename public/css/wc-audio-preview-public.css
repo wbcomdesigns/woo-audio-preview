@@ -29,17 +29,17 @@
 
 .wcap-player-cl {
     display: none;
-    margin-bottom: 10px;
-    padding: 15px 25px;
+    margin-bottom:20px;
+    background-color: #333;
     text-align: center;
-    background: #242021;
     vertical-align: middle;
     line-height: 1px;
 }
-
-.wcap-player-cl audio {
-    width: calc(100% - 50px);
-    margin: auto;
+.wcap-player-cl audio#audio_player {
+    width: 100%;
+    height: 50px;
+    border-radius: 0 !important;
+    padding: 10px;
 }
 
 .wcap-audio-playlist-row {
@@ -72,6 +72,7 @@
     justify-content: center;
     height: 30px;
     width: 30px;
+    border-radius: 100px;
     margin-right: 10px;
     border: 1px solid #d9d9d9;
 }
@@ -94,6 +95,7 @@ span#wcap_icon_select_audio {
     cursor: pointer;
     line-height: 23px;
     position: relative;
+    border-radius: 100px;
     width: 23px;
     background: #eaeaea;
     height: 23px;
@@ -101,5 +103,10 @@ span#wcap_icon_select_audio {
 
 #audio_player{
     width:100%;
-    border-bottom: 1px solid #bfbfbf;
+    height: 45px;
+}
+
+.wcap-audio-playlist-row.active,
+.wcap-audio-playlist-row.active a#wcap_select_audio {
+    color: #2abf81;
 }
