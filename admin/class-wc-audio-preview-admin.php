@@ -139,12 +139,13 @@ class Wc_Audio_Preview_Admin {
 		register_setting( 'woo_audio_preview_admin_welcome_options', 'woo_audio_preview_admin_welcome_options' );
 		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'woo_audio_preview_admin_welcome_content' ), 'woo-audio-preview-welcome' );
 
+		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'wc-audio-preview' );
+		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'woo_audio_preview_general_pro' ), 'woo-audio-preview-pro' );
+
 		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'wc-audio-preview' );
 		register_setting( 'woo_audio_preview_general_options', 'woo_audio_preview_general_options' );
 		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'woo_audio_preview_general_options_content' ), 'woo-audio-preview-faq' );
 
-		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'wc-audio-preview' );
-		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'woo_audio_preview_general_pro' ), 'woo-audio-preview-pro' );
 	}
 
 	/**
