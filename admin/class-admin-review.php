@@ -273,6 +273,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 					<div class="wc-audio-preview-notice-content">
 						<h3><?php echo esc_html__( 'Are you enjoying Woo Audio Preview?', 'wc-audio-preview' ); ?></h3>
 						<p>
+							<?php /* translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress*/ ?>
 							<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Could you please do us a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
 						</p>
 					</div>
@@ -292,7 +293,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 		public function set_no_bug() {
 
 			// Bail out if not on correct page.
-			if ( ! isset( $_GET['_wpnonce'] ) || ( ! wp_verify_nonce( $_GET['_wpnonce'], 'wc-audio-preview-feedback-nounce' ) || ! is_admin() || ! isset( $_GET[ $this->nobug_option ] ) || ! current_user_can( 'manage_options' ) ) ) {
+			if ( ! isset( $_GET['_wpnonce'] ) || ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wc-audio-preview-feedback-nounce' ) || ! is_admin() || ! isset( $_GET[ $this->nobug_option ] ) || ! current_user_can( 'manage_options' ) ) ) {
 				return;
 			}
 

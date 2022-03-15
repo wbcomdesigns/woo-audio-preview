@@ -74,7 +74,10 @@ function wcap_check_require_plugins() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		unset( $_GET['activate'] );
+		if ( null !== filter_input( INPUT_GET, 'activate' ) ) {
+			$activate = filter_input( INPUT_GET, 'activate' );
+			unset( $activate );
+		}
 	}
 }
 add_action( 'admin_init', 'wcap_check_require_plugins' );
@@ -88,21 +91,23 @@ function wcap_plugin_admin_notice() {
 	echo '<div class="error"><p>'
 	. sprintf( '%1$s is ineffective now as it requires %2$s to function correctly.', '<strong>' . esc_html( $wcap_plugin ) . '</strong>', '<strong>' . esc_html( $wc_plugin ) . '</strong>' )
 	. '</p></div>';
-	if ( isset( $_GET['activate'] ) ) {
-		unset( $_GET['activate'] );
+	if ( null !== filter_input( INPUT_GET, 'activate' ) ) {
+		$activate = filter_input( INPUT_GET, 'activate' );
+		unset( $activate );
 	}
 }
 
 add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings' );
 /**
- * woo_document_preview_activation_activation_redirect_settings
+ * Redirect to plugin settings page after activated.
  *
- * @param  string $plugin plugin.
- * @return void
+ * @since  1.0.0
+ *
+ * @param string $plugin Path to the plugin file relative to the plugins directory.
  */
 function woo_audio_preview_activation_redirect_settings( $plugin ) {
 	if ( plugin_basename( __FILE__ ) === $plugin ) {
-		wp_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
 		exit;
 	}
 }

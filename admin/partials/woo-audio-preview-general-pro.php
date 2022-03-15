@@ -10,6 +10,7 @@
  * @package    Woo_Audio_Preview
  * @subpackage Woo_Audio_Preview/admin/partials
  */
+
 ?>
 <div class="wbcom-tab-content woo-document-pro">
 	<form method="post" action="options.php">
