@@ -4,8 +4,8 @@ Contributors: vapvarun,wbcomdesigns
 Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
-Tested up to: 5.8.2
-Stable tag: trunk
+Tested up to: 5.9.3
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,10 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 
 == Changelog ==
+= 1.4.0 =
+* Fix - phpcs fixes
+* Fix - Removed install plugin button from wrapper
+
 = 1.3.0 =
 * Fix - Update frontend UI without playlist
 * Fix - #Fix audio player clickable issue
