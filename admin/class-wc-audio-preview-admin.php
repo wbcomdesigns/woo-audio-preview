@@ -421,7 +421,7 @@ class Wc_Audio_Preview_Admin {
 								 *
 								 * @see _wp_handle_upload() in wp-admin/includes/file.php
 								 */
-								echo $movefile['error']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo wp_kses_post( $movefile['error'] );
 							}
 						} else {
 							// Error Message.
