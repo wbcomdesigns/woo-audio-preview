@@ -10,7 +10,7 @@
  * @package           Wc_Audio_Preview
  *
  * @wordpress-plugin
- * Plugin Name:       Woo Audio Preview
+ * Plugin Name:       Audio Preview for WooCommerce
  * Plugin URI:        http://wbcomdesigns.com
  * Description:       Allows playing the audio files in sample mode to prevent unauthorized downloading of the audio files. It helps to display sample files at single product page.
  * Version:           1.4.0

@@ -1,11 +1,11 @@
-=== Woo Audio Preview ===
+=== Audio Preview for WooCommerce ===
 
 Contributors: vapvarun,wbcomdesigns
 Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
-Tested up to: 5.9.3
-Stable tag: 1.4.0
+Tested up to: 6.0.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 = 1.2.0 =
 * Fix - Fixed #12 - Add link is not clickable
-* Fix - Fixed #14 - Notices and warnings 
+* Fix - Fixed #14 - Notices and warnings
 
 = 1.1.0 =
 * Fix - WooCommerce v4.0.0 Compatible.
