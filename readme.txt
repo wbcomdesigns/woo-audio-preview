@@ -50,6 +50,10 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 
 == Changelog ==
+= 1.4.1 =
+* Fix - phpcs fixes
+* Fix - Updated name
+
 = 1.4.0 =
 * Fix - phpcs fixes
 * Fix - Removed install plugin button from wrapper
