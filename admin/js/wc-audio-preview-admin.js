@@ -97,7 +97,7 @@
     });
     /*faq tab accordion*/
     var wb_ads_elmt = document.getElementsByClassName(
-      "woo-audio-preview-accordion"
+      "wbcom-faq-accordion"
     );
     var k;
     var wb_ads_elmt_len = wb_ads_elmt.length;

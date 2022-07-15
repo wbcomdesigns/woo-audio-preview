@@ -113,13 +113,22 @@ class Wc_Audio_Preview_Admin {
 		$tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
 		?>
 	<div class="wrap">
-		<div class="wbcom-wrap">
+		<div class="wbcom-bb-plugins-offer-wrapper">
+				<div id="wb_admin_logo">
+					<a href="https://wbcomdesigns.com/downloads/buddypress-community-bundle/" target="_blank">
+						<img src="<?php echo esc_url( WCAP_PLUGIN_URI ) . 'admin/wbcom/assets/imgs/wbcom-offer-notice.png'; ?>">
+					</a>
+				</div>
+			</div>
+		<div class="wbcom-wrap wbcom-plugin-wrapper">
 			<div class="bupr-header">
-				<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
-				<hr class="wp-header-end">
-				<h1 class="wbcom-plugin-heading">
-					<?php esc_html_e( 'Woo Audio Preview', 'wc-audio-preview' ); ?>
-				</h1>
+				<div class="wbcom_admin_header-wrapper">
+					<div id="wb_admin_plugin_name">
+						<?php esc_html_e( 'Woo Audio Preview', 'wc-audio-preview' ); ?>
+						<span><?php printf( __( 'Version %s', 'wc-audio-preview' ), WCAP_TEXT_VERSION ); ?></span>
+					</div>
+					<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
+				</div>
 			</div>
 			<div class="wbcom-admin-settings-page">
 				<?php
@@ -164,7 +173,7 @@ class Wc_Audio_Preview_Admin {
 		echo '<div class="wbcom-tabs-section"><div class="nav-tab-wrapper"><div class="wb-responsive-menu"><span>' . esc_html( 'Menu' ) . '</span><input class="wb-toggle-btn" type="checkbox" id="wb-toggle-btn"><label class="wb-toggle-icon" for="wb-toggle-btn"><span class="wb-icon-bars"></span></label></div><ul>';
 		foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
 			$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
-			echo '<li><a class="nav-tab ' . esc_attr( $active ) . '" id="' . esc_attr( $tab_key ) . '-tab" href="?page=woo-audio-preview-settings&tab=' . esc_attr( $tab_key ) . '">' . esc_attr( $tab_caption ) . '</a></li>';
+			echo '<li class="' . esc_attr( $tab_key ) . '"><a class="nav-tab ' . esc_attr( $active ) . '" id="' . esc_attr( $tab_key ) . '-tab" href="?page=woo-audio-preview-settings&tab=' . esc_attr( $tab_key ) . '">' . esc_attr( $tab_caption ) . '</a></li>';
 		}
 		echo '</div></ul></div>';
 	}

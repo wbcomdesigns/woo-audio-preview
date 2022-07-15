@@ -27,6 +27,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+if ( ! defined( 'WCAP_TEXT_VERSION' ) ) {
+	define( 'WCAP_TEXT_VERSION', '1.4.1' );
+}
+
 if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
 	define( 'WCAP_TEXT_DOMAIN', 'wc-audio-preview' );
 }
