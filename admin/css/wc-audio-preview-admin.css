@@ -149,3 +149,11 @@
 	border-radius: 4px;
 	color: #fff;
   }
+
+  .nav-tab-wrapper ul .woo-audio-preview-pro a:before {
+    content: "\f111" !important;
+}
+.nav-tab-wrapper ul .woo-audio-preview-faq a:before {
+    content: "\f101" !important;
+}
+

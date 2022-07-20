@@ -9,8 +9,7 @@
 	<div class="wbcom-wrap wbcom-plugin-wrapper">
 		<div class="wbcom_admin_header-wrapper">
 			<div id="wb_admin_plugin_name">
-				<?php esc_html_e( 'Woo Audio Preview', 'wc-audio-preview' ); ?>
-				<span><?php printf( __( 'Version %s', 'wc-audio-preview' ), WCAP_TEXT_VERSION ); ?></span>
+				<?php esc_html_e( 'Help & Support', 'wc-audio-preview' ); ?>
 			</div>
 			<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
 		</div>        
