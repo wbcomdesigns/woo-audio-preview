@@ -15,7 +15,7 @@
 <div class="wbcom-tab-content woo-document-pro">
 	<div class="wbcom-wrapper-admin">
 		<div class="wbcom-admin-title-section">
-			<h3><?php esc_html_e( 'General Settings', 'bp-add-group-types' ); ?></h3>
+			<h3><?php esc_html_e( 'General Settings', 'wc-audio-preview' ); ?></h3>
 		</div>
 		<div class="wbcom-admin-option-wrap wbcom-admin-option-wrap-view">
 			<form method="post" action="options.php">

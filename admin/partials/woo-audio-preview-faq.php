@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wbcom-tab-content">      
 <div class="wbcom-faq-adming-setting">
 	<div class="wbcom-admin-title-section">
-		<h3><?php esc_html_e( 'Have some questions?', 'bp-lock' ); ?></h3>
+		<h3><?php esc_html_e( 'Have some questions?', 'wc-audio-preview' ); ?></h3>
 	</div>
 	<div class="wbcom-faq-admin-settings-block">
 		<div id="wbcom-faq-settings-section" class="wbcom-faq-table">
