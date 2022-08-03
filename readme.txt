@@ -4,8 +4,8 @@ Contributors: vapvarun,wbcomdesigns
 Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
-Tested up to: 6.0.0
-Stable tag: 1.4.1
+Tested up to: 6.0.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,8 +48,10 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 2. It is displaying a button and after click on button this will open a player with given audio demo in single product page screenshot-2.png
 
 
-
 == Changelog ==
+= 1.4.2 =
+* Fix - updated admin ui
+
 = 1.4.1 =
 * Fix - phpcs fixes
 * Fix - Updated name
