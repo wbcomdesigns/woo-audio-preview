@@ -117,39 +117,7 @@ class Wc_Audio_Preview_Public {
 			<?php
 			endif;
 
-		if ( ! empty( $wcap_audio['wcap_audio_names'][0] ) && 'yes' == $wcap_audio_display_playlist ) {
-
-			?>
-				<audio controls="controls" id="audio_player" autoplay preload="auto" controlsList="nodownload">
-					<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
-					<?php
-						$wcap_count_number = 1;
-					foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-						?>
-						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" data-track-number="<?php esc_html_e( '0', 'wc-audio-preview' ); ?><?php echo esc_attr( $wcap_count_number ); ?>">
-					<?php $wcap_count_number++; } ?>
-				</audio>
-				<div class="wcap-audio-playlist">
-				<?php
-				$wcap_count_number = 1;
-				foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-					?>
-					<div class="wcap-audio-playlist-row" data-audio-row="<?php echo esc_attr( $wcap_count_number ); ?>">
-						<div class="wcap-audio-small-toggle-btn">
-							<span class="dashicons dashicons-controls-play" id="wcap_icon_select_audio" data-audio="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>"></span></i>
-						</div>
-						<div class="wcap-audio-number"><?php echo wp_kses_post( $wcap_count_number ); ?></div>
-						<div class="wcap-audio-title">
-						<a href="javascript:void(0)" class="link" id="wcap_select_audio"  data-audio="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>">
-							<?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?>
-						</a>
-						</div>
-					</div>
-					<?php $wcap_count_number++; } ?>
-				</div>
-						<?php
-
-		} elseif ( ! empty( $wcap_audio ) ) {
+		if ( ! empty( $wcap_audio ) ) {
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) ) {
 					?>

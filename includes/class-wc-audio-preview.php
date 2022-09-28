@@ -162,7 +162,10 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'wp_ajax_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'wp_ajax_nopriv_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'woo_audio_preview_init_plugin_settings' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'woo_audio_preview_views_add_admin_settings' );
+		$wcap_free_activated_plugins = get_option( 'active_plugins' );
+		if ( ! in_array( 'woo-audio-preview-pro/woo-audio-preview-pro.php', $wcap_free_activated_plugins ) ) {
+			$this->loader->add_action( 'admin_menu', $plugin_admin, 'woo_audio_preview_views_add_admin_settings' );
+		}
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wbcom_hide_all_admin_notices_from_setting_page' );
 	}
 
