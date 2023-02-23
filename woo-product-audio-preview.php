@@ -111,7 +111,9 @@ add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings'
  */
 function woo_audio_preview_activation_redirect_settings( $plugin ) {
 	if ( plugin_basename( __FILE__ ) === $plugin ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
-		exit;
+		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) {
+			wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
+			exit;
+		}
 	}
 }
