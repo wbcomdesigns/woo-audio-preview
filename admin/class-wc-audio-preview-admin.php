@@ -289,9 +289,9 @@ class Wc_Audio_Preview_Admin {
 								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="text"></td>
 								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 								<td width="15%">
-								<a href="javascript:void(0)"  class="wcap-add-audio-cl"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?></a>&nbsp;
+								<a href="javascript:void(0)"  class="wcap-add-audio-cl button button-primary button-small"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?></a>&nbsp;
 								<?php if ( count( $wcap_audio['wcap_audio_names'] ) > 1 ) : ?>
-								<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl" id="wcap-delete-audio-id"><?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?></a></td>
+								<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="wcap-delete-audio-cl button button-primary button-small" id="wcap-delete-audio-id"><?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?></a></td>
 								<?php endif; ?>
 							</tr>
 						<?php endforeach; ?>
@@ -302,7 +302,7 @@ class Wc_Audio_Preview_Admin {
 							<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $preview_data['url'] ) ? esc_attr( $preview_data['url'] ) : ''; ?>" type="text"></td>
 							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 							<td width="15%">
-							<a href="javascript:void(0)"  class="wcap-add-audio-cl"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?></a>&nbsp;
+							<a href="javascript:void(0)" class="wcap-add-audio-cl button button-primary button-small"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?></a>&nbsp;
 						</tr>
 					<?php endif; ?>
 					</tbody>
