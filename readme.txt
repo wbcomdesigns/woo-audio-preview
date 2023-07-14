@@ -5,7 +5,7 @@ Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
 Tested up to: 6.0.1
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,11 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 
 == Changelog ==
+= 1.4.4 =
+* Managed: (#24)  Frontend audio player UI
+* Managed: (#24) Preview item button UI
+* Fix: Plugin redirect issue when multiple plugins activate at the same time
+
 = 1.4.3 =
 * Fix - (#22)Fixed audio listing with Woo Audio Preview Pro plugins
 * Fix - Update compatibility with WooCommerce latest version
