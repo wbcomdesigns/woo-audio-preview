@@ -4,7 +4,7 @@ Contributors: vapvarun,wbcomdesigns
 Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
-Tested up to: 6.0.1
+Tested up to: 6.3.0
 Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Allows playing the audio files in sample mode to prevent unauthorized downloading of the audio files. It helps to display sample files at single product page.
+The feature of playing audio files in sample mode is available to prevent unauthorized downloading. This feature also enables the display of sample files on a product page.
 
 == Installation ==
 
@@ -22,10 +22,10 @@ Allows playing the audio files in sample mode to prevent unauthorized downloadin
 
 3. Activate the plugin through the \'Plugins\' menu.
 
-4. Alternatively you can use WordPress Plugin installer from Dashboard->Plugins->Add New to add this plugin
+4. Alternatively, you can use the WordPress Plugin installer from Dashboard->Plugins->Add New to add this plugin
 
 5. Enjoy
-If you need additional help you can contact us for [Custom Development](https://wbcomdesigns.com/hire-us/).
+If you require further assistance, feel free to reach out to us for Custom Development at https://wbcomdesigns.com/hire-us/.
 
 
 == Frequently Asked Questions ==
