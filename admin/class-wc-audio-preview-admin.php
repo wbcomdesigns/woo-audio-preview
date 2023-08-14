@@ -40,6 +40,15 @@ class Wc_Audio_Preview_Admin {
 	private $version;
 
 	/**
+	 * Plugin_settings_tabs
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 * @var mixed    $plugin_settings_tabs  The Settings tab.
+	 */
+	public $plugin_settings_tabs;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
