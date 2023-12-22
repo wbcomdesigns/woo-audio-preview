@@ -75,7 +75,8 @@ add_action( 'plugins_loaded', 'wcap_plugin_init' );
  * this plugin requires WooCommerce to be installed and active
  */
 function wcap_check_require_plugins() {
-	if ( ! class_exists( 'WooCommerce' ) ) {
+		$plugins_all = get_option('active_plugins');
+		if( ! in_array( 'woocommerce/woocommerce.php' , $plugins_all ) ){
 		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		if ( null !== filter_input( INPUT_GET, 'activate' ) ) {
@@ -101,7 +102,7 @@ function wcap_plugin_admin_notice() {
 	}
 }
 
-add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings' );
+add_action( 'admin_init', 'woo_audio_preview_activation_redirect_settings' );
 /**
  * Redirect to plugin settings page after activated.
  *

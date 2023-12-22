@@ -25,6 +25,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
+						<?php esc_html_e( 'What are the essential steps to use the plugin?', 'wc-audio-preview' ); ?>
+					</button>
+					<div class="wbcom-faq-panel">
+						<p> 
+							<?php esc_html_e( 'To incorporate an audio preview into your product, follow these steps: Go to WooCommerce > Products, locate and edit the specific product where you wish to include the audio preview. Scroll down to the "Preview Item" section, and select the file you want to showcase as the preview on the Front-End.', 'wc-audio-preview' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="wbcom-faq-section-row">
+				<div class="wbcom-faq-admin-row">
+					<button class="wbcom-faq-accordion">
 						<?php esc_html_e( 'Does This plugin requires Woocommerce?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
