@@ -2,15 +2,18 @@
 	font-size: 10px;
 	color: red;
 }
-.preview_files p.wcap-del-msg{
+
+.preview_files p.wcap-del-msg {
 	color: red;
 	display: none;
 }
+
 .wcap-audio-file td.file_url #wcap_audio_urls.focused {
-   border: 1px solid red;
+	border: 1px solid red;
 }
+
 .wcap-audio-file .file_url_choose #wcap_preview_attachment.focused {
-   border: 1px solid red;
+	border: 1px solid red;
 }
 
 
@@ -19,12 +22,14 @@
 	float: left;
 	padding: 10px 0;
 	width: 100%;
-  }
-  .woo-audio-preview-admin-setting {
+}
+
+.woo-audio-preview-admin-setting {
 	float: left;
 	width: 90%;
-  }
-  button.woo-audio-preview-accordion {
+}
+
+button.woo-audio-preview-accordion {
 	background-color: hsl(0, 0%, 87%);
 	border: medium none;
 	border-top-right-radius: 10px;
@@ -38,122 +43,205 @@
 	text-align: left;
 	transition: all 0.4s ease 0s;
 	width: 90%;
-  }
-  button.woo-audio-preview-accordion.active,
-  button.woo-audio-preview-accordion:hover {
+}
+
+button.woo-audio-preview-accordion.active,
+button.woo-audio-preview-accordion:hover {
 	background-color: hsl(207, 90%, 54%);
 	color: white;
-  }
-  div.wb-ads-panel {
+}
+
+div.wb-ads-panel {
 	background-color: white;
 	margin: 0px 5%;
 	max-height: 0;
 	overflow: hidden;
 	padding: 0 18px;
 	transition: max-height 0.2s ease-out;
-  }
-  button.woo-audio-preview-accordion::after {
+}
+
+button.woo-audio-preview-accordion::after {
 	color: hsl(0, 0%, 47%);
 	content: "+";
 	float: right;
 	font-size: 13px;
 	font-weight: bold;
 	margin-left: 5px;
-  }
-  button.woo-audio-preview-accordion::after:hover {
+}
+
+button.woo-audio-preview-accordion::after:hover {
 	color: white;
-  }
-  button.woo-audio-preview-accordion.active::after {
+}
+
+button.woo-audio-preview-accordion.active::after {
 	content: "−";
 	color: white;
-  }
-  .woo-document-preview-admin-row {
+}
+
+.woo-document-preview-admin-row {
 	border-top: 1px solid #ddd;
 	clear: both;
 	overflow: hidden;
 	padding-bottom: 5px;
-  }
-  
-  .wb-ads-tab-3-title {
+}
+
+.wb-ads-tab-3-title {
 	font-weight: 700;
 	font-size: 16px;
-  }
-  
-  .wb-ads-tab-content .form-table td {
+}
+
+.wb-ads-tab-content .form-table td {
 	padding: 0;
-  }
-  
-  /*Ads CPT UI*/
-  .wb_ads_rotator-panel .CodeMirror-wrap pre {
+}
+
+/*Ads CPT UI*/
+.wb_ads_rotator-panel .CodeMirror-wrap pre {
 	padding-left: 35px;
-  }
-  .wb_ads_rotator-wrapper.select-ads-image.image-ad {
+}
+
+.wb_ads_rotator-wrapper.select-ads-image.image-ad {
 	align-items: center;
 	gap: 30px;
-  }
-  input#wb_ads_rotator_select_image {
+}
+
+input#wb_ads_rotator_select_image {
 	padding: 3px 20px;
 	margin-right: 10px;
-  }
-  .wb_ads_rotator-panel
-	.wb_ads_rotator-wrapper.select-ads-image.image-ad
-	.wb_ads_rotator-label {
+}
+
+.wb_ads_rotator-panel .wb_ads_rotator-wrapper.select-ads-image.image-ad .wb_ads_rotator-label {
 	width: 40%;
-  }
-  .wb_ads_rotator-wrapper.select-ads-image.image-ad
-	.wb_ads_rotator-input
-	input.wb_ads_rotator_image {
+}
+
+.wb_ads_rotator-wrapper.select-ads-image.image-ad .wb_ads_rotator-input input.wb_ads_rotator_image {
 	width: 95%;
-  }
-  .wb_ads_rotator-input label {
+}
+
+.wb_ads_rotator-input label {
 	margin-right: 20px;
-  }
-  .wb-bp-ads-size span {
+}
+
+.wb-bp-ads-size span {
 	display: block;
 	margin-bottom: 5px;
-  }
-  .wb_ads_rotator-input.wb-ads-rotator-ads-size {
+}
+
+.wb_ads_rotator-input.wb-ads-rotator-ads-size {
 	display: flex;
-  }
-  .wb_ads_rotator-input label span {
+}
+
+.wb_ads_rotator-input label span {
 	display: block;
 	margin-bottom: 5px;
-  }
-  .wb_ads_rotator-input .wb_ads_margin {
+}
+
+.wb_ads_rotator-input .wb_ads_margin {
 	width: 100%;
 	display: flex;
 	clear: both;
-  }
-  p.wb_ads_margin_disc {
+}
+
+p.wb_ads_margin_disc {
 	display: block;
 	margin-bottom: 0;
 	clear: both;
 	width: 100%;
-  }
-  .wb_ads_bg_color input[type="color"],
-  .wb_ads_text_color input[type="color"] {
+}
+
+.wb_ads_bg_color input[type="color"],
+.wb_ads_text_color input[type="color"] {
 	padding: 0;
 	border-radius: 0;
 	height: 40px;
 	width: 40px;
 	border: none !important;
 	cursor: pointer;
-  }
-  .shortcode-text-hide {
+}
+
+.shortcode-text-hide {
 	display: none;
-  }
-  .ads-shortcode-text {
+}
+
+.ads-shortcode-text {
 	margin-left: 40px;
 	padding: 5px 12px;
 	background-color: #000000df;
 	border-radius: 4px;
 	color: #fff;
-  }
-
-  .nav-tab-wrapper ul .woo-audio-preview-pro a:before {
-    content: "\f111" !important;
 }
+
+.nav-tab-wrapper ul .woo-audio-preview-pro a:before {
+	content: "\f111" !important;
+}
+
 .nav-tab-wrapper ul .woo-audio-preview-faq a:before {
-    content: "\f101" !important;
+	content: "\f101" !important;
 }
 
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+	/* If you want dots under the hoverable text */
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+
+woocommerce-help-tip {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.tooltiptext {
+	visibility: hidden;
+	width: 200px;
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px;
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -100px;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.woocommerce-help-tip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}

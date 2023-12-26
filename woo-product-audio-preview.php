@@ -102,7 +102,7 @@ function wcap_plugin_admin_notice() {
 	}
 }
 
-add_action( 'admin_init', 'woo_audio_preview_activation_redirect_settings' );
+add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings' );
 /**
  * Redirect to plugin settings page after activated.
  *
@@ -111,7 +111,8 @@ add_action( 'admin_init', 'woo_audio_preview_activation_redirect_settings' );
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  */
 function woo_audio_preview_activation_redirect_settings( $plugin ) {
-	if ( plugin_basename( __FILE__ ) === $plugin ) {
+	$plugins_all = get_option('active_plugins');
+	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php' , $plugins_all ) ) {
 		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) {//phpcs:ignore
 			wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
 			exit;
