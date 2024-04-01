@@ -118,4 +118,21 @@ function woo_audio_preview_activation_redirect_settings( $plugin ) {
 			exit;
 		}
 	}
+	if ( $plugin == $_REQUEST['plugin'] && class_exists( 'Buddypress' ) ) {
+		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate-plugin' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) { //phpcs:ignore		
+			set_transient( '_woo_audio_preview_is_new_install', true, 30 );
+		}
+	}
 }
+/**
+ * Woo_audio_preview_do_activation_redirect
+ *
+ * @return void
+ */
+function woo_audio_preview_do_activation_redirect() {
+	if ( get_transient( '_woo_audio_preview_is_new_install' ) ) {
+		delete_transient( '_woo_audio_preview_is_new_install' );
+		wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
+	}
+}
+add_action( 'admin_init', 'woo_audio_preview_do_activation_redirect' );
