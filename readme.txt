@@ -4,8 +4,8 @@ Contributors: vapvarun,wbcomdesigns
 Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
-Tested up to: 6.3.0
-Stable tag: 1.4.4
+Tested up to: 6.5.0
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,13 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 
 == Changelog ==
+= 1.4.5 =
+* Fix: (#26) Compatibility check with PHP 8.0
+* Fix: (#27) Fixed check for dependency plugin 
+* Fix: (#28) Update Faq
+* Fix: (#29) Fixed added tooltip for meta boxes  
+* Fix: Compatibility check with WordPress 6.5.0  
+
 = 1.4.4 =
 * Managed: (#24)  Frontend audio player UI
 * Managed: (#24) Preview item button UI
