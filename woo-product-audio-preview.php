@@ -13,7 +13,7 @@
  * Plugin Name:       Audio Preview for WooCommerce
  * Plugin URI:        http://wbcomdesigns.com
  * Description:       Allows playing the audio files in sample mode to prevent unauthorized downloading of the audio files. It helps to display sample files at single product page.
- * Version:           1.4.4
+ * Version:           1.4.5
  * Author:            Wbcom Designs <admin@wbcomdesigns.com>
  * Author URI:        http://wbcomdesigns.com
  * License:           GPL-2.0+
@@ -28,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 if ( ! defined( 'WCAP_TEXT_VERSION' ) ) {
-	define( 'WCAP_TEXT_VERSION', '1.4.4' );
+	define( 'WCAP_TEXT_VERSION', '1.4.5' );
 }
 
 if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
@@ -75,8 +75,8 @@ add_action( 'plugins_loaded', 'wcap_plugin_init' );
  * this plugin requires WooCommerce to be installed and active
  */
 function wcap_check_require_plugins() {
-		$plugins_all = get_option('active_plugins');
-		if( ! in_array( 'woocommerce/woocommerce.php' , $plugins_all ) ){
+		$plugins_all = get_option( 'active_plugins' );
+	if ( ! in_array( 'woocommerce/woocommerce.php', $plugins_all ) ) {
 		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		if ( null !== filter_input( INPUT_GET, 'activate' ) ) {
@@ -111,8 +111,8 @@ add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings'
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  */
 function woo_audio_preview_activation_redirect_settings( $plugin ) {
-	$plugins_all = get_option('active_plugins');
-	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php' , $plugins_all ) ) {
+	$plugins_all = get_option( 'active_plugins' );
+	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php', $plugins_all ) ) {
 		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) {//phpcs:ignore
 			wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
 			exit;
