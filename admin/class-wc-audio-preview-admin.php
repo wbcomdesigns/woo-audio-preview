@@ -112,11 +112,11 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Wbcom_hide_all_admin_notices_from_setting_page
+	 * wcap_hide_all_admin_notices_from_setting_page
 	 *
 	 * @return void
 	 */
-	public function wbcom_hide_all_admin_notices_from_setting_page() {
+	public function wcap_hide_all_admin_notices_from_setting_page() {
 		$wbcom_pages_array  = array( 'wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings' );
 		$wbcom_setting_page = filter_input( INPUT_GET, 'page' ) ? filter_input( INPUT_GET, 'page' ) : '';
 
@@ -175,7 +175,7 @@ class Wc_Audio_Preview_Admin {
 	 * @access   public
 	 * @author   Wbcom Designs
 	 */
-	public function woo_audio_preview_init_plugin_settings() {
+	public function wcap_woo_audio_preview_init_plugin_settings() {
 		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'wc-audio-preview' );
 		register_setting( 'woo_audio_preview_admin_welcome_options', 'woo_audio_preview_admin_welcome_options' );
 		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'woo_audio_preview_admin_welcome_content' ), 'woo-audio-preview-welcome' );
@@ -237,7 +237,7 @@ class Wc_Audio_Preview_Admin {
 	 * @access   public
 	 * @author   Wbcom Designs
 	 */
-	public function woo_audio_preview_views_add_admin_settings() {
+	public function wcap_woo_audio_preview_views_add_admin_settings() {
 		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
 			add_menu_page( esc_html__( 'WB Plugins', 'wc-audio-preview' ), esc_html__( 'WB Plugins', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'woo_audio_preview_admin_options_page' ), 'dashicons-lightbulb', 59 );
 			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcomw', 'wc-audio-preview' ), esc_html__( 'Welcome', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins' );
@@ -250,7 +250,7 @@ class Wc_Audio_Preview_Admin {
 	/**
 	 * Update edit form enctype.
 	 */
-	public function update_edit_form() {
+	public function wcap_update_edit_form() {
 		echo ' enctype="multipart/form-data"';
 	}
 
