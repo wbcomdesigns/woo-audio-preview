@@ -480,7 +480,7 @@ class Wc_Audio_Preview_Admin {
 			$upload_path   = $upload_dir['basedir'];
 			$uploaded_file = $upload_path . '/wcap_files/' . $filename;
 			if ( file_exists( $uploaded_file ) ) {
-				@unlink( $uploaded_file );
+				@wp_delete_file( $uploaded_file );
 				update_post_meta( $post_id, 'wcap_preview_attachment', '' );
 			}
 		}
