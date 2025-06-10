@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="wbcom-support-inner">
 						<h3><span class="dashicons dashicons-book"></span><?php esc_html_e( 'Documentation', 'wc-audio-preview' ); ?></h3>
 						<p><?php esc_html_e( 'Explore our detailed guide on Woo Audio Preview to understand all the features and how to make the most of them.', 'wc-audio-preview' ); ?></p>
-						<a href="<?php echo esc_url( 'https://wbcomdesigns.com/docs/woo-addons/woo-audio-preview/' ); ?>" class="button button-primary button-welcome-support" target="_blank"><?php esc_html_e( 'Read Documentation', 'wc-audio-preview' ); ?></a>
+						<a href="<?php echo esc_url( 'https://docs.wbcomdesigns.com/doc_category/woo-audio-preview/' ); ?>" class="button button-primary button-welcome-support" target="_blank"><?php esc_html_e( 'Read Documentation', 'wc-audio-preview' ); ?></a>
 					</div>
 				</div>
 
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="wbcom-support-inner">
 						<h3><span class="dashicons dashicons-admin-comments"></span><?php esc_html_e( 'Share Your Feedback', 'wc-audio-preview' ); ?></h3>
 						<p><?php esc_html_e( 'We’d love to hear about your experience with the plugin. Your feedback and suggestions help us improve future updates.', 'wc-audio-preview' ); ?></p>
-						<a href="<?php echo esc_url( 'https://wbcomdesigns.com/contact/' ); ?>" class="button button-primary button-welcome-support" target="_blank"><?php esc_html_e( 'Send Feedback', 'wc-audio-preview' ); ?></a>
+						<a href="<?php echo esc_url( 'https://wbcomdesigns.com/submit-review/' ); ?>" class="button button-primary button-welcome-support" target="_blank"><?php esc_html_e( 'Send Feedback', 'wc-audio-preview' ); ?></a>
 					</div>
 				</div>
 			</div>

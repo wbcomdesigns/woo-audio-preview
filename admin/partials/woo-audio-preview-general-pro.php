@@ -16,7 +16,7 @@
 	<div class="wbcom-welcome-main-wrapper">
 		<a href="<?php echo esc_url( 'https://wbcomdesigns.com/downloads/woo-audio-preview-pro/' ); ?>" target="_blank">
 			<small><?php esc_html_e( 'Get Pro Version', 'wc-audio-preview' ); ?></small>
-			<img src="<?php echo esc_url( plugin_dir_url( dirname( __FILE__ ) ) . 'images/audio_preview_pro.png' ); ?>">
+			<img src="<?php echo esc_url( plugin_dir_url( dirname( __FILE__ ) ) . 'images/audio_preview_pro.png'); ?>">
 		</a>
 	</div>
 </div>
