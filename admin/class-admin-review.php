@@ -274,7 +274,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 						<h3><?php echo esc_html__( 'Are you enjoying Woo Audio Preview?', 'wc-audio-preview' ); ?></h3>
 						<p>
 							<?php /* translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress*/ ?>
-							<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Could you please do us a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
+							<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Could you please help us by leaving a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
 						</p>
 					</div>
 					<div class="wc-audio-preview-install-now">

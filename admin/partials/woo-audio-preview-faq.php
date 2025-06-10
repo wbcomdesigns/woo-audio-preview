@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wbcom-tab-content">      
 <div class="wbcom-faq-adming-setting">
 	<div class="wbcom-admin-title-section">
-		<h3><?php esc_html_e( 'Have some questions?', 'wc-audio-preview' ); ?></h3>
+		<h3><?php esc_html_e( 'Frequently Asked Questions', 'wc-audio-preview' ); ?></h3>
 	</div>
 	<div class="wbcom-faq-admin-settings-block">
 		<div id="wbcom-faq-settings-section" class="wbcom-faq-table">
@@ -29,7 +29,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'To incorporate an audio preview into your product, follow these steps: Go to WooCommerce > Products, locate and edit the specific product where you wish to include the audio preview. Scroll down to the "Preview Item" section, and select the file you want to showcase as the preview on the Front-End.', 'wc-audio-preview' ); ?>
+							<?php esc_html_e( 'Setting up audio previews for your products is simple: ', 'wc-audio-preview' ); ?>
+						</p>
+						<p> 
+							<?php esc_html_e( '1. Navigate to Products: Go to WooCommerce → Products in your WordPress admin', 'wc-audio-preview' ); ?>
+						</p>
+						<p> 
+							<?php esc_html_e( '2. Edit Your Product: Select the product you want to add an audio preview to', 'wc-audio-preview' ); ?>
+						</p>
+						<p> 
+							<?php esc_html_e( '3. Find Preview Section: Scroll down to the "Audio Preview Item" section', 'wc-audio-preview' ); ?>
+						</p>
+						<p> 
+							<?php esc_html_e( '4. Upload Audio File: Select your MP3 file to use as the preview', 'wc-audio-preview' ); ?>
+						</p>
+						<p> 
+							<?php esc_html_e( '5. Save Changes: Update your product to activate the preview', 'wc-audio-preview' ); ?>
+						</p>
+						<p> 
+							<?php esc_html_e( 'The audio preview button will now appear on your product page, allowing customers to listen before purchasing.', 'wc-audio-preview' ); ?>
 						</p>
 					</div>
 				</div>
@@ -37,11 +55,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'Does This plugin requires Woocommerce?', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'Does this plugin require WooCommerce?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'Yes, It needs you to have Woocommerce installed and activated.', 'wc-audio-preview' ); ?>
+							<?php esc_html_e( 'Yes, this plugin requires WooCommerce to be installed and activated on your WordPress site. The Woo Audio Preview plugin is specifically designed to work with WooCommerce products and will not function without it.', 'wc-audio-preview' ); ?>
 						</p>
 					</div>
 				</div>
@@ -49,11 +67,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'Can We download the preview file?', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'Can customers download the preview file?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'Yes Preview file is downloadable', 'wc-audio-preview' ); ?>     
+							<?php esc_html_e( 'Yes, the preview audio files are downloadable by default. Customers can listen to the preview directly on the product page and also download it if they choose to do so.', 'wc-audio-preview' ); ?>     
 						</p>
 					</div>
 				</div>
@@ -61,11 +79,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'Can multiple files be uploaded to preview?', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'Can I upload multiple preview files for one product?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'Yes plugin provides a feature to upload multiple preview Files', 'wc-audio-preview' ); ?>
+							<?php esc_html_e( 'Absolutely! The plugin supports multiple audio preview files per product. This allows you to showcase different samples, tracks, or variations of your audio product, giving customers a comprehensive preview experience.', 'wc-audio-preview' ); ?>
 						</p>
 					</div>
 				</div>

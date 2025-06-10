@@ -90,11 +90,11 @@ add_action( 'admin_init', 'wcap_check_require_plugins' );
  * Required Plugin Admin Notice.
  */
 function wcap_plugin_admin_notice() {
-	$wcap_plugin = esc_html__( 'WooCommerce Audio Preview', 'wc-audio-preview' );
+	$wcap_plugin = esc_html__( 'Woo Audio Preview', 'wc-audio-preview' );
 	$wc_plugin   = esc_html__( 'WooCommerce', 'wc-audio-preview' );
 
 	echo '<div class="error"><p>'
-	. sprintf( '%1$s is ineffective now as it requires %2$s to function correctly.', '<strong>' . esc_html( $wcap_plugin ) . '</strong>', '<strong>' . esc_html( $wc_plugin ) . '</strong>' )
+	. sprintf( '%1$s is currently ineffective because it requires %2$s to be installed and activated.', '<strong>' . esc_html( $wcap_plugin ) . '</strong>', '<strong>' . esc_html( $wc_plugin ) . '</strong>' )
 	. '</p></div>';
 	if ( null !== filter_input( INPUT_GET, 'activate' ) ) {
 		$activate = filter_input( INPUT_GET, 'activate' );

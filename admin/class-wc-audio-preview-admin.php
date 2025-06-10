@@ -237,7 +237,7 @@ class Wc_Audio_Preview_Admin {
 	public function wcap_woo_audio_preview_views_add_admin_settings() {
 		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
 			add_menu_page( esc_html__( 'WB Plugins', 'wc-audio-preview' ), esc_html__( 'WB Plugins', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'woo_audio_preview_admin_options_page' ), 'dashicons-lightbulb', 59 );
-			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcomw', 'wc-audio-preview' ), esc_html__( 'Welcome', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins' );
+			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'wc-audio-preview' ), esc_html__( 'Welcome', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins' );
 
 		}
 		add_submenu_page( 'wbcomplugins', esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'woo_audio_preview_admin_options_page' ) );
@@ -256,7 +256,17 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_register_meta_boxes() {
 		global $post;
-		add_meta_box( 'wc-preview-audio-mata-id', __( 'Audio Preview Item <span class="wcap-required-span"> ( Only MP3 allowed here. )</span>', 'wc-audio-preview' ), array( $this, 'wcap_display_callback' ), 'product' );
+		$label_text = sprintf(
+			__( 'Audio Preview Item %s', 'wc-audio-preview' ),
+			'<span class="wcap-required-span">' . __( '( Only MP3 allowed here. )', 'wc-audio-preview' ) . '</span>'
+		);
+
+		add_meta_box(
+			'wc-preview-audio-mata-id',
+			$label_text,
+			array( $this, 'wcap_display_callback' ),
+			'product'
+		);
 
 	}
 
