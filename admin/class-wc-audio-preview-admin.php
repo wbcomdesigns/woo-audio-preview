@@ -415,10 +415,8 @@ class Wc_Audio_Preview_Admin {
 							$audio_data['wcap_audio_urls'][$key] = esc_url_raw($url);
 						}
 					}
-					// $data = map_deep( wp_unslash( $_POST['wcap_audio'] ), 'sanitize_text_field' );
 					// Update post meta with sanitized data
     				update_post_meta($post_id, 'wcap_audio', $audio_data);
-					// update_post_meta( $post_id, 'wcap_audio', $data );
 				}
 			}
 
@@ -464,6 +462,7 @@ class Wc_Audio_Preview_Admin {
 								 * @see _wp_handle_upload() in wp-admin/includes/file.php
 								 */
 								echo wp_kses_post( $movefile['error'] );
+								$this->wcap_woo_audio_preview_log_error($movefile['error']);
 								error_log('Error uploading file: ' . ($movefile['error'] ?? 'Unknown error'));
 								add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
 								return;
@@ -561,6 +560,54 @@ class Wc_Audio_Preview_Admin {
 		$upload['path']   = $upload['basedir'] . $upload['subdir'];
 		$upload['url']    = $upload['baseurl'] . $upload['subdir'];
 		return $upload;
+	}
+
+	/**
+	 * Display admin errors
+	 *
+	 */
+	function wcap_woo_audio_preview_display_admin_errors() {
+		$screen = get_current_screen();
+		
+		// Only show on our plugin pages
+		if ($screen && (strpos($screen->id, 'woo-audio-preview') !== false || $screen->id === 'product')) {
+			$errors = get_option('wcap_admin_errors', array());
+			
+			if (!empty($errors)) {
+				echo '<div class="notice notice-error is-dismissible">';
+				foreach ($errors as $error) {
+					echo '<p>' . esc_html($error) . '</p>';
+				}
+				echo '</div>';
+				
+				// Clear errors after displaying
+				update_option('wcap_admin_errors', array());
+			}
+		}
+	}
+
+	/**
+	 * Log plugin errors for debugging
+	 *
+	 * @param string $message Error message to log
+	 * @param string $level   Log level (error, warning, info)
+	*/
+	function wcap_woo_audio_preview_log_error($message, $level = 'error') {
+		if (defined('WP_DEBUG') && WP_DEBUG === true) {
+			// For debug mode, output to debug.log
+			if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
+				error_log('[Audio Preview for WooCommerce] ' . $level . ': ' . $message);
+			}
+			
+			// For admin UI, maybe store errors to be displayed
+			if (is_admin() && $level === 'error') {
+				$errors = get_option('wcap_admin_errors', array());
+				$errors[] = $message;
+				// Keep only last 10 errors
+				$errors = array_slice($errors, -10);
+				update_option('wcap_admin_errors', $errors);
+			}
+		}
 	}
 
 }
