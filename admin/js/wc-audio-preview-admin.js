@@ -49,52 +49,56 @@
         //location.reload();
       });
     });
-    $("body.post-type-product form#post").on("submit", function () {
-      if ($("#wcap_preview_attachment").val() != "") {
-        var ext = $("#wcap_preview_attachment")
-          .val()
-          .split(".")
-          .pop()
-          .toLowerCase();
-        if ($.inArray(ext, ["mp3"]) == -1) {
+  $("body.post-type-product form#post").on("submit", function () {
+    let isValid = true;
+
+    // Clear previous error states
+    $(".preview_files p.wcap-del-msg").text("").hide();
+    $(".focused").removeClass("focused");
+
+    // Validate preview attachment
+    $("#wcap_preview_attachment").each(function () {
+      let val = $(this).val();
+      if (val !== "") {
+        let ext = val.split(".").pop().toLowerCase();
+        if ($.inArray(ext, ["mp3"]) === -1) {
+         
           $(".preview_files p.wcap-del-msg")
-            .text(
-              "The audio type that you've uploaded is invalid. Please upload given audio type."
-            )
+            .text("The preview file must be an MP3.")
             .show();
-          $(
-            ".wcap-audio-file .file_url_choose #wcap_preview_attachment"
-          ).addClass("focused");
-          $("html, body").animate(
-            {
-              scrollTop: $("#wcap_preview_attachment").offset().top,
-            },
-            500
-          );
-          return false;
-        }
-      }
-      if ($("#wcap_audio_urls").val() != "") {
-        var ext = $("#wcap_audio_urls").val().split(".").pop().toLowerCase();
-        if ($.inArray(ext, ["mp3"]) == -1) {
-          $(".preview_files p.wcap-del-msg")
-            .text(
-              "The audio type that you've uploaded is invalid. Please upload given audio type."
-            )
-            .show();
-          $(".wcap-audio-file td.file_url #wcap_audio_urls").addClass(
-            "focused"
-          );
-          $("html, body").animate(
-            {
-              scrollTop: $("#wcap_audio_urls").offset().top,
-            },
-            500
-          );
-          return false;
+            $(this).addClass("focused");
+          isValid = false;
         }
       }
     });
+
+    // Validate each audio URL input (assuming multiple rows)
+    $(".wcap-audio-file input[type='text'], .wcap-audio-file input[type='file']").each(function () {
+      let val = $(this).val();
+      if (val !== "") {
+        let ext = val.split(".").pop().toLowerCase();
+        if ($.inArray(ext, ["mp3"]) === -1) {
+          $(this).addClass("focused");
+         $(".preview_files p.wcap-del-msg")
+            .text("The preview file must be an MP3.")
+            .show();
+          isValid = false;
+        }
+      }
+    });
+
+    // If any invalid file, prevent form submission
+    if (!isValid) {
+      $("html, body").animate(
+        {
+          scrollTop: $(".focused:first").offset().top,
+        },
+        500
+      );
+      return false;
+    }
+  });
+
     /*faq tab accordion*/
     var wb_ads_elmt = document.getElementsByClassName(
       "wbcom-faq-accordion"
