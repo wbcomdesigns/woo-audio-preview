@@ -438,6 +438,9 @@ class Wc_Audio_Preview_Admin {
 								 * @see _wp_handle_upload() in wp-admin/includes/file.php
 								 */
 								echo wp_kses_post( $movefile['error'] );
+								error_log('Error uploading file: ' . ($movefile['error'] ?? 'Unknown error'));
+								add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
+								return;
 							}
 						} else {
 							// Error Message.
@@ -475,23 +478,47 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_woo_audio_preview_delete_audio_ajax() {
-		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ajax-nonce' ) ) {
-			die( 'Busted!' );
+		if (!check_ajax_referer('ajax-nonce', 'nonce', false)) {
+			wp_send_json_error('Invalid security token');
+			exit;
 		}
-		if ( isset( $_POST ) ) {
-			$post_id       = isset( $_POST['p_id'] ) ? sanitize_text_field( wp_unslash( $_POST['p_id'] ) ) : '';
-			$fileurl       = isset( $_POST['file_url'] ) ? sanitize_text_field( wp_unslash( $_POST['file_url'] ) ) : '';
+		if (!current_user_can('manage_woocommerce')) {
+			wp_send_json_error('Insufficient permissions');
+			exit;
+		}
+		
+		$post_id       = isset( $_POST['p_id'] ) ? absint( wp_unslash( $_POST['p_id'] ) ) : '';
+		$fileurl       = isset( $_POST['file_url'] ) ? esc_url_raw( wp_unslash( $_POST['file_url'] ) ) : '';
+		if (!$post_id || !$fileurl) {
+			wp_send_json_error('Missing required parameters');
+			exit;
+    	}
+
+		 // Verify the file belongs to this product
+		$attachment_meta = get_post_meta($post_id, 'wcap_preview_attachment', true);
+		if (empty($attachment_meta) || $attachment_meta['url'] !== $fileurl) {
+			wp_send_json_error('File verification failed');
+			exit;
+		}
+		// if ( isset( $_POST ) ) {
+			
 			$filename      = basename( $fileurl );
 			$upload_dir    = wp_upload_dir();
 			$upload_path   = $upload_dir['basedir'];
 			$uploaded_file = $upload_path . '/wcap_files/' . $filename;
-			if ( file_exists( $uploaded_file ) ) {
-				@wp_delete_file( $uploaded_file );
-				update_post_meta( $post_id, 'wcap_preview_attachment', '' );
+			if (file_exists($uploaded_file) && is_writable($uploaded_file)) {
+				if (@unlink($uploaded_file)) {
+					update_post_meta($post_id, 'wcap_preview_attachment', '');
+					wp_send_json_success('File deleted successfully');
+				} else {
+					wp_send_json_error('Could not delete file');
+				}
+			} else {
+				// File doesn't exist or isn't writable, just update the meta
+				update_post_meta($post_id, 'wcap_preview_attachment', '');
+				wp_send_json_success('Metadata updated');
 			}
-		}
-		die();
+			exit;
 	}
 
 	/**

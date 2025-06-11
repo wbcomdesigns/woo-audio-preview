@@ -37,12 +37,16 @@
 
     $(document).on("click", ".wcap-delete-audio-cl", function (e) {
       $(this).parents("tr").remove();
+      var fiel_url = $(this).closest('tr').find('.file_url input[type=text]').val();
+      var postId = $(this).data('p_id');
+
       if ($("tr.wcap-audio-file").length < 2) {
         $("a.wcap-delete-audio-cl").remove();
       }
       var data = {
         action: "wcap_delete_audio_ajax",
-        ajaxurl: wcap_ajax_object.ajax_url,
+        file_url:fiel_url,
+        p_id :postId,
         nonce: wcap_ajax_object.nonce,
       };
       $.post(ajaxurl, data, function (response) {
