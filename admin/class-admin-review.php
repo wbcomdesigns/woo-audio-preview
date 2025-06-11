@@ -305,7 +305,7 @@ endif;
 /*
 * Instantiate the Woo_Audio_Feedback class.
 */
-function woo_audio_feedback_cb(){
+function wcap_woo_audio_preview_audio_feedback_cb(){
 	new Woo_Audio_Feedback(
 		array(
 			'slug'       => 'woo_audio_feedback',
@@ -315,4 +315,4 @@ function woo_audio_feedback_cb(){
 	);
 }
 
-add_action('init','woo_audio_feedback_cb');
+add_action('init','wcap_woo_audio_preview_audio_feedback_cb');
