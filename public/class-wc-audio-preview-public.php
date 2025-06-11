@@ -97,7 +97,7 @@ class Wc_Audio_Preview_Public {
 	/**
 	 * To display audio preview fields.
 	 */
-	public function wcap_woo_audio_preview_add_preview_field() {
+	public function wcap_add_preview_field() {
 		global $post;
 
 		$wcap_preview                = get_post_meta( $post->ID, 'wcap_preview_attachment', true );

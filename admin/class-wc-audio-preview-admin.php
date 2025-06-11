@@ -127,7 +127,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @return void
 	 */
-	public function wcap_woo_audio_preview_hide_all_admin_notices_from_setting_page() {
+	public function wcap_hide_all_admin_notices_from_setting_page() {
 		
 		if (isset($_GET['page']) && in_array($_GET['page'], array('wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings'), true)) {
         
@@ -144,7 +144,7 @@ class Wc_Audio_Preview_Admin {
 	 * @since    1.0.0
 	 * @access public
 	 */
-	public function wcap_woo_audio_preview_admin_options_page() {
+	public function wcap_admin_options_page() {
 		global $allowedposttags;
 		$tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
 		?>
@@ -166,7 +166,7 @@ class Wc_Audio_Preview_Admin {
 			<div class="wbcom-admin-settings-page">
 				<?php
 				settings_errors();
-				$this->wcap_woo_audio_preview_plugin_settings_tabs();
+				$this->wcap_plugin_settings_tabs();
 				settings_fields( $tab );
 				do_settings_sections( $tab );
 				?>
@@ -183,24 +183,24 @@ class Wc_Audio_Preview_Admin {
 	 * @access   public
 	 * @author   Wbcom Designs
 	 */
-	public function wcap_woo_audio_preview_init_plugin_settings() {
+	public function wcap_init_plugin_settings() {
 		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'wc-audio-preview' );
 		register_setting( 'woo_audio_preview_admin_welcome_options', 'woo_audio_preview_admin_welcome_options' );
-		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'wcap_woo_audio_preview_admin_welcome_content' ), 'woo-audio-preview-welcome' );
+		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'wcap_admin_welcome_content' ), 'woo-audio-preview-welcome' );
 
 		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'wc-audio-preview' );
-		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'wcap_woo_audio_preview_general_pro' ), 'woo-audio-preview-pro' );
+		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'wcap_general_pro' ), 'woo-audio-preview-pro' );
 
 		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'wc-audio-preview' );
 		register_setting( 'woo_audio_preview_general_options', 'woo_audio_preview_general_options' );
-		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'wcap_woo_audio_preview_general_options_content' ), 'woo-audio-preview-faq' );
+		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'wcap_general_options_content' ), 'woo-audio-preview-faq' );
 
 	}
 
 	/**
 	 * Actions performed to create tabs on the sub menu page.
 	 */
-	public function wcap_woo_audio_preview_plugin_settings_tabs() {
+	public function wcap_plugin_settings_tabs() {
 		$current_tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
 		// xprofile setup tab.
 		echo '<div class="wbcom-tabs-section"><div class="nav-tab-wrapper"><div class="wb-responsive-menu"><span>' . esc_html( 'Menu' ) . '</span><input class="wb-toggle-btn" type="checkbox" id="wb-toggle-btn"><label class="wb-toggle-icon" for="wb-toggle-btn"><span class="wb-icon-bars"></span></label></div><ul>';
@@ -216,7 +216,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @return void
 	 */
-	public function wcap_woo_audio_preview_admin_welcome_content() {
+	public function wcap_admin_welcome_content() {
 		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-welcome-page.php';
 	}
 
@@ -225,7 +225,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @return void
 	 */
-	public function wcap_woo_audio_preview_general_options_content() {
+	public function wcap_general_options_content() {
 		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-faq.php';
 	}
 
@@ -234,7 +234,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @return void
 	 */
-	public function wcap_woo_audio_preview_general_pro() {
+	public function wcap_general_pro() {
 		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-general-pro.php';
 	}
 
@@ -245,27 +245,27 @@ class Wc_Audio_Preview_Admin {
 	 * @access   public
 	 * @author   Wbcom Designs
 	 */
-	public function wcap_woo_audio_preview_views_add_admin_settings() {
+	public function wcap_views_add_admin_settings() {
 		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
-			add_menu_page( esc_html__( 'WB Plugins', 'wc-audio-preview' ), esc_html__( 'WB Plugins', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_woo_audio_preview_admin_options_page' ), 'dashicons-lightbulb', 59 );
+			add_menu_page( esc_html__( 'WB Plugins', 'wc-audio-preview' ), esc_html__( 'WB Plugins', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_admin_options_page' ), 'dashicons-lightbulb', 59 );
 			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'wc-audio-preview' ), esc_html__( 'Welcome', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins' );
 
 		}
-		add_submenu_page( 'wbcomplugins', esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'wcap_woo_audio_preview_admin_options_page' ) );
+		add_submenu_page( 'wbcomplugins', esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), esc_html__( 'Woo Audio Preview', 'wc-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'wcap_admin_options_page' ) );
 	}
 
 
 	/**
 	 * Update edit form enctype.
 	 */
-	public function wcap_woo_audio_preview_update_edit_form() {
+	public function wcap_update_edit_form() {
 		echo ' enctype="multipart/form-data"';
 	}
 
 	/**
 	 * Register meta box(es).
 	 */
-	public function wcap_woo_audio_preview_register_meta_boxes() {
+	public function wcap_register_meta_boxes() {
 		global $post;
 		$label_text = sprintf(
 			__( 'Audio Preview Item %s', 'wc-audio-preview' ),
@@ -275,7 +275,7 @@ class Wc_Audio_Preview_Admin {
 		add_meta_box(
 			'wc-preview-audio-mata-id',
 			$label_text,
-			array( $this, 'wcap_woo_audio_preview_display_callback' ),
+			array( $this, 'wcap_display_callback' ),
 			'product'
 		);
 
@@ -286,7 +286,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
-	public function wcap_woo_audio_preview_display_callback( $post ) {
+	public function wcap_display_callback( $post ) {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
 
@@ -345,7 +345,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @param int $post_id Post ID Get a Post ID.
 	 */
-	public function wcap_woo_audio_preview_save_meta_box( $post_id ) {
+	public function wcap_save_meta_box( $post_id ) {
 		// Add nonce for security and authentication.
 		$nonce_name   = isset( $_POST['wcap_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['wcap_nonce'] ) ) : '';
 		$nonce_action = 'wcap_nonce_action';
@@ -400,9 +400,9 @@ class Wc_Audio_Preview_Admin {
 							$uploadedfile['size']     = $wcap_upload_audio['size']['wcap_preview_attachment'][ $key ];
 							$upload_overrides         = array( 'test_form' => false );
 
-							add_filter( 'upload_dir', array( $this, 'wcap_woo_audio_preview_set_upload_dir' ) );
+							add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
 							$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-							remove_filter( 'upload_dir', array( $this, 'wcap_woo_audio_preview_set_upload_dir' ) );
+							remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
 							$_POST['wcap_audio']['wcap_audio_urls'][ $key ] = $movefile['url'];
 
 						}
@@ -451,9 +451,9 @@ class Wc_Audio_Preview_Admin {
 							$uploadedfile     = $wcap_preview;
 							$upload_overrides = array( 'test_form' => false );
 
-							add_filter( 'upload_dir', array( $this, 'wcap_woo_audio_preview_set_upload_dir' ) );
+							add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
 							$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-							remove_filter( 'upload_dir', array( $this, 'wcap_woo_audio_preview_set_upload_dir' ) );
+							remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
 
 							if ( $movefile && ! isset( $movefile['error'] ) ) {
 								$movefile['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
@@ -466,7 +466,7 @@ class Wc_Audio_Preview_Admin {
 								 * @see _wp_handle_upload() in wp-admin/includes/file.php
 								 */
 								echo wp_kses_post( $movefile['error'] );
-								$this->wcap_woo_audio_preview_log_error($movefile['error']);
+								$this->wcap_log_error($movefile['error']);
 								error_log('Error uploading file: ' . ($movefile['error'] ?? 'Unknown error'));
 								add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
 								return;
@@ -506,7 +506,7 @@ class Wc_Audio_Preview_Admin {
 	 *
 	 * @return void
 	 */
-	public function wcap_woo_audio_preview_delete_audio_ajax() {
+	public function wcap_delete_audio_ajax() {
 		if (!check_ajax_referer('ajax-nonce', 'nonce', false)) {
 			wp_send_json_error('Invalid security token');
 			exit;
@@ -529,25 +529,24 @@ class Wc_Audio_Preview_Admin {
 			wp_send_json_error('File verification failed');
 			exit;
 		}
-		// if ( isset( $_POST ) ) {
 			
-			$filename      = basename( $fileurl );
-			$upload_dir    = wp_upload_dir();
-			$upload_path   = $upload_dir['basedir'];
-			$uploaded_file = $upload_path . '/wcap_files/' . $filename;
-			if (file_exists($uploaded_file) && is_writable($uploaded_file)) {
-				if (@unlink($uploaded_file)) {
-					update_post_meta($post_id, 'wcap_preview_attachment', '');
-					wp_send_json_success('File deleted successfully');
-				} else {
-					wp_send_json_error('Could not delete file');
-				}
-			} else {
-				// File doesn't exist or isn't writable, just update the meta
+		$filename      = basename( $fileurl );
+		$upload_dir    = wp_upload_dir();
+		$upload_path   = $upload_dir['basedir'];
+		$uploaded_file = $upload_path . '/wcap_files/' . $filename;
+		if (file_exists($uploaded_file) && is_writable($uploaded_file)) {
+			if (@unlink($uploaded_file)) {
 				update_post_meta($post_id, 'wcap_preview_attachment', '');
-				wp_send_json_success('Metadata updated');
+				wp_send_json_success('File deleted successfully');
+			} else {
+				wp_send_json_error('Could not delete file');
 			}
-			exit;
+		} else {
+			// File doesn't exist or isn't writable, just update the meta
+			update_post_meta($post_id, 'wcap_preview_attachment', '');
+			wp_send_json_success('Metadata updated');
+		}
+		exit;
 	}
 
 	/**
@@ -559,7 +558,7 @@ class Wc_Audio_Preview_Admin {
 	 * @since 1.0
 	 * @return array Upload directory information
 	 */
-	public function wcap_woo_audio_preview_set_upload_dir( $upload ) {
+	public function wcap_set_upload_dir( $upload ) {
 		$upload['subdir'] = '/wcap_files';
 		$upload['path']   = $upload['basedir'] . $upload['subdir'];
 		$upload['url']    = $upload['baseurl'] . $upload['subdir'];
@@ -570,7 +569,7 @@ class Wc_Audio_Preview_Admin {
 	 * Display admin errors
 	 *
 	 */
-	function wcap_woo_audio_preview_display_admin_errors() {
+	function wcap_display_admin_errors() {
 		$screen = get_current_screen();
 		
 		// Only show on our plugin pages
@@ -596,7 +595,7 @@ class Wc_Audio_Preview_Admin {
 	 * @param string $message Error message to log
 	 * @param string $level   Log level (error, warning, info)
 	*/
-	function wcap_woo_audio_preview_log_error($message, $level = 'error') {
+	function wcap_log_error($message, $level = 'error') {
 		if (defined('WP_DEBUG') && WP_DEBUG === true) {
 			// For debug mode, output to debug.log
 			if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
