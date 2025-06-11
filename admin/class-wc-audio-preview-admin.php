@@ -368,6 +368,10 @@ class Wc_Audio_Preview_Admin {
 		if ( wp_is_post_autosave( $post_id ) ) {
 			return;
 		}
+		// For admin settings:
+		if (!current_user_can('manage_woocommerce')) {
+			wp_die(__('You do not have sufficient permissions to access this page.', 'wc-audio-preview'));
+		}
 
 		// Check if not a revision.
 		if ( wp_is_post_revision( $post_id ) ) {
