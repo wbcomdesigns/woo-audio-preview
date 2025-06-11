@@ -19,6 +19,7 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       wc-audio-preview
+ * Requires Plugins:  woocommerce
  * Domain Path:       /languages
  */
 
@@ -75,15 +76,15 @@ add_action( 'plugins_loaded', 'wcap_plugin_init' );
  * this plugin requires WooCommerce to be installed and active
  */
 function wcap_check_require_plugins() {
-		$plugins_all = get_option( 'active_plugins' );
-	if ( ! in_array( 'woocommerce/woocommerce.php', $plugins_all ) ) {
-		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
-		deactivate_plugins( plugin_basename( __FILE__ ) );
-		if ( null !== filter_input( INPUT_GET, 'activate' ) ) {
-			$activate = filter_input( INPUT_GET, 'activate' );
-			unset( $activate );
-		}
-	}
+	if (!class_exists('WooCommerce')) {
+        add_action('admin_notices', 'wcap_plugin_admin_notice');
+        deactivate_plugins(plugin_basename(__FILE__));
+        if (isset($_GET['activate'])) {
+            unset($_GET['activate']);
+        }
+        return false;
+    }
+    return true;
 }
 add_action( 'admin_init', 'wcap_check_require_plugins' );
 /**
