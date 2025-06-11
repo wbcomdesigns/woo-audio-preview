@@ -133,6 +133,8 @@ class Wc_Audio_Preview_Admin {
         
 			// Remove non-critical notices only
 			remove_action('admin_notices', 'update_nag', 3);
+			remove_all_actions( 'admin_notices' );
+			remove_all_actions( 'all_admin_notices' );
 			
 		}
 	}
