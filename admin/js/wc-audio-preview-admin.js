@@ -51,6 +51,7 @@
     });
   $("body.post-type-product form#post").on("submit", function () {
     let isValid = true;
+    let emptyRows = [];
 
     // Clear previous error states
     $(".preview_files p.wcap-del-msg").text("").hide();
@@ -72,22 +73,47 @@
       }
     });
 
-    // Validate each audio URL input (assuming multiple rows)
-    $(".wcap-audio-file input[type='text'], .wcap-audio-file input[type='file']").each(function () {
-      let val = $(this).val();
-      if (val !== "") {
-        let ext = val.split(".").pop().toLowerCase();
+    $(".wcap-audio-file").each(function () {
+      let $row = $(this);
+      console.log($row);
+      let fileInput = $row.find("input[type='file']");
+      let textInput = $row.find(".file_url input[type='text']");
+      let fileVal = fileInput.val();
+      let urlVal = textInput.val();
+      let errorShown = false;
+
+      // Reset previous error state
+      $row.find("p.wcap-del-msg").text("").hide();
+      fileInput.removeClass("focused");
+      textInput.removeClass("focused");
+
+      if (fileVal !== "") {
+        let ext = fileVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
-          $(this).addClass("focused");
-         $(".preview_files p.wcap-del-msg")
-            .text("The preview file must be an MP3.")
-            .show();
+          
+          $row.closest(".preview_files").find("p.wcap-del-msg").text("Uploaded file must be an MP3.").show();
+          fileInput.addClass("focused");
           isValid = false;
+          errorShown = true;
         }
+      } else if (urlVal !== "") {
+        let ext = urlVal.split(".").pop().toLowerCase();
+        if ($.inArray(ext, ["mp3"]) === -1) {
+          
+          $row.closest(".preview_files").find("p.wcap-del-msg").text("Audio URL must be an MP3 fileee.").show();
+          textInput.addClass("focused");
+          isValid = false;
+          errorShown = true;
+        }
+      } else {
+        // Mark this row for removal if both inputs are empty
+        emptyRows.push($row);
       }
     });
+    emptyRows.forEach(row => row.remove());
 
-    // If any invalid file, prevent form submission
+
+    /* If any invalid file, prevent form submission*/
     if (!isValid) {
       $("html, body").animate(
         {
