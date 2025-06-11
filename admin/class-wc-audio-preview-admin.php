@@ -377,6 +377,7 @@ class Wc_Audio_Preview_Admin {
 		if ( isset( $_POST['post_type'] ) && 'product' === $_POST['post_type'] ) {
 			if ( isset( $_POST['wcap_audio'] ) && ! empty( $_POST['wcap_audio'] ) ) {
 				if ( isset( $_FILES['wcap_audio']['name'] ) && ! empty( $_FILES['wcap_audio']['name'] ) ) {
+					$audio_data = array();
 					$supported_types   = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
 					$wcap_upload_audio = map_deep( wp_unslash( $_FILES['wcap_audio'] ), 'sanitize_text_field' );
 					foreach ( $wcap_upload_audio['name']['wcap_preview_attachment'] as $key => $value ) {
@@ -402,8 +403,22 @@ class Wc_Audio_Preview_Admin {
 
 						}
 					}
-					$data = map_deep( wp_unslash( $_POST['wcap_audio'] ), 'sanitize_text_field' );
-					update_post_meta( $post_id, 'wcap_audio', $data );
+					if (isset($_POST['wcap_audio']['wcap_audio_names']) && is_array($_POST['wcap_audio']['wcap_audio_names'])) {
+						foreach ($_POST['wcap_audio']['wcap_audio_names'] as $key => $name) {
+							$audio_data['wcap_audio_names'][$key] = sanitize_text_field($name);
+						}
+					}
+
+					// Sanitize URLs
+					if (isset($_POST['wcap_audio']['wcap_audio_urls']) && is_array($_POST['wcap_audio']['wcap_audio_urls'])) {
+						foreach ($_POST['wcap_audio']['wcap_audio_urls'] as $key => $url) {
+							$audio_data['wcap_audio_urls'][$key] = esc_url_raw($url);
+						}
+					}
+					// $data = map_deep( wp_unslash( $_POST['wcap_audio'] ), 'sanitize_text_field' );
+					// Update post meta with sanitized data
+    				update_post_meta($post_id, 'wcap_audio', $audio_data);
+					// update_post_meta( $post_id, 'wcap_audio', $data );
 				}
 			}
 
