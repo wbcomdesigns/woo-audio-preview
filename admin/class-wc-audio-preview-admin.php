@@ -79,7 +79,11 @@ class Wc_Audio_Preview_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wc-audio-preview-admin.css', array(), $this->version, 'all' );
+		$screen = get_current_screen();
+		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {
+			
+			wp_enqueue_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wc-audio-preview-admin.css', array(), $this->version, 'all' );
+		}
 	}
 
 	/**
@@ -100,15 +104,22 @@ class Wc_Audio_Preview_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script(
+		$screen = get_current_screen();
+		
+		
+
+		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {
+			
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin.js', array( 'jquery' ), $this->version, false );
+			wp_localize_script(
 			$this->plugin_name,
 			'wcap_ajax_object',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'ajax-nonce' ),
-			)
-		);
+				array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'nonce'    => wp_create_nonce( 'ajax-nonce' ),
+				)
+			);
+		}
 	}
 
 	/**
@@ -117,12 +128,12 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_woo_audio_preview_hide_all_admin_notices_from_setting_page() {
-		$wbcom_pages_array  = array( 'wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings' );
-		$wbcom_setting_page = filter_input( INPUT_GET, 'page' ) ? filter_input( INPUT_GET, 'page' ) : '';
-
-		if ( in_array( $wbcom_setting_page, $wbcom_pages_array, true ) ) {
-			remove_all_actions( 'admin_notices' );
-			remove_all_actions( 'all_admin_notices' );
+		
+		if (isset($_GET['page']) && in_array($_GET['page'], array('wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings'), true)) {
+        
+			// Remove non-critical notices only
+			remove_action('admin_notices', 'update_nag', 3);
+			
 		}
 	}
 
