@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 09:38:40+00:00\n"
+"POT-Creation-Date: 2025-06-12 06:26:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -78,23 +78,22 @@ msgstr ""
 msgid "a second"
 msgstr ""
 
-#: admin/class-admin-review.php:271 admin/class-admin-review.php:311
-#: admin/class-wc-audio-preview-admin.php:149
-#: admin/class-wc-audio-preview-admin.php:243
+#: admin/class-admin-review.php:271 admin/class-wc-audio-preview-admin.php:162
+#: admin/class-wc-audio-preview-admin.php:256
 #: admin/wbcom/templates/wbcom-license-page.php:9
-msgid "Woo Audio Preview"
+#: woo-product-audio-preview.php:94
+msgid "Audio Preview for WooCommerce"
 msgstr ""
 
 #: admin/class-admin-review.php:274
-msgid "Are you enjoying Woo Audio Preview?"
+msgid "Are you enjoying Audio Preview for WooCommerce?"
 msgstr ""
 
 #: admin/class-admin-review.php:277
 #. translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress
 msgid ""
-"We hope you're enjoying %1$s! Could you please do us a BIG favor and give "
-"it a 5-star rating on WordPress to help us spread the word and boost our "
-"motivation?"
+"We hope you're enjoying %1$s! Would you kindly give it a 5-star rating on "
+"WordPress? Your feedback helps us improve and reach more users."
 msgstr ""
 
 #: admin/class-admin-review.php:281
@@ -105,61 +104,63 @@ msgstr ""
 msgid "No thanks / I already have"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:150
+#: admin/class-wc-audio-preview-admin.php:163
 #: admin/wbcom/templates/wbcom-license-page.php:10
 msgid "Version %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:176
-#: admin/class-wc-audio-preview-admin.php:240
+#: admin/class-wc-audio-preview-admin.php:189
+#: admin/class-wc-audio-preview-admin.php:253
 msgid "Welcome"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:180
+#: admin/class-wc-audio-preview-admin.php:193
 msgid "General (PRO)"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:183
+#: admin/class-wc-audio-preview-admin.php:196
 msgid "FAQ"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:239
+#: admin/class-wc-audio-preview-admin.php:252
 msgid "WB Plugins"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:240
-msgid "Welcomw"
+#: admin/class-wc-audio-preview-admin.php:273
+msgid "Audio Preview Item %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:259
-msgid ""
-"Audio Preview Item <span class=\"wcap-required-span\"> ( Only MP3 allowed "
-"here. )</span>"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:279
-msgid "Name"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:281
-msgid "Audio URL"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:287
-msgid "Error"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:300
-#: admin/class-wc-audio-preview-admin.php:313
-msgid "Add"
+#: admin/class-wc-audio-preview-admin.php:274
+msgid "( Only MP3 allowed here. )"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:302
+msgid "Name"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:304
+msgid "Audio URL"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:310
+msgid "Error"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:323
+#: admin/class-wc-audio-preview-admin.php:336
+msgid "Add"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:325
 msgid "Remove"
 msgstr ""
 
+#: admin/class-wc-audio-preview-admin.php:375
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
 #: admin/partials/woo-audio-preview-faq.php:21
-msgid "Have some questions?"
+msgid "Frequently Asked Questions"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:28
@@ -167,93 +168,90 @@ msgid "What are the essential steps to use the plugin?"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:32
-msgid ""
-"To incorporate an audio preview into your product, follow these steps: Go "
-"to WooCommerce > Products, locate and edit the specific product where you "
-"wish to include the audio preview. Scroll down to the \"Preview Item\" "
-"section, and select the file you want to showcase as the preview on the "
-"Front-End."
+msgid "Setting up audio previews for your products is simple: "
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:40
-msgid "Does This plugin requires Woocommerce?"
+#: admin/partials/woo-audio-preview-faq.php:35
+msgid ""
+"1. Navigate to Products: Go to WooCommerce → Products in your WordPress "
+"admin"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:38
+msgid "2. Edit Your Product: Select the product you want to add an audio preview to"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:41
+msgid "3. Find Preview Section: Scroll down to the \"Audio Preview Item\" section"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:44
-msgid "Yes, It needs you to have Woocommerce installed and activated."
+msgid "4. Upload Audio File: Select your MP3 file to use as the preview"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:52
-msgid "Can We download the preview file?"
+#: admin/partials/woo-audio-preview-faq.php:47
+msgid "5. Save Changes: Update your product to activate the preview"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:56
-msgid "Yes Preview file is downloadable"
+#: admin/partials/woo-audio-preview-faq.php:50
+msgid ""
+"The audio preview button will now appear on your product page, allowing "
+"customers to listen before purchasing."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:64
-msgid "Can multiple files be uploaded to preview?"
+#: admin/partials/woo-audio-preview-faq.php:58
+msgid "Does this plugin require WooCommerce?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:68
-msgid "Yes plugin provides a feature to upload multiple preview Files"
+#: admin/partials/woo-audio-preview-faq.php:62
+msgid "Yes, it requires WooCommerce to be installed and activated."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:76
+#: admin/partials/woo-audio-preview-faq.php:70
+msgid "Can users download the preview file?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:74
+msgid "Yes, preview files are downloadable."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:82
+msgid "Can I upload multiple preview files for one product?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:86
+msgid ""
+"Absolutely! The plugin supports multiple audio preview files per product. "
+"This allows you to showcase different samples, tracks, or variations of "
+"your audio product, giving customers a comprehensive preview experience."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:94
 msgid "What if I need more features?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:80
+#: admin/partials/woo-audio-preview-faq.php:98
 msgid "You can hire our team to assist you."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:88
+#: admin/partials/woo-audio-preview-faq.php:106
 msgid "What if I have a question?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:93
+#: admin/partials/woo-audio-preview-faq.php:111
 msgid "No problem. Please get in touch with us via our"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-general-pro.php:18
-msgid "General Settings"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:26
-msgid "Preview Button Display Position"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:32
-msgid "Before Add to cart Button"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:33
-msgid "After Add to cart Button"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:44
-msgid "Exclude Category"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:61
-#: admin/partials/woo-audio-preview-general-pro.php:76
-msgid "Preview Button Text Color"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:91
-msgid "Preview Button Background Color"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-general-pro.php:106
-msgid "Preview Button Hover Background Color"
+msgid "Get Pro Version"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:17
-#: admin/partials/woo-audio-preview-welcome-page.php:31
 msgid ""
-"Woo Audio Preview provides a button on the single product page which will "
-"allow you to preview the Audio. The plugin provides a simple meta box to "
-"add sample audio file which can be previewed."
+"Audio Preview for WooCommerce provides a button on the single product page, "
+"allowing users to preview audio files before making a purchase. The plugin "
+"includes a user-friendly meta box where you can easily upload and manage "
+"sample audio files for preview."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:24
@@ -262,13 +260,19 @@ msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:25
 msgid ""
-"Here are all the resources you may need to get help from us. Documentation "
-"is usually the best place to start. Should you require help anytime, our "
-"customer care team is available to assist you at the support center."
+"If you need assistance, here are some helpful resources. Our documentation "
+"is a great place to start, and our support team is available if you require "
+"further help."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:30
 msgid "Documentation"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:31
+msgid ""
+"Explore our detailed guide on Audio Preview for WooCommerce to understand "
+"all the features and how to make the most of them."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:32
@@ -281,8 +285,8 @@ msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:39
 msgid ""
-"We strive to offer the best customer care via our support center. Once your "
-"theme is activated, you can ask us for help anytime."
+"Our support team is here to assist you with any questions or issues. Feel "
+"free to contact us anytime through our support center."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:40
@@ -290,13 +294,13 @@ msgid "Get Support"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:45
-msgid "Got Feedback?"
+msgid "Share Your Feedback"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:46
 msgid ""
-"We want to hear about your experience with the plugin. We would also love "
-"to hear any suggestions you may for future updates."
+"We’d love to hear about your experience with the plugin. Your feedback and "
+"suggestions help us improve future updates."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-welcome-page.php:47
@@ -1136,10 +1140,6 @@ msgstr ""
 msgid "Your browser does not support the audio element."
 msgstr ""
 
-#: woo-product-audio-preview.php:93
-msgid "WooCommerce Audio Preview"
-msgstr ""
-
-#: woo-product-audio-preview.php:94
+#: woo-product-audio-preview.php:95
 msgid "WooCommerce"
 msgstr ""
