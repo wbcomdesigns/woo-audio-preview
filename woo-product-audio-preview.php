@@ -79,7 +79,7 @@ function wcap_check_require_plugins() {
 	if (!class_exists('WooCommerce')) {
         add_action('admin_notices', 'wcap_plugin_admin_notice');
         deactivate_plugins(plugin_basename(__FILE__));
-        if (isset($_GET['activate'])) {
+        if (isset($_GET['activate'])) { //phpcs:ignore
             unset($_GET['activate']);
         }
         return false;
