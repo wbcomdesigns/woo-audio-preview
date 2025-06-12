@@ -103,15 +103,15 @@ function wcap_plugin_admin_notice() {
 	}
 }
 
-add_action( 'activated_plugin', 'woo_audio_preview_activation_redirect_settings' );
+add_action( 'activated_plugin', 'wcap_activation_redirect_settings' );
 /**
- * Redirect to plugin settings page after activated.
+ * Actions performed to check the depedency of the plugin.
  *
  * @since  1.0.0
  *
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  */
-function woo_audio_preview_activation_redirect_settings( $plugin ) {
+function wcap_activation_redirect_settings( $plugin ) {
 	$plugins_all = get_option( 'active_plugins' );
 	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php', $plugins_all ) ) {
 		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) {//phpcs:ignore
@@ -126,14 +126,14 @@ function woo_audio_preview_activation_redirect_settings( $plugin ) {
 	}
 }
 /**
- * Woo_audio_preview_do_activation_redirect
+ * Actions performed to redirection on the activation.
  *
  * @return void
  */
-function woo_audio_preview_do_activation_redirect() {
+function wcap_do_activation_redirect() {
 	if ( get_transient( '_woo_audio_preview_is_new_install' ) ) {
 		delete_transient( '_woo_audio_preview_is_new_install' );
 		wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
 	}
 }
-add_action( 'admin_init', 'woo_audio_preview_do_activation_redirect' );
+add_action( 'admin_init', 'wcap_do_activation_redirect' );

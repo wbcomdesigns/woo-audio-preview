@@ -110,7 +110,7 @@ class Wc_Audio_Preview_Admin {
 
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
 			
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin.js', array( 'jquery' ), $this->version, false );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin.js', array( 'jquery','wp-i18n' ), $this->version, false );
 			wp_localize_script(
 			$this->plugin_name,
 			'wcap_ajax_object',

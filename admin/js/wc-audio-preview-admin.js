@@ -29,6 +29,9 @@
    * practising this, we should strive to set a better example in our own work.
    */
   $(function () {
+    if (typeof wp !== 'undefined' && wp.i18n) {
+        var { __ } = wp.i18n;
+    }
     $(document).on("click", ".wcap-add-audio-cl", function (e) {
       var woo_audio_tr =
         '<tr class="wcap-audio-file"><td class="sort"></td><td class="file_name"><input class="input_text" placeholder="Mp3 Name" name="wcap_audio[wcap_audio_names][]" value="" type="text" ></td><td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="" type="text"></td><td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="" size="25"/></td><td width="15%"><a href="javascript:void(0)"  class="tooltip wcap-add-audio-cl button button-primary button-small">Add<span class="tooltiptext">Add a new audio file</span></a>&nbsp;<a href="javascript:void(0)" class="tooltip wcap-delete-audio-cl button button-primary button-small" id="wcap-delete-audio-id">Remove<span class="tooltiptext">Remove this audio file</span></a></td></tr>';
@@ -37,7 +40,7 @@
 
     $(document).on("click", ".wcap-delete-audio-cl", function (e) {
       $(this).parents("tr").remove();
-      var fiel_url = $(this).closest('tr').find('.file_url input[type=text]').val();
+      var file_url = $(this).closest('tr').find('.file_url input[type=text]').val();
       var postId = $(this).data('p_id');
 
       if ($("tr.wcap-audio-file").length < 2) {
@@ -45,7 +48,7 @@
       }
       var data = {
         action: "wcap_delete_audio_ajax",
-        file_url:fiel_url,
+        file_url:file_url,
         p_id :postId,
         nonce: wcap_ajax_object.nonce,
       };
@@ -69,7 +72,7 @@
         if ($.inArray(ext, ["mp3"]) === -1) {
          
           $(".preview_files p.wcap-del-msg")
-            .text("The preview file must be an MP3.")
+            .text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","woo-audio-preview-welcome"))
             .show();
             $(this).addClass("focused");
           isValid = false;
@@ -79,7 +82,6 @@
 
     $(".wcap-audio-file").each(function () {
       let $row = $(this);
-      console.log($row);
       let fileInput = $row.find("input[type='file']");
       let textInput = $row.find(".file_url input[type='text']");
       let fileVal = fileInput.val();
@@ -95,7 +97,7 @@
         let ext = fileVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text("The audio type you've uploaded is invalid. Please upload an MP3 file.").show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","woo-audio-preview-welcome")).show();
           fileInput.addClass("focused");
           isValid = false;
           errorShown = true;
@@ -104,7 +106,7 @@
         let ext = urlVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text("The audio type you've uploaded is invalid. Please upload an MP3 file.").show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","woo-audio-preview-welcome")).show();
           textInput.addClass("focused");
           isValid = false;
           errorShown = true;
