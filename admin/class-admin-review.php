@@ -268,13 +268,13 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 			<div class="notice updated wc-audio-preview-notice">
 				<div class="wc-audio-preview-notice-inner">
 					<div class="wc-audio-preview-notice-icon">
-						<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Woo Audio Preview', 'wc-audio-preview' ); ?>" />
+						<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>" />
 					</div>
 					<div class="wc-audio-preview-notice-content">
-						<h3><?php echo esc_html__( 'Are you enjoying Woo Audio Preview?', 'wc-audio-preview' ); ?></h3>
+						<h3><?php echo esc_html__( 'Are you enjoying Audio Preview for WooCommerce?', 'wc-audio-preview' ); ?></h3>
 						<p>
 							<?php /* translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress*/ ?>
-							<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Could you please help us by leaving a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
+							<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Would you kindly give it a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
 						</p>
 					</div>
 					<div class="wc-audio-preview-install-now">
@@ -309,7 +309,7 @@ function wcap_audio_feedback_cb(){
 	new Woo_Audio_Feedback(
 		array(
 			'slug'       => 'woo_audio_feedback',
-			'name'       => esc_html( 'Woo Audio Preview', 'wc-audio-preview' ),
+			'name'       => esc_html( 'Audio Preview for WooCommerce', 'wc-audio-preview' ),
 			'time_limit' => WEEK_IN_SECONDS,
 		)
 	);

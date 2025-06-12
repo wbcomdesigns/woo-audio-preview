@@ -43,9 +43,9 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 == Screenshots ==
 
-1. It is displaying Meta Box Field under specific product post screenshot-1.png
+1. Meta Box Field displayed under a specific product post screenshot-1.png
 
-2. It is displaying a button and after click on button this will open a player with given audio demo in single product page screenshot-2.png
+2. Preview button displayed on the product page; clicking it opens an audio player with the demo with given audio demo in single product page screenshot-2.png
 
 
 == Changelog ==
@@ -62,7 +62,7 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 * Fix: Plugin redirect issue when multiple plugins activate at the same time
 
 = 1.4.3 =
-* Fix - (#22)Fixed audio listing with Woo Audio Preview Pro plugins
+* Fix - (#22)Fixed audio listing with Audio Preview for WooCommerce Pro plugins
 * Fix - Update compatibility with WooCommerce latest version
 
 = 1.4.2 =

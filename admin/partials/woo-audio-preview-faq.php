@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'Yes, this plugin requires WooCommerce to be installed and activated on your WordPress site. The Woo Audio Preview plugin is specifically designed to work with WooCommerce products and will not function without it.', 'wc-audio-preview' ); ?>
+							<?php esc_html_e( 'Yes, it requires WooCommerce to be installed and activated.', 'wc-audio-preview' ); ?>
 						</p>
 					</div>
 				</div>
@@ -67,11 +67,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'Can customers download the preview file?', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'Can users download the preview file?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'Yes, the preview audio files are downloadable by default. Customers can listen to the preview directly on the product page and also download it if they choose to do so.', 'wc-audio-preview' ); ?>     
+							<?php esc_html_e( 'Yes, preview files are downloadable.', 'wc-audio-preview' ); ?>     
 						</p>
 					</div>
 				</div>

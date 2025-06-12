@@ -95,7 +95,7 @@
         let ext = fileVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text("Uploaded file must be an MP3.").show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text("The audio type you've uploaded is invalid. Please upload an MP3 file.").show();
           fileInput.addClass("focused");
           isValid = false;
           errorShown = true;
@@ -104,7 +104,7 @@
         let ext = urlVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text("Audio URL must be an MP3 fileee.").show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text("The audio type you've uploaded is invalid. Please upload an MP3 file.").show();
           textInput.addClass("focused");
           isValid = false;
           errorShown = true;

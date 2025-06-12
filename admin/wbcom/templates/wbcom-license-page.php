@@ -6,7 +6,7 @@
 	<div class="wbcom-wrap wbcom-plugin-wrapper">
 		<div class="wbcom_admin_header-wrapper">
 			<div id="wb_admin_plugin_name">
-				<?php esc_html_e( 'Woo Audio Preview', 'wc-audio-preview' ); ?>
+				<?php esc_html_e( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>
 				<span><?php printf( __( 'Version %s', 'wc-audio-preview' ), WCAP_TEXT_VERSION );//phpcs:ignore ?></span>
 			</div>
 			<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
