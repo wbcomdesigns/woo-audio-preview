@@ -80,7 +80,7 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
-		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {
+		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {//phpcs:ignore
 			
 			wp_enqueue_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wc-audio-preview-admin.css', array(), $this->version, 'all' );
 		}
@@ -108,7 +108,7 @@ class Wc_Audio_Preview_Admin {
 		
 		
 
-		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {
+		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
 			
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin.js', array( 'jquery' ), $this->version, false );
 			wp_localize_script(
@@ -129,7 +129,7 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_hide_all_admin_notices_from_setting_page() {
 		
-		if (isset($_GET['page']) && in_array($_GET['page'], array('wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings'), true)) {
+		if (isset($_GET['page']) && in_array($_GET['page'], array('wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings'), true)) { //phpcs:ignore
         
 			// Remove non-critical notices only
 			remove_action('admin_notices', 'update_nag', 3);
@@ -372,7 +372,7 @@ class Wc_Audio_Preview_Admin {
 		}
 		// For admin settings:
 		if (!current_user_can('manage_woocommerce')) {
-			wp_die(__('You do not have sufficient permissions to access this page.', 'wc-audio-preview'));
+			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'wc-audio-preview'));
 		}
 
 		// Check if not a revision.
@@ -410,14 +410,16 @@ class Wc_Audio_Preview_Admin {
 						}
 					}
 					if (isset($_POST['wcap_audio']['wcap_audio_names']) && is_array($_POST['wcap_audio']['wcap_audio_names'])) {
-						foreach ($_POST['wcap_audio']['wcap_audio_names'] as $key => $name) {
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized inside the loop
+						foreach (wp_unslash($_POST['wcap_audio']['wcap_audio_names']) as $key => $name) {
 							$audio_data['wcap_audio_names'][$key] = sanitize_text_field($name);
 						}
 					}
 
 					// Sanitize URLs
 					if (isset($_POST['wcap_audio']['wcap_audio_urls']) && is_array($_POST['wcap_audio']['wcap_audio_urls'])) {
-						foreach ($_POST['wcap_audio']['wcap_audio_urls'] as $key => $url) {
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized inside the loop
+						foreach (wp_unslash($_POST['wcap_audio']['wcap_audio_urls']) as $key => $url) {
 							$audio_data['wcap_audio_urls'][$key] = esc_url_raw($url);
 						}
 					}
@@ -469,7 +471,6 @@ class Wc_Audio_Preview_Admin {
 								 */
 								echo wp_kses_post( $movefile['error'] );
 								$this->wcap_log_error($movefile['error']);
-								error_log('Error uploading file: ' . ($movefile['error'] ?? 'Unknown error'));
 								add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
 								return;
 							}
@@ -536,8 +537,8 @@ class Wc_Audio_Preview_Admin {
 		$upload_dir    = wp_upload_dir();
 		$upload_path   = $upload_dir['basedir'];
 		$uploaded_file = $upload_path . '/wcap_files/' . $filename;
-		if (file_exists($uploaded_file) && is_writable($uploaded_file)) {
-			if (@unlink($uploaded_file)) {
+		if (file_exists($uploaded_file) && is_writable($uploaded_file)) { //phpcs:ignore
+			if (@wp_delete_file($uploaded_file)) {
 				update_post_meta($post_id, 'wcap_preview_attachment', '');
 				wp_send_json_success('File deleted successfully');
 			} else {
@@ -601,7 +602,7 @@ class Wc_Audio_Preview_Admin {
 		if (defined('WP_DEBUG') && WP_DEBUG === true) {
 			// For debug mode, output to debug.log
 			if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
-				error_log('[Audio Preview for WooCommerce] ' . $level . ': ' . $message);
+				error_log('[Audio Preview for WooCommerce] ' . $level . ': ' . $message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
 			
 			// For admin UI, maybe store errors to be displayed
