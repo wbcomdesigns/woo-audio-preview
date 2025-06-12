@@ -80,9 +80,19 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
+		$rtl_css = is_rtl() ? '-rtl' : '';
+
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$css_extension = '.css';
+		} else {
+			$css_extension = '.min.css';
+		}
+		if(is_rtl()){
+			$css_extension = '.css';
+		}
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {//phpcs:ignore
 			
-			wp_enqueue_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wc-audio-preview-admin.css', array(), $this->version, 'all' );
+			wp_enqueue_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css'. $rtl_css .'/wc-audio-preview-admin'.$css_extension, array(), $this->version, 'all' );
 		}
 	}
 
@@ -105,12 +115,17 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$js_extension = '.js';
+		} else {
+			$js_extension = '.min.js';
+		}
 		
 		
 
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
 			
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin.js', array( 'jquery','wp-i18n' ), $this->version, false );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin'.$js_extension, array( 'jquery','wp-i18n' ), $this->version, false );
 			wp_localize_script(
 			$this->plugin_name,
 			'wcap_ajax_object',

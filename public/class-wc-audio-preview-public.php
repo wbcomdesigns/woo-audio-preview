@@ -70,7 +70,18 @@ class Wc_Audio_Preview_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wc-audio-preview-public.css', array(), $this->version, 'all' );
+		$rtl_css = is_rtl() ? '-rtl' : '';
+
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$css_extension = '.css';
+
+		} else {
+			$css_extension = '.min.css';
+		}
+		if(is_rtl()){
+			$css_extension = '.css';
+		}
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css'.$rtl_css.'/wc-audio-preview-public'.$css_extension, array(), $this->version, 'all' );
 	}
 
 	/**
@@ -91,7 +102,13 @@ class Wc_Audio_Preview_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-public.js', array( 'jquery' ), $this->version, false );
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$js_extension = '.js';
+		} else {
+			$js_extension = '.min.js';
+		}
+		
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-public'.$js_extension, array( 'jquery' ), $this->version, false );
 	}
 
 	/**

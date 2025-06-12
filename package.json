@@ -1,23 +1,25 @@
 {
-  "name": "wc-audio-preview",
+  "name": "woo-audio-preview",
   "version": "1.0.0",
-  "url": "https://github.com/wbcomdesigns/woo-audio-preview",
+  "url": "https://github.com/wbcomdesigns/woo-audio-preview/",
   "license": "GPL-2.0+",
-  "description": "This plugin will add an extended feature to the big name “ WooCommerce ” that will allow you to add audio preview feature in single product page.",
+  "description": "Audio Preview for WooCommerce lets you showcase audio tracks in a secure sample mode, allowing users to listen to a short preview on the product page while preventing unauthorized downloads of the original audio.",
   "devDependencies": {
-    "grunt": "^1.0.4",
+    "grunt": "^1.3.0",
     "grunt-checktextdomain": "^1.0.1",
-    "grunt-wp-i18n": "^1.0.1"
+    "grunt-contrib-cssmin": "^5.0.0",
+    "grunt-contrib-uglify": "^5.2.2",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-rtlcss": "^2.0.2",
+    "grunt-shell": "^4.0.0",
+    "grunt-wp-i18n": "^1.0.3",
+    "load-grunt-tasks": "^3.5.2"
   },
   "engines": {
     "node": ">=6.9.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wbcomdesigns/woo-audio-preview"
-  },
-  "dependencies": {
-    "load-grunt-tasks": "^3.5.2",
-    "npm": "^8.15.1"
+    "url": "https://github.com/wbcomdesigns/woo-audio-preview/"
   }
 }

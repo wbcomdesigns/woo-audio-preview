@@ -56,6 +56,7 @@
         //location.reload();
       });
     });
+    console.log(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview"));
   $("body.post-type-product form#post").on("submit", function () {
     let isValid = true;
     let emptyRows = [];
@@ -72,7 +73,7 @@
         if ($.inArray(ext, ["mp3"]) === -1) {
          
           $(".preview_files p.wcap-del-msg")
-            .text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","woo-audio-preview-welcome"))
+            .text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview"))
             .show();
             $(this).addClass("focused");
           isValid = false;
@@ -97,7 +98,7 @@
         let ext = fileVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","woo-audio-preview-welcome")).show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview")).show();
           fileInput.addClass("focused");
           isValid = false;
           errorShown = true;
@@ -106,7 +107,7 @@
         let ext = urlVal.split(".").pop().toLowerCase();
         if ($.inArray(ext, ["mp3"]) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","woo-audio-preview-welcome")).show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview")).show();
           textInput.addClass("focused");
           isValid = false;
           errorShown = true;
