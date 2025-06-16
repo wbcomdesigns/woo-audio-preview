@@ -512,23 +512,23 @@ class Wc_Audio_Preview_Admin {
 						if ( ! function_exists( 'wp_handle_upload' ) ) {
 							require_once ABSPATH . 'wp-admin/includes/file.php';
 						}
-							$upload_overrides = array( 'test_form' => false );
+						$upload_overrides = array( 'test_form' => false );
 
-							add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-							$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-							remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
+						add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
+						$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+						remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
 
-							if ( $movefile && ! isset( $movefile['error'] ) ) {
-								$movefile['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
-								add_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
-								update_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
-							} else {
+						if ( $movefile && ! isset( $movefile['error'] ) ) {
+							$movefile['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
+							add_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
+							update_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
+						} else {
 
-								echo wp_kses_post( $movefile['error'] );
-								$this->wcap_log_error($movefile['error']);
-								add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
-								return;
-							}
+							echo wp_kses_post( $movefile['error'] );
+							$this->wcap_log_error($movefile['error']);
+							add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
+							return;
+						}
 					} else {
 						if ( isset( $_POST['wcap_audio_urls'] ) && ! empty( $_POST['wcap_audio_urls'] ) ) {
 							$upload_file   = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
@@ -581,13 +581,6 @@ class Wc_Audio_Preview_Admin {
 			exit;
 		}
 
-		 // Verify the file belongs to this product
-		$attachment_meta = get_post_meta($post_id, 'wcap_preview_attachment', true);
-		if (empty($attachment_meta) || $attachment_meta['url'] !== $fileurl) {
-			wp_send_json_error('File verification failed');
-			exit;
-		}
-			
 		$filename      = basename( $fileurl );
 		$upload_dir    = wp_upload_dir();
 		$upload_path   = $upload_dir['basedir'];
