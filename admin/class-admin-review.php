@@ -82,7 +82,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 		public function seconds_to_words( $seconds ) {
 
 			// Get the years.
-			$years = ( intval( $seconds ) / YEAR_IN_SECONDS ) % 100;
+			$years = intval( intval( $seconds ) / YEAR_IN_SECONDS ) % 100;
 			if ( $years > 1 ) {
 				/* translators: Number of years */
 				return sprintf( __( '%s years', 'wc-audio-preview' ), $years );
@@ -91,7 +91,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 			}
 
 			// Get the weeks.
-			$weeks = ( intval( $seconds ) / WEEK_IN_SECONDS ) % 52;
+			$weeks = intval( intval( $seconds ) / WEEK_IN_SECONDS ) % 52;
 			if ( $weeks > 1 ) {
 				/* translators: Number of weeks */
 				return sprintf( __( '%s weeks', 'wc-audio-preview' ), $weeks );
