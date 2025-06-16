@@ -424,11 +424,11 @@ class Wc_Audio_Preview_Admin {
 						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
 						
 						if ( ! in_array( $file_ext, $supported_types ) || !$file_type['type'] ) {
-							wp_die( __( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
+							wp_die( esc_html__( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
 						}
 
 						if ( $uploadedfile['size'] > 10485760 ) {
-							wp_die( __( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
+							wp_die( esc_html__( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
 						}
 						// Use the WordPress API to upload the file.
 						if ( ! function_exists( 'wp_handle_upload' ) ) {
@@ -457,13 +457,13 @@ class Wc_Audio_Preview_Admin {
 								$cleaned_url = esc_url_raw(wp_unslash($url));
 								$file_ext = strtolower(pathinfo(parse_url($cleaned_url, PHP_URL_PATH), PATHINFO_EXTENSION));
 								if (!in_array($file_ext, array('mp3', 'wav', 'ogg', 'm4a'))) {
-									wp_die(__('External URL must point to a valid audio file (MP3, WAV, OGG, M4A)', 'wc-audio-preview'));
+									wp_die(esc_html__('External URL must point to a valid audio file (MP3, WAV, OGG, M4A)', 'wc-audio-preview'));
 								}
 								if (!empty($cleaned_url) && filter_var($cleaned_url, FILTER_VALIDATE_URL)) {
 									$audio_data['wcap_audio_urls'][$key] = $cleaned_url;
 									$audio_data['wcap_audio_source'][$key] = 'external';
 								} else if (!empty($url)) {
-									wp_die(__('Invalid URL provided', 'wc-audio-preview'));
+									wp_die(esc_html__('Invalid URL provided', 'wc-audio-preview'));
 								}
 							}elseif (!empty($_FILES['wcap_audio']['name']['wcap_preview_attachment'][$key])) {
 								// File uploaded - handle upload
@@ -501,11 +501,11 @@ class Wc_Audio_Preview_Admin {
 						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
 						
 						if ( ! in_array( $file_ext, $supported_types ) || !$file_type['type'] ) {
-							wp_die( __( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
+							wp_die( esc_html__( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
 						}
 
 						if ( $uploadedfile['size'] > 10485760 ) {
-							wp_die( __( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
+							wp_die( esc_html__( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
 						}
 
 						
