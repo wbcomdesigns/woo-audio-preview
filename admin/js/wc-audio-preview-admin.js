@@ -56,7 +56,6 @@
         //location.reload();
       });
     });
-    console.log(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview"));
   $("body.post-type-product form#post").on("submit", function () {
     let isValid = true;
     let emptyRows = [];
@@ -68,9 +67,11 @@
     // Validate preview attachment
     $("#wcap_preview_attachment").each(function () {
       let val = $(this).val();
+      let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
       if (val !== "") {
         let ext = val.split(".").pop().toLowerCase();
-        if ($.inArray(ext, ["mp3"]) === -1) {
+      console.log(ext);
+        if ($.inArray(ext, supported_types) === -1) {
          
           $(".preview_files p.wcap-del-msg")
             .text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview"))
@@ -96,7 +97,9 @@
 
       if (fileVal !== "") {
         let ext = fileVal.split(".").pop().toLowerCase();
-        if ($.inArray(ext, ["mp3"]) === -1) {
+      console.log(ext);
+        let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
+        if ($.inArray(ext, supported_types) === -1) {
           
           $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview")).show();
           fileInput.addClass("focused");
@@ -105,7 +108,9 @@
         }
       } else if (urlVal !== "") {
         let ext = urlVal.split(".").pop().toLowerCase();
-        if ($.inArray(ext, ["mp3"]) === -1) {
+        console.log(ext);
+         let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
+        if ($.inArray(ext, supported_types) === -1) {
           
           $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview")).show();
           textInput.addClass("focused");

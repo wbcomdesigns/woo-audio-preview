@@ -399,30 +399,48 @@ class Wc_Audio_Preview_Admin {
 			if ( isset( $_POST['wcap_audio'] ) && ! empty( $_POST['wcap_audio'] ) ) {
 				if ( isset( $_FILES['wcap_audio']['name'] ) && ! empty( $_FILES['wcap_audio']['name'] ) ) {
 					$audio_data = array();
-					$supported_types   = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
+					$supported_types = array('mp3', 'wav', 'ogg', 'm4a');
+					$supported_mimes = array(
+						'mp3' => array('audio/mpeg', 'audio/mp3', 'audio/mpeg3', 'audio/x-mpeg-3'),
+						'wav' => array('audio/wav', 'audio/x-wav', 'audio/wave'),
+						'ogg' => array('audio/ogg', 'application/ogg'),
+						'm4a' => array('audio/mp4', 'audio/x-m4a')
+					);
 					$wcap_upload_audio = map_deep( wp_unslash( $_FILES['wcap_audio'] ), 'sanitize_text_field' );
 					foreach ( $wcap_upload_audio['name']['wcap_preview_attachment'] as $key => $value ) {
-						$arr_file_type = wp_check_filetype( basename( $value ) );
-						$uploaded_type = $arr_file_type['type'];
-						if ( in_array( $uploaded_type, $supported_types ) ) {
-							// Use the WordPress API to upload the file.
-							if ( ! function_exists( 'wp_handle_upload' ) ) {
-								require_once ABSPATH . 'wp-admin/includes/file.php';
-							}
 
-							$uploadedfile['name']     = $wcap_upload_audio['name']['wcap_preview_attachment'][ $key ];
-							$uploadedfile['type']     = $wcap_upload_audio['type']['wcap_preview_attachment'][ $key ];
-							$uploadedfile['tmp_name'] = $wcap_upload_audio['tmp_name']['wcap_preview_attachment'][ $key ];
-							$uploadedfile['error']    = $wcap_upload_audio['error']['wcap_preview_attachment'][ $key ];
-							$uploadedfile['size']     = $wcap_upload_audio['size']['wcap_preview_attachment'][ $key ];
-							$upload_overrides         = array( 'test_form' => false );
-
-							add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-							$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-							remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-							$_POST['wcap_audio']['wcap_audio_urls'][ $key ] = $movefile['url'];
-
+						if ( empty( $value ) || empty( $wcap_upload_audio['tmp_name']['wcap_preview_attachment'][$key] ) ) {
+							continue;
 						}
+
+						$uploadedfile = array(
+							'name'     => $wcap_upload_audio['name']['wcap_preview_attachment'][ $key ],
+							'type'     => $wcap_upload_audio['type']['wcap_preview_attachment'][ $key ],
+							'tmp_name' => $wcap_upload_audio['tmp_name']['wcap_preview_attachment'][ $key ],
+							'error'    => $wcap_upload_audio['error']['wcap_preview_attachment'][ $key ],
+							'size'     => $wcap_upload_audio['size']['wcap_preview_attachment'][ $key ],
+						);
+						$file_ext = strtolower( pathinfo( $uploadedfile['name'], PATHINFO_EXTENSION ) );
+						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
+						
+						if ( ! in_array( $file_ext, $supported_types ) || !$file_type['type'] ) {
+							wp_die( __( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
+						}
+
+						if ( $uploadedfile['size'] > 10485760 ) {
+							wp_die( __( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
+						}
+						// Use the WordPress API to upload the file.
+						if ( ! function_exists( 'wp_handle_upload' ) ) {
+							require_once ABSPATH . 'wp-admin/includes/file.php';
+						}
+						$upload_overrides         = array( 'test_form' => false );
+
+						add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
+						$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+						remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
+						$_POST['wcap_audio']['wcap_audio_urls'][ $key ] = $movefile['url'];
+
 					}
 					if (isset($_POST['wcap_audio']['wcap_audio_names']) && is_array($_POST['wcap_audio']['wcap_audio_names'])) {
 						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized inside the loop
@@ -446,28 +464,38 @@ class Wc_Audio_Preview_Admin {
 			if ( isset( $_POST['wcap_audio_names'] ) ) {
 				$wcap_preview     = isset( $_FILES['wcap_preview_attachment'] ) ? map_deep( wp_unslash( $_FILES['wcap_preview_attachment'] ), 'sanitize_text_field' ) : '';
 				$wcap_audio_names = sanitize_text_field( wp_unslash( $_POST['wcap_audio_names'] ) );
-				if ( '' == $wcap_audio_names ) {
+				if ( '' == $wcap_audio_names && ! empty( $wcap_preview['name'] )) {
 					$file_name                 = explode( '.', $wcap_preview['name'] );
 					$_POST['wcap_audio_names'] = $file_name[0];
 				}
 				if ( isset( $_POST['wcap_audio_names'] ) && ! empty( $_POST['wcap_audio_names'] ) ) {
+					$supported_types = array('mp3', 'wav', 'ogg', 'm4a');
+					$supported_mimes = array(
+						'mp3' => array('audio/mpeg', 'audio/mp3', 'audio/mpeg3', 'audio/x-mpeg-3'),
+						'wav' => array('audio/wav', 'audio/x-wav', 'audio/wave'),
+						'ogg' => array('audio/ogg', 'application/ogg'),
+						'm4a' => array('audio/mp4', 'audio/x-m4a')
+					);
 
 					// Make sure the file array isn't empty.
 					if ( ! empty( $_FILES['wcap_preview_attachment']['name'] ) ) {
+						$uploadedfile = $wcap_preview;
 
-						// Setup the array of supported file types. In this case, it's just PDF.
-						$supported_types = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
+						$file_ext = strtolower( pathinfo( $uploadedfile['name'], PATHINFO_EXTENSION ) );
+						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
+						
+						if ( ! in_array( $file_ext, $supported_types ) || !$file_type['type'] ) {
+							wp_die( __( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
+						}
 
-						// Get the file type of the upload.
-						$arr_file_type = wp_check_filetype( basename( $wcap_preview['name'] ) );
-						$uploaded_type = $arr_file_type['type'];
-						// Check if the type is supported. If not, throw an error.
-						if ( in_array( $uploaded_type, $supported_types ) ) {
-							// Use the WordPress API to upload the file.
-							if ( ! function_exists( 'wp_handle_upload' ) ) {
-								require_once ABSPATH . 'wp-admin/includes/file.php';
-							}
-							$uploadedfile     = $wcap_preview;
+						if ( $uploadedfile['size'] > 10485760 ) {
+							wp_die( __( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
+						}
+
+						
+						if ( ! function_exists( 'wp_handle_upload' ) ) {
+							require_once ABSPATH . 'wp-admin/includes/file.php';
+						}
 							$upload_overrides = array( 'test_form' => false );
 
 							add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
@@ -479,33 +507,24 @@ class Wc_Audio_Preview_Admin {
 								add_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
 								update_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
 							} else {
-								/**
-								 * Error generated by _wp_handle_upload()
-								 *
-								 * @see _wp_handle_upload() in wp-admin/includes/file.php
-								 */
+
 								echo wp_kses_post( $movefile['error'] );
 								$this->wcap_log_error($movefile['error']);
 								add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
 								return;
 							}
-						} else {
-							// Error Message.
-						} // end if/else.
 					} else {
 						if ( isset( $_POST['wcap_audio_urls'] ) && ! empty( $_POST['wcap_audio_urls'] ) ) {
-							$supported_types = array( 'audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3' );
-							$upload_file     = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
-							$arr_file_type   = wp_check_filetype( $upload_file );
-							$uploaded_type   = $arr_file_type['type'];
-							if ( in_array( $uploaded_type, $supported_types ) ) {
+							$upload_file   = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
+							$file_ext      = strtolower( pathinfo( $upload_file, PATHINFO_EXTENSION ) );
+							$file_type     = wp_check_filetype( $upload_file );
+							
+							if ( in_array( $file_ext, $supported_types ) ) {
 								$mp3url         = array();
 								$mp3url['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
 								$mp3url['url']  = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
 								add_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
 								update_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
-							} else {
-								// Error Message.
 							}
 						}
 					}
