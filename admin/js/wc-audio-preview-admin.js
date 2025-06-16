@@ -59,6 +59,8 @@
   $("body.post-type-product form#post").on("submit", function () {
     let isValid = true;
     let emptyRows = [];
+    const allowedExtensions = ['mp3', 'wav', 'ogg', 'm4a'];
+    const allowedExtensionsStr = allowedExtensions.join(', ').toUpperCase();
 
     // Clear previous error states
     $(".preview_files p.wcap-del-msg").text("").hide();
@@ -70,10 +72,10 @@
       let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
       if (val !== "") {
         let ext = val.split(".").pop().toLowerCase();
-        if ($.inArray(ext, supported_types) === -1) {
+        if ($.inArray(ext, allowedExtensions) === -1) {
          
           $(".preview_files p.wcap-del-msg")
-            .text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview"))
+            .text(__(`Invalid audio format. Allowed: ${allowedExtensionsStr}`,"wc-audio-preview"))
             .show();
             $(this).addClass("focused");
           isValid = false;
@@ -97,9 +99,9 @@
       if (fileVal !== "") {
         let ext = fileVal.split(".").pop().toLowerCase();
         let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
-        if ($.inArray(ext, supported_types) === -1) {
+        if ($.inArray(ext, allowedExtensions) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview")).show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text(__(`External URL must point to an audio file. Allowed: ${allowedExtensionsStr}`,"wc-audio-preview")).show();
           fileInput.addClass("focused");
           isValid = false;
           errorShown = true;
@@ -107,9 +109,9 @@
       } else if (urlVal !== "") {
         let ext = urlVal.split(".").pop().toLowerCase();
          let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
-        if ($.inArray(ext, supported_types) === -1) {
+        if ($.inArray(ext, allowedExtensions) === -1) {
           
-          $row.closest(".preview_files").find("p.wcap-del-msg").text(__("The audio type you've uploaded is invalid. Please upload an MP3 file.","wc-audio-preview")).show();
+          $row.closest(".preview_files").find("p.wcap-del-msg").text(__(`External URL must point to an audio file. Allowed: ${allowedExtensionsStr}`,"wc-audio-preview")).show();
           textInput.addClass("focused");
           isValid = false;
           errorShown = true;
