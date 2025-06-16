@@ -70,7 +70,6 @@
       let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
       if (val !== "") {
         let ext = val.split(".").pop().toLowerCase();
-      console.log(ext);
         if ($.inArray(ext, supported_types) === -1) {
          
           $(".preview_files p.wcap-del-msg")
@@ -97,7 +96,6 @@
 
       if (fileVal !== "") {
         let ext = fileVal.split(".").pop().toLowerCase();
-      console.log(ext);
         let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
         if ($.inArray(ext, supported_types) === -1) {
           
@@ -108,7 +106,6 @@
         }
       } else if (urlVal !== "") {
         let ext = urlVal.split(".").pop().toLowerCase();
-        console.log(ext);
          let supported_types = ['mp3', 'wav', 'ogg', 'm4a'];
         if ($.inArray(ext, supported_types) === -1) {
           
