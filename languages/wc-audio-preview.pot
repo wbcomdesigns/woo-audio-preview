@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-16T13:45:00+05:30\n"
+"POT-Creation-Date: 2025-06-16T13:49:56+05:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wc-audio-preview\n"
@@ -246,26 +246,54 @@ msgid "Yes, preview files are downloadable."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:82
-msgid "Can I upload multiple preview files for one product?"
+msgid "What audio formats are supported?"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:86
+msgid "The plugin supports the following audio formats:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:89
+msgid "MP3 - Supported by all browsers"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:90
+msgid "WAV - Supported by most modern browsers"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:91
+msgid "OGG - Supported by Firefox, Chrome, Opera"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:92
+msgid "M4A - Supported by Safari, Chrome, Edge"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:95
+msgid "You can either upload files directly or use external URLs to audio files hosted elsewhere."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:103
+msgid "Can I upload multiple preview files for one product?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:107
 msgid "Absolutely! The plugin supports multiple audio preview files per product. This allows you to showcase different samples, tracks, or variations of your audio product, giving customers a comprehensive preview experience."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:94
+#: admin/partials/woo-audio-preview-faq.php:115
 msgid "What if I need more features?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:98
+#: admin/partials/woo-audio-preview-faq.php:119
 msgid "You can hire our team to assist you."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:106
+#: admin/partials/woo-audio-preview-faq.php:127
 msgid "What if I have a question?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:111
+#: admin/partials/woo-audio-preview-faq.php:132
 msgid "No problem. Please get in touch with us via our"
 msgstr ""
 
