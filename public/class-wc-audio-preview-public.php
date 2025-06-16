@@ -118,7 +118,7 @@ class Wc_Audio_Preview_Public {
 		global $post;
 
 		$wcap_audio                  = get_post_meta( $post->ID, 'wcap_audio', true );
-		if ( ! empty( $wcap_audio ) ) {
+		if ( ! empty( $wcap_audio ) && isset($wcap_audio['wcap_audio_urls'])) {
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) ) {
 					$audio_url = $wcap_audio['wcap_audio_urls'][$key];
