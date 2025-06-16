@@ -117,25 +117,7 @@ class Wc_Audio_Preview_Public {
 	public function wcap_add_preview_field() {
 		global $post;
 
-		$wcap_preview                = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
 		$wcap_audio                  = get_post_meta( $post->ID, 'wcap_audio', true );
-		$wcap_audio_display_playlist = isset( $wcap_audio['wcap_display_audio_players'] ) ? $wcap_audio['wcap_display_audio_players'] : '';
-		if ( ! empty( $wcap_preview ) && empty( $wcap_audio ) ) :
-			$audio_url = $wcap_preview['url'];
-                	$mime_type = $this->get_audio_mime_type($audio_url);
-			?>
-			<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id">
-				<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $wcap_preview['name'] ) ? esc_attr( $wcap_preview['name'] ) : ''; ?></a>
-			</div>
-			<div class="wcap-player-cl" id="wcap-player-id">
-				<audio controls="controls" id="audio_player" preload="none" controlsList="nodownload">
-					<source src="<?php echo isset( $wcap_preview['url'] ) ? esc_attr( $wcap_preview['url'] ) : ''; ?>" type="<?php echo esc_attr($mime_type); ?>" />
-					<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
-				</audio>
-			</div>
-			<?php
-			endif;
-
 		if ( ! empty( $wcap_audio ) ) {
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) ) {

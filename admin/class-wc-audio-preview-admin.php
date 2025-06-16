@@ -478,10 +478,10 @@ class Wc_Audio_Preview_Admin {
 			}
 
 			if ( isset( $_POST['wcap_audio_names'] ) ) {
-				$wcap_preview     = isset( $_FILES['wcap_preview_attachment'] ) ? map_deep( wp_unslash( $_FILES['wcap_preview_attachment'] ), 'sanitize_text_field' ) : '';
+				$wcap_audio     = isset( $_FILES['wcap_preview_attachment'] ) ? map_deep( wp_unslash( $_FILES['wcap_preview_attachment'] ), 'sanitize_text_field' ) : '';
 				$wcap_audio_names = sanitize_text_field( wp_unslash( $_POST['wcap_audio_names'] ) );
-				if ( '' == $wcap_audio_names && ! empty( $wcap_preview['name'] )) {
-					$file_name                 = explode( '.', $wcap_preview['name'] );
+				if ( '' == $wcap_audio_names && ! empty( $wcap_audio['name'] )) {
+					$file_name                 = explode( '.', $wcap_audio['name'] );
 					$_POST['wcap_audio_names'] = $file_name[0];
 				}
 				if ( isset( $_POST['wcap_audio_names'] ) && ! empty( $_POST['wcap_audio_names'] ) ) {
@@ -495,7 +495,7 @@ class Wc_Audio_Preview_Admin {
 
 					// Make sure the file array isn't empty.
 					if ( ! empty( $_FILES['wcap_preview_attachment']['name'] ) ) {
-						$uploadedfile = $wcap_preview;
+						$uploadedfile = $wcap_audio;
 
 						$file_ext = strtolower( pathinfo( $uploadedfile['name'], PATHINFO_EXTENSION ) );
 						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
