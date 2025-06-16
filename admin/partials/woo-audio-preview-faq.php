@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( '3. Find Preview Section: Scroll down to the "Audio Preview Item" section', 'wc-audio-preview' ); ?>
 						</p>
 						<p> 
-							<?php esc_html_e( '4. Upload Audio File: Select your MP3 file to use as the preview', 'wc-audio-preview' ); ?>
+							<?php esc_html_e( '4. Upload Audio File: Select your audio file to use as the preview', 'wc-audio-preview' ); ?>
 						</p>
 						<p> 
 							<?php esc_html_e( '5. Save Changes: Update your product to activate the preview', 'wc-audio-preview' ); ?>
