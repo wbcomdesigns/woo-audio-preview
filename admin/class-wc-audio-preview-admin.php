@@ -333,7 +333,7 @@ class Wc_Audio_Preview_Admin {
 								<td class="sort"></td>
 								<td class="file_name"><input class="input_text" placeholder="Audio Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?>" type="text" ></td>
 								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="text"></td>
-								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
+								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" class="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 								<td width="15%">
 								<a href="javascript:void(0)"  class="tooltip wcap-add-audio-cl button button-primary button-small"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?><span class="tooltiptext">Add a new audio file</span></a>&nbsp;
 								<?php if ( count( $wcap_audio['wcap_audio_names'] ) > 1 ) : ?>
@@ -346,7 +346,7 @@ class Wc_Audio_Preview_Admin {
 							<td class="sort"></td>
 							<td class="file_name"><input class="input_text" placeholder="Audio Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $preview_data['name'] ) ? esc_attr( $preview_data['name'] ) : ''; ?>" type="text" ></td>
 							<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $preview_data['url'] ) ? esc_attr( $preview_data['url'] ) : ''; ?>" type="text"></td>
-							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
+							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" class="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
 							<td width="15%">
 							<a href="javascript:void(0)" class="tooltip wcap-add-audio-cl button button-primary button-small"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?><span class="tooltiptext">Add a new audio file</span></a>&nbsp;
 						</tr>
