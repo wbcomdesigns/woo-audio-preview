@@ -593,10 +593,12 @@ class Wc_Audio_Preview_Admin {
 		$upload_path   = $upload_dir['basedir'];
 		$uploaded_file = $upload_path . '/wcap_files/' . $filename;
 		if (file_exists($uploaded_file) && is_writable($uploaded_file)) { //phpcs:ignore
-			if (@wp_delete_file($uploaded_file)) {
+			$result = wp_delete_file($uploaded_file);
+			if ($result !== false) {
 				update_post_meta($post_id, 'wcap_preview_attachment', '');
 				wp_send_json_success('File deleted successfully');
 			} else {
+				$this->wcap_log_error('Failed to delete file: ' . $uploaded_file);
 				wp_send_json_error('Could not delete file');
 			}
 		} else {
