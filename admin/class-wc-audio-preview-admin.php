@@ -453,11 +453,22 @@ class Wc_Audio_Preview_Admin {
 					if (isset($_POST['wcap_audio']['wcap_audio_urls']) && is_array($_POST['wcap_audio']['wcap_audio_urls'])) {
 						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized inside the loop
 						foreach (wp_unslash($_POST['wcap_audio']['wcap_audio_urls']) as $key => $url) {
-							 $cleaned_url = esc_url_raw(wp_unslash($url));
-							if (!empty($cleaned_url) && filter_var($cleaned_url, FILTER_VALIDATE_URL)) {
-								$audio_data['wcap_audio_urls'][$key] = $cleaned_url;
-							} else if (!empty($url)) {
-								wp_die(__('Invalid URL provided', 'wc-audio-preview'));
+							if (!empty($url)) {
+								$cleaned_url = esc_url_raw(wp_unslash($url));
+								$file_ext = strtolower(pathinfo(parse_url($cleaned_url, PHP_URL_PATH), PATHINFO_EXTENSION));
+								if (!in_array($file_ext, array('mp3', 'wav', 'ogg', 'm4a'))) {
+									wp_die(__('External URL must point to a valid audio file (MP3, WAV, OGG, M4A)', 'wc-audio-preview'));
+								}
+								if (!empty($cleaned_url) && filter_var($cleaned_url, FILTER_VALIDATE_URL)) {
+									$audio_data['wcap_audio_urls'][$key] = $cleaned_url;
+									$audio_data['wcap_audio_source'][$key] = 'external';
+								} else if (!empty($url)) {
+									wp_die(__('Invalid URL provided', 'wc-audio-preview'));
+								}
+							}elseif (!empty($_FILES['wcap_audio']['name']['wcap_preview_attachment'][$key])) {
+								// File uploaded - handle upload
+								// ... existing upload code ...
+								$audio_data['wcap_audio_source'][$key] = 'local';
 							}
 						}
 					}
