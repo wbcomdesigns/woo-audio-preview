@@ -564,7 +564,7 @@ class Wc_Audio_Preview_Admin {
 			wp_send_json_error('Invalid security token');
 			exit;
 		}
-		if (!current_user_can('manage_woocommerce')) {
+		if (!current_user_can('edit_posts')) {
 			wp_send_json_error('Insufficient permissions');
 			exit;
 		}
@@ -575,6 +575,11 @@ class Wc_Audio_Preview_Admin {
 			wp_send_json_error('Missing required parameters');
 			exit;
     	}
+		 // Verify user can edit this specific post
+		if (!current_user_can('edit_post', $post_id)) {
+			wp_send_json_error('Cannot edit this product');
+			exit;
+		}
 
 		 // Verify the file belongs to this product
 		$attachment_meta = get_post_meta($post_id, 'wcap_preview_attachment', true);
