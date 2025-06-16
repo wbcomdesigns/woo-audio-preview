@@ -121,13 +121,15 @@ class Wc_Audio_Preview_Public {
 		$wcap_audio                  = get_post_meta( $post->ID, 'wcap_audio', true );
 		$wcap_audio_display_playlist = isset( $wcap_audio['wcap_display_audio_players'] ) ? $wcap_audio['wcap_display_audio_players'] : '';
 		if ( ! empty( $wcap_preview ) && empty( $wcap_audio ) ) :
+			$audio_url = $wcap_preview['url'];
+                	$mime_type = $this->get_audio_mime_type($audio_url);
 			?>
 			<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id">
 				<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $wcap_preview['name'] ) ? esc_attr( $wcap_preview['name'] ) : ''; ?></a>
 			</div>
 			<div class="wcap-player-cl" id="wcap-player-id">
-				<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
-					<source src="<?php echo isset( $wcap_preview['url'] ) ? esc_attr( $wcap_preview['url'] ) : ''; ?>" type="audio/mpeg" />
+				<audio controls="controls" id="audio_player" preload="none" controlsList="nodownload">
+					<source src="<?php echo isset( $wcap_preview['url'] ) ? esc_attr( $wcap_preview['url'] ) : ''; ?>" type="<?php echo esc_attr($mime_type); ?>" />
 					<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
 				</audio>
 			</div>
@@ -137,22 +139,36 @@ class Wc_Audio_Preview_Public {
 		if ( ! empty( $wcap_audio ) ) {
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) ) {
+					$audio_url = $wcap_audio['wcap_audio_urls'][$key];
+                	$mime_type = $this->get_audio_mime_type($audio_url);
 					?>
 
 				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
-					<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?></a>
+					<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $value) ? esc_attr( $value ) : ''; ?></a>
 				</div>
-						<?php } ?>
+						
 				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
-					<audio controls="controls" id="audio_player" preload="auto" controlsList="nodownload">
-						<source src="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="audio/mpeg" />
+					<audio controls="controls" id="audio_player" preload="none" controlsList="nodownload">
+						<source src="<?php echo esc_url($audio_url); ?>" type="<?php echo esc_attr($mime_type); ?>" />
 						<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
 					</audio>
 				</div>
 							<?php
+				}
 			}
 		}
 		return true;
+	}
+
+	private function get_audio_mime_type($url) {
+		$extension = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+		$mime_types = array(
+			'mp3' => 'audio/mpeg',
+			'wav' => 'audio/wav',
+			'ogg' => 'audio/ogg',
+			'm4a' => 'audio/mp4'
+		);
+		return isset($mime_types[$extension]) ? $mime_types[$extension] : 'audio/mpeg';
 	}
 
 }
