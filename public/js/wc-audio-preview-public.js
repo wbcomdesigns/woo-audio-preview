@@ -2,14 +2,32 @@ jQuery(document).ready(
 	function ($) {
 		'use strict';
 
+		// Pause all other audio players when one starts
+		$(document).on('play', 'audio', function() {
+			$('audio').not(this).each(function() {
+				this.pause();
+			});
+		});
+
 		$(document).on(
 			'click',
 			'.wcap-preview-btn-div',
 			function () {
 				var id = $(this).data('id');
+        
+				// Hide all other players
+				$('.wcap-player-cl').not('#' + id).each(function () {
+					$(this).slideUp('fast');
+					$(this).find('audio').each(function () {
+						this.pause();
+					});
+				});
+				
+				// Toggle current player
 				$("#" + id).slideToggle("slow");
 			}
 		);
+		
 		$(document).on(
 			'click',
 			'.wcap-audio-title #wcap_select_audio',
