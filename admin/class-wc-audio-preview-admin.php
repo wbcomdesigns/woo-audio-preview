@@ -392,16 +392,17 @@ class Wc_Audio_Preview_Admin {
 		}
 
 		if ( isset( $_POST['post_type'] ) && 'product' === $_POST['post_type'] ) {
+			$supported_types = apply_filters( 'wcap_supported_audio_types', array( 'mp3', 'wav', 'ogg', 'm4a' ) );
+			$supported_mimes = apply_filters( 'wcap_supported_audio_mimes', array(
+				'mp3' => array( 'audio/mpeg', 'audio/mp3', 'audio/mpeg3', 'audio/x-mpeg-3' ),
+				'wav' => array( 'audio/wav', 'audio/x-wav', 'audio/wave' ),
+				'ogg' => array( 'audio/ogg', 'application/ogg' ),
+				'm4a' => array( 'audio/mp4', 'audio/x-m4a' )
+			) ); 
 			if ( isset( $_POST['wcap_audio'] ) && ! empty( $_POST['wcap_audio'] ) ) {
 				if ( isset( $_FILES['wcap_audio']['name'] ) && ! empty( $_FILES['wcap_audio']['name'] ) ) {
 					$audio_data = array();
-					$supported_types = array('mp3', 'wav', 'ogg', 'm4a');
-					$supported_mimes = array(
-						'mp3' => array('audio/mpeg', 'audio/mp3', 'audio/mpeg3', 'audio/x-mpeg-3'),
-						'wav' => array('audio/wav', 'audio/x-wav', 'audio/wave'),
-						'ogg' => array('audio/ogg', 'application/ogg'),
-						'm4a' => array('audio/mp4', 'audio/x-m4a')
-					);
+					
 					$wcap_upload_audio = map_deep( wp_unslash( $_FILES['wcap_audio'] ), 'sanitize_text_field' );
 					foreach ( $wcap_upload_audio['name']['wcap_preview_attachment'] as $key => $value ) {
 
@@ -481,14 +482,6 @@ class Wc_Audio_Preview_Admin {
 					$_POST['wcap_audio_names'] = $file_name[0];
 				}
 				if ( isset( $_POST['wcap_audio_names'] ) && ! empty( $_POST['wcap_audio_names'] ) ) {
-					$supported_types = array('mp3', 'wav', 'ogg', 'm4a');
-					$supported_mimes = array(
-						'mp3' => array('audio/mpeg', 'audio/mp3', 'audio/mpeg3', 'audio/x-mpeg-3'),
-						'wav' => array('audio/wav', 'audio/x-wav', 'audio/wave'),
-						'ogg' => array('audio/ogg', 'application/ogg'),
-						'm4a' => array('audio/mp4', 'audio/x-m4a')
-					);
-
 					// Make sure the file array isn't empty.
 					if ( ! empty( $_FILES['wcap_preview_attachment']['name'] ) ) {
 						$uploadedfile = $wcap_audio;
@@ -516,7 +509,6 @@ class Wc_Audio_Preview_Admin {
 
 						if ( $movefile && ! isset( $movefile['error'] ) ) {
 							$movefile['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
-							add_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
 							update_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
 						} else {
 
@@ -535,7 +527,6 @@ class Wc_Audio_Preview_Admin {
 								$mp3url         = array();
 								$mp3url['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
 								$mp3url['url']  = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
-								add_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
 								update_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
 							}
 						}
