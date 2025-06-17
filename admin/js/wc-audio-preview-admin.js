@@ -61,7 +61,7 @@
      e.preventDefault();
     let isValid = true;
     let emptyRows = [];
-    const allowedExtensions = ['mp3', 'wav', 'ogg', 'm4a'];
+    const allowedExtensions = wcap_ajax_object.allowedExtensions;
     const allowedExtensionsStr = allowedExtensions.join(', ').toUpperCase();
     const maxFileSizeMB = 10;
     const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024;

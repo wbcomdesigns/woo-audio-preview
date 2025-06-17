@@ -120,9 +120,8 @@ class Wc_Audio_Preview_Admin {
 		} else {
 			$js_extension = '.min.js';
 		}
+		$extensions = ['mp3', 'wav', 'ogg', 'm4a'];
 		
-		
-
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
 			
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin'.$js_extension, array( 'jquery','wp-i18n' ), $this->version, false );
@@ -132,6 +131,7 @@ class Wc_Audio_Preview_Admin {
 				array(
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'nonce'    => wp_create_nonce( 'ajax-nonce' ),
+					'allowedExtensions' => apply_filters('wcap_allowed_audio_extensions', $extensions),
 				)
 			);
 		}
