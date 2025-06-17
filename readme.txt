@@ -4,8 +4,8 @@ Contributors: vapvarun,wbcomdesigns
 Donate link: https://wbcomdesigns.com/donate/
 Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
 Requires at least: 3.0.1
-Tested up to: 6.5.0
-Stable tag: 1.4.5
+Tested up to: 6.8.2
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,20 @@ Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query rela
 
 
 == Changelog ==
+
+= 1.5.0 =
+* Added: Support for multiple audio formats, including external URLs.
+* Improved: Frontend audio player and admin labels for better format handling.
+* Added: Secure file upload validation and enhanced input sanitization.
+* Fixed: AJAX security vulnerabilities and error handling during file uploads.
+* Fixed: Debug log issues and PHP warnings on plugin activation.
+* Updated: JavaScript validation logic to support various file types.
+* Improved: FAQ section with clearer file format details.
+* Optimized: Table layout responsiveness and overall performance.
+* Cleaned: Removed unused code and resolved PHPCS issues.
+* Improved: Language strings and code structure for better maintainability.
+* Added: Minified CSS/JS and RTL compatibility for improved loading and accessibility.
+
 = 1.4.5 =
 * Fix: (#26) Compatibility check with PHP 8.0
 * Fix: (#27) Fixed check for dependency plugin 
