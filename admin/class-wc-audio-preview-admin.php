@@ -366,13 +366,9 @@ class Wc_Audio_Preview_Admin {
 		// Add nonce for security and authentication.
 		$nonce_name   = isset( $_POST['wcap_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['wcap_nonce'] ) ) : '';
 		$nonce_action = 'wcap_nonce_action';
-		// Check if nonce is set.
-		if ( ! isset( $nonce_name ) ) {
-			return;
-		}
 
 		// Check if nonce is valid.
-		if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) ) {
+		if ( empty( $nonce_name ) || ! wp_verify_nonce( $nonce_name, $nonce_action ) ) {
 			return;
 		}
 
