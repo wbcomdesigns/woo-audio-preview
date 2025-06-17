@@ -122,7 +122,7 @@ class Wc_Audio_Preview_Public {
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) ) {
 					$audio_url = $wcap_audio['wcap_audio_urls'][$key];
-                	$mime_type = $this->get_audio_mime_type($audio_url);
+                	$mime_type = $this->wcap_get_audio_mime_type($audio_url);
 					?>
 
 				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
@@ -142,7 +142,7 @@ class Wc_Audio_Preview_Public {
 		return true;
 	}
 
-	private function get_audio_mime_type($url) {
+	private function wcap_get_audio_mime_type($url) {
 		$extension = strtolower(pathinfo($url, PATHINFO_EXTENSION));
 		$mime_types = array(
 			'mp3' => 'audio/mpeg',
@@ -150,6 +150,7 @@ class Wc_Audio_Preview_Public {
 			'ogg' => 'audio/ogg',
 			'm4a' => 'audio/mp4'
 		);
+		$mime_types = apply_filters( 'wcap_audio_mime_types', $mime_types );
 		return isset($mime_types[$extension]) ? $mime_types[$extension] : 'audio/mpeg';
 	}
 
