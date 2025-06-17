@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-17T11:30:04+05:30\n"
+"POT-Creation-Date: 2025-06-17T08:01:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wc-audio-preview\n"
@@ -154,8 +154,16 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: admin/class-wc-audio-preview-admin.php:317
+msgid "Enter the Title of audio file"
+msgstr ""
+
 #: admin/class-wc-audio-preview-admin.php:319
 msgid "Audio URL"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:319
+msgid "Enter the path to the audio file"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:325
@@ -167,29 +175,38 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+#: admin/class-wc-audio-preview-admin.php:338
+#: admin/class-wc-audio-preview-admin.php:351
+msgid "Add a new audio file"
+msgstr ""
+
 #: admin/class-wc-audio-preview-admin.php:340
 msgid "Remove"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:340
+msgid "Remove this audio file"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:386
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:423
-#: admin/class-wc-audio-preview-admin.php:500
+#: admin/class-wc-audio-preview-admin.php:424
+#: admin/class-wc-audio-preview-admin.php:493
 msgid "Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:427
-#: admin/class-wc-audio-preview-admin.php:504
+#: admin/class-wc-audio-preview-admin.php:428
+#: admin/class-wc-audio-preview-admin.php:497
 msgid "File size exceeds 10MB limit"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:456
+#: admin/class-wc-audio-preview-admin.php:457
 msgid "External URL must point to a valid audio file (MP3, WAV, OGG, M4A)"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:462
+#: admin/class-wc-audio-preview-admin.php:463
 msgid "Invalid URL provided"
 msgstr ""
 
