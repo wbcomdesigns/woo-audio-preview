@@ -39,6 +39,7 @@
     });
 
     $(document).on("click", ".wcap-delete-audio-cl", function (e) {
+      e.preventDefault();
       $(this).parents("tr").remove();
       var file_url = $(this).closest('tr').find('.file_url input[type=text]').val();
       var postId = $(this).data('p_id');
