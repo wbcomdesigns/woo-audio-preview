@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( '3. Find Preview Section: Scroll down to the "Audio Preview Item" section', 'wc-audio-preview' ); ?>
 						</p>
 						<p> 
-							<?php esc_html_e( '4. Upload Audio File: Select your MP3 file to use as the preview', 'wc-audio-preview' ); ?>
+							<?php esc_html_e( '4. Upload Audio File: Select your audio file to use as the preview', 'wc-audio-preview' ); ?>
 						</p>
 						<p> 
 							<?php esc_html_e( '5. Save Changes: Update your product to activate the preview', 'wc-audio-preview' ); ?>
@@ -72,6 +72,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="wbcom-faq-panel">
 						<p> 
 							<?php esc_html_e( 'Yes, preview files are downloadable.', 'wc-audio-preview' ); ?>     
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="wbcom-faq-section-row">
+				<div class="wbcom-faq-admin-row">
+					<button class="wbcom-faq-accordion">
+						<?php esc_html_e( 'What audio formats are supported?', 'wc-audio-preview' ); ?>
+					</button>
+					<div class="wbcom-faq-panel">
+						<p> 
+							<?php esc_html_e( 'The plugin supports the following audio formats:', 'wc-audio-preview' ); ?>
+						</p>
+						<ul>
+							<li><?php esc_html_e( 'MP3 - Supported by all browsers', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'WAV - Supported by most modern browsers', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'OGG - Supported by Firefox, Chrome, Opera', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'M4A - Supported by Safari, Chrome, Edge', 'wc-audio-preview' ); ?></li>
+						</ul>
+						<p> 
+							<?php esc_html_e( 'You can either upload files directly or use external URLs to audio files hosted elsewhere.', 'wc-audio-preview' ); ?>
 						</p>
 					</div>
 				</div>
