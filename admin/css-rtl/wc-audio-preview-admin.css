@@ -1,249 +1,327 @@
 .wcap-required-span {
-	font-size: 10px;
-	color: red;
+    font-size: 10px;
+    color: red;
 }
 
 .preview_files p.wcap-del-msg {
-	color: red;
-	display: none;
+    color: red;
+    display: none;
 }
 
 .wcap-audio-file td.file_url #wcap_audio_urls.focused {
-	border: 1px solid red;
+    border: 1px solid red;
 }
 
 .wcap-audio-file .file_url_choose #wcap_preview_attachment.focused {
-	border: 1px solid red;
+    border: 1px solid red;
 }
-
 
 /*----------  Faq Style  ----------*/
 .woo-audio-preview-admin-col-12 {
-	float: right;
-	padding: 10px 0;
-	width: 100%;
+    float: right;
+    padding: 10px 0;
+    width: 100%;
 }
 
 .woo-audio-preview-admin-setting {
-	float: right;
-	width: 90%;
+    float: right;
+    width: 90%;
 }
 
 button.woo-audio-preview-accordion {
-	background-color: hsl(0, 0%, 87%);
-	border: medium none;
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
-	color: hsl(0, 0%, 27%);
-	cursor: pointer;
-	font-size: 15px;
-	margin: 0 5%;
-	outline: medium none;
-	padding: 15px 20px;
-	text-align: right;
-	transition: all 0.4s ease 0s;
-	width: 90%;
+    background-color: hsl(0, 0%, 87%);
+    border: medium none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: hsl(0, 0%, 27%);
+    cursor: pointer;
+    font-size: 15px;
+    margin: 0 5%;
+    outline: medium none;
+    padding: 15px 20px;
+    text-align: right;
+    transition: all 0.4s ease 0s;
+    width: 90%;
 }
 
 button.woo-audio-preview-accordion.active,
 button.woo-audio-preview-accordion:hover {
-	background-color: hsl(207, 90%, 54%);
-	color: white;
+    background-color: hsl(207, 90%, 54%);
+    color: white;
 }
 
 div.wb-ads-panel {
-	background-color: white;
-	margin: 0px 5%;
-	max-height: 0;
-	overflow: hidden;
-	padding: 0 18px;
-	transition: max-height 0.2s ease-out;
+    background-color: white;
+    margin: 0px 5%;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 18px;
+    transition: max-height 0.2s ease-out;
 }
 
 button.woo-audio-preview-accordion::after {
-	color: hsl(0, 0%, 47%);
-	content: "+";
-	float: left;
-	font-size: 13px;
-	font-weight: bold;
-	margin-right: 5px;
+    color: hsl(0, 0%, 47%);
+    content: "+";
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 5px;
 }
 
 button.woo-audio-preview-accordion::after:hover {
-	color: white;
+    color: white;
 }
 
 button.woo-audio-preview-accordion.active::after {
-	content: "−";
-	color: white;
+    content: "−";
+    color: white;
 }
 
 .woo-document-preview-admin-row {
-	border-top: 1px solid #ddd;
-	clear: both;
-	overflow: hidden;
-	padding-bottom: 5px;
+    border-top: 1px solid #ddd;
+    clear: both;
+    overflow: hidden;
+    padding-bottom: 5px;
 }
 
 .wb-ads-tab-3-title {
-	font-weight: 700;
-	font-size: 16px;
+    font-weight: 700;
+    font-size: 16px;
 }
 
 .wb-ads-tab-content .form-table td {
-	padding: 0;
+    padding: 0;
 }
 
 /*Ads CPT UI*/
 .wb_ads_rotator-panel .CodeMirror-wrap pre {
-	padding-right: 35px;
+    padding-right: 35px;
 }
 
 .wb_ads_rotator-wrapper.select-ads-image.image-ad {
-	align-items: center;
-	gap: 30px;
+    align-items: center;
+    gap: 30px;
 }
 
 input#wb_ads_rotator_select_image {
-	padding: 3px 20px;
-	margin-left: 10px;
+    padding: 3px 20px;
+    margin-left: 10px;
 }
 
 .wb_ads_rotator-panel .wb_ads_rotator-wrapper.select-ads-image.image-ad .wb_ads_rotator-label {
-	width: 40%;
+    width: 40%;
 }
 
 .wb_ads_rotator-wrapper.select-ads-image.image-ad .wb_ads_rotator-input input.wb_ads_rotator_image {
-	width: 95%;
+    width: 95%;
 }
 
 .wb_ads_rotator-input label {
-	margin-left: 20px;
+    margin-left: 20px;
 }
 
 .wb-bp-ads-size span {
-	display: block;
-	margin-bottom: 5px;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .wb_ads_rotator-input.wb-ads-rotator-ads-size {
-	display: flex;
+    display: flex;
 }
 
 .wb_ads_rotator-input label span {
-	display: block;
-	margin-bottom: 5px;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .wb_ads_rotator-input .wb_ads_margin {
-	width: 100%;
-	display: flex;
-	clear: both;
+    width: 100%;
+    display: flex;
+    clear: both;
 }
 
 p.wb_ads_margin_disc {
-	display: block;
-	margin-bottom: 0;
-	clear: both;
-	width: 100%;
+    display: block;
+    margin-bottom: 0;
+    clear: both;
+    width: 100%;
 }
 
 .wb_ads_bg_color input[type="color"],
 .wb_ads_text_color input[type="color"] {
-	padding: 0;
-	border-radius: 0;
-	height: 40px;
-	width: 40px;
-	border: none !important;
-	cursor: pointer;
+    padding: 0;
+    border-radius: 0;
+    height: 40px;
+    width: 40px;
+    border: none !important;
+    cursor: pointer;
 }
 
 .shortcode-text-hide {
-	display: none;
+    display: none;
 }
 
 .ads-shortcode-text {
-	margin-right: 40px;
-	padding: 5px 12px;
-	background-color: #000000df;
-	border-radius: 4px;
-	color: #fff;
+    margin-right: 40px;
+    padding: 5px 12px;
+    background-color: #000000df;
+    border-radius: 4px;
+    color: #fff;
 }
 
 .nav-tab-wrapper ul .woo-audio-preview-pro a:before {
-	content: "\f111" !important;
+    content: "\f111" !important;
 }
 
 .nav-tab-wrapper ul .woo-audio-preview-faq a:before {
-	content: "\f101" !important;
+    content: "\f101" !important;
 }
 
 .tooltip {
-	position: relative;
-	display: inline-block;
-	border-bottom: 1px dotted black;
-	/* If you want dots under the hoverable text */
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    /* If you want dots under the hoverable text */
 }
 
 .tooltip .tooltiptext {
-	visibility: hidden;
-	width: 120px;
-	background-color: #555;
-	color: #fff;
-	text-align: center;
-	border-radius: 6px;
-	padding: 5px 0;
-	position: absolute;
-	z-index: 1;
-	bottom: 125%;
-	right: 50%;
-	margin-right: -60px;
-	opacity: 0;
-	transition: opacity 0.3s;
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    right: 50%;
+    margin-right: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-.tooltip .tooltiptext::after {
-	content: "";
-	position: absolute;
-	top: 100%;
-	right: 50%;
-	margin-right: -5px;
-	border-width: 5px;
-	border-style: solid;
-	border-color: #555 transparent transparent transparent;
+.tooltip .tooltiptext::after,
+.woo-audio-preview-table .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 50%;
+    margin-right: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
 }
 
 .tooltip:hover .tooltiptext {
-	visibility: visible;
-	opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }
 
-woocommerce-help-tip {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
+.woocommerce-help-tip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .tooltiptext {
-	visibility: hidden;
-	width: 200px;
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	border-radius: 6px;
-	padding: 5px;
-	position: absolute;
-	z-index: 1;
-	bottom: 125%;
-	right: 50%;
-	margin-right: -100px;
-	opacity: 0;
-	transition: opacity 0.3s;
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+	font-size: 11px;
+	line-height: 1.5;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    right: 50%;
+    margin-right: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .woocommerce-help-tip:hover .tooltiptext {
-	visibility: visible;
-	opacity: 1;
+    visibility: visible;
+    opacity: 1;
+}
+
+/* --- Responsive: stack table cells vertically --- */
+@media screen and (min-width: 1024px) and (max-width: 1370px) {
+	#wcap-audio-table {
+		min-width: 700px;
+	}
+
+	.preview_files {
+		width: 100%;
+    	overflow-x: auto;
+	}
+
+	#wcap-audio-table .wcap-add-audio-cl {
+		margin: 0 0 10px 10px !important;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+
+    #wcap-audio-table,
+    #wcap-audio-table thead,
+    #wcap-audio-table tbody,
+    #wcap-audio-table th,
+    #wcap-audio-table td,
+    #wcap-audio-table tr {
+        display: block;
+        width: auto;
+    }
+
+    #wcap-audio-table thead {
+        display: none;
+    }
+
+    #wcap-audio-table td {
+        border: none;
+        position: relative;
+        padding-right: 50%;
+        text-align: right;
+    }
+
+    #wcap-audio-table td::before {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 45%;
+        white-space: nowrap;
+    }
+
+    /* Labels for each cell (match in order) */
+    #wcap-audio-table td:nth-of-type(1)::before {
+        content: "";
+    }
+
+    #wcap-audio-table td:nth-of-type(2)::before {
+        content: "Name";
+    }
+
+    #wcap-audio-table td:nth-of-type(3)::before {
+        content: "Audio URL";
+    }
+
+    #wcap-audio-table td:nth-of-type(4)::before {
+        content: "Choose File";
+    }
+
+    #wcap-audio-table td:nth-of-type(5)::before {
+        content: "Actions";
+    }
+
+    #wcap-audio-table .file_name input,
+    #wcap-audio-table .file_url input,
+    #wcap-audio-table .file_url_choose input {
+        width: 100%;
+        box-sizing: border-box;
+    }
 }
 
 /* for pro banner */
@@ -279,43 +357,43 @@ woocommerce-help-tip {
 
 /* Pro Screen */
 .woo-document-pro .wbcom-welcome-main-wrapper a {
-  display: block;
-  position: relative;
-  z-index: 99;
+    display: block;
+    position: relative;
+    z-index: 99;
 }
 
 .woo-document-pro .wbcom-welcome-main-wrapper small {
-  position: absolute;
-  right: 50%;
-  top: 50%;
-  color: #fff;
-  margin-top: -15px;
-  margin-right: -85px;
-  font-weight: 500;
-  z-index: 9;
-  line-height: 50px;
-  padding: 0 35px;
-  font-size: 15px;
-  background: #f02f32;
-  text-shadow: none;
-  transition: all 0.3s;
-  box-shadow: 0px 10px 25px rgba(32, 53, 85, 0.35);
-  border-radius: 12px;
-  border: none;
-  transition: all 0.3s;
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    color: #fff;
+    margin-top: -15px;
+    margin-right: -85px;
+    font-weight: 500;
+    z-index: 9;
+    line-height: 50px;
+    padding: 0 35px;
+    font-size: 15px;
+    background: #f02f32;
+    text-shadow: none;
+    transition: all 0.3s;
+    box-shadow: 0px 10px 25px rgba(32, 53, 85, 0.35);
+    border-radius: 12px;
+    border: none;
+    transition: all 0.3s;
 }
 
 .woo-document-pro .wbcom-welcome-main-wrapper small:hover {
-  background: #2a32ef;
+    background: #2a32ef;
 }
 
 .woo-document-pro .wbcom-welcome-main-wrapper img {
-  width: 100%;
-  margin: 0;
-  border-radius: 12px;
-  background-color: black;
-  transition: all 0.3s;
-  opacity: 0.5;
-  overflow: hidden;
+    width: 100%;
+    margin: 0;
+    border-radius: 12px;
+    background-color: black;
+    transition: all 0.3s;
+    opacity: 0.5;
+    overflow: hidden;
 }
 /*# sourceMappingURL=wc-audio-preview-admin.css.map */
