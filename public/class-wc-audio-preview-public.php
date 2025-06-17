@@ -126,7 +126,7 @@ class Wc_Audio_Preview_Public {
 					?>
 
 				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
-					<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $value) ? esc_attr( $value ) : ''; ?></a>
+					<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $value) ? esc_html( $value ) : ''; ?></a>
 				</div>
 						
 				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
