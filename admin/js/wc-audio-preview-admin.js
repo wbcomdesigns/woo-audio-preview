@@ -520,6 +520,8 @@
     validateAudioName: function() {
       const $input = $(this);
       const name = $.trim($input.val());
+      console.log($input);
+      console.log(name);
       
       if (name && name.length < 3) {
         $input.addClass('error').removeClass('success');
@@ -529,6 +531,7 @@
         WCAP.hideFieldError($input);
         if (name) {
           $input.addClass('success');
+          $input.val(name);
         }
       }
     },

@@ -148,22 +148,21 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
-		$rtl_css = is_rtl() ? '-rtl' : '';
-
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$css_extension = '.css';
-		} else {
-			$css_extension = '.min.css';
-		}
-		if(is_rtl()){
-			$css_extension = '.css';
-		}
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {//phpcs:ignore
-			
-			wp_enqueue_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css'. $rtl_css .'/wc-audio-preview-admin'.$css_extension, array(), $this->version, 'all' );
-			
-			// Add enhanced styles for better UI
-			wp_add_inline_style( $this->plugin_name, $this->get_enhanced_styles() );
+		
+			 $css_file = $this->get_asset_filename('css', 'wc-audio-preview-admin');
+			if ($css_file) {
+				wp_enqueue_style(
+					$this->plugin_name, 
+					plugin_dir_url(__FILE__) . $css_file, 
+					array(), 
+					$this->version, 
+					'all'
+				);
+				
+				// Add enhanced styles for better UI
+				wp_add_inline_style($this->plugin_name, $this->get_enhanced_styles());
+       		}
 		}
 	}
 
@@ -186,39 +185,42 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$js_extension = '.js';
-		} else {
-			$js_extension = '.min.js';
-		}
 		
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
 			
 			// Enqueue media uploader
 			wp_enqueue_media();
-			
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin'.$js_extension, array( 'jquery','wp-i18n', 'media-upload' ), $this->version, false );
-			
-			// Enhanced localize script with CDN support
-			wp_localize_script(
-			$this->plugin_name,
-			'wcap_ajax_object',
-				array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-					'nonce'    => wp_create_nonce( 'ajax-nonce' ),
-					'allowedExtensions' => apply_filters('wcap_allowed_audio_extensions', $this->allowed_file_types),
-					'cdn_patterns' => $this->get_cdn_patterns_for_js(),
-					'error_messages' => array(
-						'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'wc-audio-preview' ),
-						'file_required' => __( 'Please select a file or enter a file URL.', 'wc-audio-preview' ),
-						'name_required' => __( 'Audio name is required.', 'wc-audio-preview' ),
-						'url_invalid' => __( 'Please enter a valid URL.', 'wc-audio-preview' ),
-						'file_too_large' => __( 'File size is too large. Maximum allowed size is 50MB.', 'wc-audio-preview' ),
-						'cdn_detected' => __( 'CDN/streaming service link detected! This will work great for preview.', 'wc-audio-preview' ),
-					),
-					'supported_services' => $this->get_supported_services_info(),
-				)
-			);
+			$js_file = $this->get_asset_filename('js', 'wc-audio-preview-admin');
+			if ($js_file) {
+				wp_enqueue_script(
+					$this->plugin_name, 
+					plugin_dir_url(__FILE__) . $js_file, 
+					array('jquery', 'wp-i18n', 'media-upload'), 
+					$this->version, 
+					false
+				);
+				
+				// Enhanced localize script with CDN support
+				wp_localize_script(
+				$this->plugin_name,
+				'wcap_ajax_object',
+					array(
+						'ajax_url' => admin_url( 'admin-ajax.php' ),
+						'nonce'    => wp_create_nonce( 'ajax-nonce' ),
+						'allowedExtensions' => apply_filters('wcap_allowed_audio_extensions', $this->allowed_file_types),
+						'cdn_patterns' => $this->get_cdn_patterns_for_js(),
+						'error_messages' => array(
+							'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'wc-audio-preview' ),
+							'file_required' => __( 'Please select a file or enter a file URL.', 'wc-audio-preview' ),
+							'name_required' => __( 'Audio name is required.', 'wc-audio-preview' ),
+							'url_invalid' => __( 'Please enter a valid URL.', 'wc-audio-preview' ),
+							'file_too_large' => __( 'File size is too large. Maximum allowed size is 50MB.', 'wc-audio-preview' ),
+							'cdn_detected' => __( 'CDN/streaming service link detected! This will work great for preview.', 'wc-audio-preview' ),
+						),
+						'supported_services' => $this->get_supported_services_info(),
+					)
+				);
+			}
 		}
 	}
 
@@ -1029,6 +1031,87 @@ class Wc_Audio_Preview_Admin {
 				color: #4caf50;
 			}
 		';
+	}
+
+	/**
+	 * Get asset filename with intelligent fallback
+	 *
+	 * @since    1.6.0
+	 * @param    string $type     Asset type ('css' or 'js')
+	 * @param    string $filename Base filename without extension
+	 * @return   string|false     Full filename with path or false if not found
+	 */
+	private function get_asset_filename($type, $filename) {
+		// Determine if we should use minified files
+		$use_minified = !(defined('SCRIPT_DEBUG') && SCRIPT_DEBUG);
+		
+		// Determine if RTL is needed (only for CSS)
+		$is_rtl = ($type === 'css') ? is_rtl() : false;
+		
+		// Build the base directory path
+		$base_dir = plugin_dir_path(__FILE__) . $type . '/';
+		$actual_type = $type;
+		$actual_base_dir = $base_dir;
+		
+		
+		// Array of file variants to try in order of preference
+		$variants = array();
+		
+		if ($type === 'css') {
+			if ($is_rtl && $use_minified) {
+				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified
+				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified
+			} elseif ($is_rtl && !$use_minified) {
+				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified
+			} elseif (!$is_rtl && $use_minified) {
+				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified
+				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified
+			} else {
+				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified
+			}
+		} else { // JavaScript
+			if ($use_minified) {
+				$variants[] = $filename . '.min.js';           // 1st preference: minified
+				$variants[] = $filename . '.js';               // 2nd preference: non-minified
+			} else {
+				$variants[] = $filename . '.js';               // 1st preference: non-minified
+			}
+		}
+		if ($type === 'css' &&  $is_rtl ) {
+			$actual_type = 'css-rtl';
+			$actual_base_dir = plugin_dir_path(__FILE__) . 'css-rtl/';
+		}
+		
+		// Check each variant in order
+		foreach ($variants as $variant) {
+			if (file_exists($actual_base_dir . $variant)) {
+				
+				// Log which file is being used in debug mode
+				if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+					error_log(sprintf(
+						'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
+						$actual_type,
+						$variant,
+						$is_rtl ? 'yes' : 'no',
+						!$use_minified ? 'yes' : 'no'
+					));
+				}
+				
+				return $actual_type . '/' . $variant;
+			}
+		}
+		
+		// No valid file found - log error
+		if (defined('WP_DEBUG') && WP_DEBUG) {
+			error_log(sprintf(
+				'WCAP Asset Error: No %s file found for %s (tried: %s)',
+				$actual_type,
+				$filename,
+				implode(', ', $variants)
+			));
+		}
+		
+		return false;
 	}
 
 }
