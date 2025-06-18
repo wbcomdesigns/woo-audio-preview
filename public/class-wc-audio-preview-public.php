@@ -175,14 +175,19 @@ class Wc_Audio_Preview_Public {
 						
 						// Determine if it's a CDN URL
 						$is_cdn = $this->wcap_is_cdn_url($audio_url);
+						// echo 'cdsn_service: '.$is_cdn['service'] ;
 						
-						// Check if we need iframe player (for Google Drive)
+						// Check if we need iframe player
 						$needs_iframe = $this->wcap_needs_iframe_player($audio_url);
 						
 						if ($needs_iframe && $is_cdn && $is_cdn['service'] === 'google_drive') {
 							// Use iframe for Google Drive
 							$this->render_google_drive_player($key, $value, $audio_url);
-						} else {
+						} elseif($needs_iframe && $is_cdn && $is_cdn['service'] === 'soundcloud'){
+							// Use iframe for Sound Cloud
+								$this->render_sound_cloud_player($key, $value, $audio_url);
+						} 
+						else {
 							// Use regular audio player
 							$this->render_audio_player($key, $value, $audio_url, $is_cdn);
 						}
@@ -355,6 +360,78 @@ class Wc_Audio_Preview_Public {
 	}
 
 	/**
+	 * Render Sound Cloud player with iframe
+	 *
+	 * @param int    $key       Audio key
+	 * @param string $name      Audio name
+	 * @param string $audio_url Audio URL
+	 */
+	private function render_sound_cloud_player($key, $name, $audio_url){
+
+		$embed_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $audio_url );
+
+		?>
+		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
+			<button class="wcap-preview-button wcap-soundcloud-button" type="button" 
+					onclick="wcapToggleSoundCloudPlayer('<?php echo esc_js( $key ); ?>')"
+					aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+				<div class="wcap-button-content">
+					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</span>
+					<span class="wcap-pause-icon" id="wcap-pause-<?php echo esc_attr( $key ); ?>" style="display: none;">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+						</svg>
+					</span>
+					<div class="wcap-preview-info">
+						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
+						<span class="wcap-preview-badge">Sound Cloud </span>
+					</div>
+				</div>
+			</button>
+			<div class="wcap-soundcloud-player" id="wcap-soundcloud-<?php echo esc_attr( $key ); ?>" style="display: none;">
+				<iframe 
+					src="<?php echo esc_url($embed_url); ?>" 
+					width="" 
+					height="" 
+					frameborder="0"
+					allow="autoplay"
+					allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+
+		<script>
+			function wcapToggleSoundCloudPlayer(key) {
+				const player = document.getElementById(`wcap-soundcloud-${key}`);
+				const playIcon = document.getElementById(`wcap-play-${key}`);
+				const pauseIcon = document.getElementById(`wcap-pause-${key}`);
+
+				const isHidden = player.style.display === "none";
+
+				// Hide all players and reset all icons
+				document.querySelectorAll(".wcap-soundcloud-player").forEach(el => el.style.display = "none");
+				document.querySelectorAll(".wcap-play-icon").forEach(el => el.style.display = "inline-block");
+				document.querySelectorAll(".wcap-pause-icon").forEach(el => el.style.display = "none");
+
+				// If it was hidden, show this one and toggle icons
+				if (isHidden) {
+					player.style.display = "block";
+					playIcon.style.display = "none";
+					pauseIcon.style.display = "inline-block";
+				}
+			}
+		</script>
+
+
+		<?php
+
+	}
+
+	/**
 	 * Extract Google Drive file ID from URL
 	 *
 	 * @param string $url Google Drive URL
@@ -385,7 +462,7 @@ class Wc_Audio_Preview_Public {
 	private function wcap_needs_iframe_player($url) {
 		// Currently only Google Drive needs iframe
 		// You can extend this for other services that need special handling
-		return strpos($url, 'drive.google.com') !== false;
+		return strpos($url, 'drive.google.com') !== false || strpos($url, 'soundcloud.com') !== false;
 	}
 
 	/**
