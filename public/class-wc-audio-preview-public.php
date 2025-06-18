@@ -109,49 +109,502 @@ class Wc_Audio_Preview_Public {
 		}
 		
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-public'.$js_extension, array( 'jquery' ), $this->version, false );
+		
+		// Localize script for better UX
+		wp_localize_script( $this->plugin_name, 'wcap_public', array(
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'nonce' => wp_create_nonce( 'wcap-public-nonce' ),
+			'loading_text' => __( 'Loading...', 'wc-audio-preview' ),
+			'error_text' => __( 'Error loading audio', 'wc-audio-preview' ),
+			'play_text' => __( 'Play', 'wc-audio-preview' ),
+			'pause_text' => __( 'Pause', 'wc-audio-preview' ),
+		));
 	}
 
 	/**
-	 * To display audio preview fields.
+	 * To display audio preview fields with modern UI.
 	 */
 	public function wcap_add_preview_field() {
 		global $post;
 
-		$wcap_audio                  = get_post_meta( $post->ID, 'wcap_audio', true );
-		if ( ! empty( $wcap_audio ) && isset($wcap_audio['wcap_audio_urls'])) {
+		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
+		if ( ! empty( $wcap_audio ) && isset($wcap_audio['wcap_audio_urls']) && !empty($wcap_audio['wcap_audio_urls']) ) {
+			
+			// Filter out empty entries
+			$valid_audios = array();
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-				if ( ! empty( $value ) ) {
-					$audio_url = $wcap_audio['wcap_audio_urls'][$key];
-                	$mime_type = $this->wcap_get_audio_mime_type($audio_url);
-					?>
-
-				<div class='product_meta wcap-preview-btn-div' data-id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
-					<a class="wcap-preview-btn button" href="javascript:void(0)"><?php echo isset( $value) ? esc_html( $value ) : ''; ?></a>
-				</div>
-						
-				<div class="wcap-player-cl" id="wcap-player-id-<?php echo esc_attr( $key ); ?>">
-					<audio controls="controls" id="audio_player" preload="none" controlsList="nodownload">
-						<source src="<?php echo esc_url($audio_url); ?>" type="<?php echo esc_attr($mime_type); ?>" />
-						<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
-					</audio>
-				</div>
-							<?php
+				if ( ! empty( $value ) && ! empty( $wcap_audio['wcap_audio_urls'][$key] ) ) {
+					$valid_audios[] = array(
+						'key' => $key,
+						'name' => $value,
+						'url' => $wcap_audio['wcap_audio_urls'][$key]
+					);
 				}
 			}
+			
+			if ( empty( $valid_audios ) ) {
+				return;
+			}
+			
+			// Check if we have multiple audio files
+			$has_multiple = count($valid_audios) > 1;
+			?>
+			
+			<div class="wcap-audio-preview-container">
+				<?php if ($has_multiple): ?>
+					<h3 class="wcap-preview-title">
+						<svg class="wcap-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M9 18V5l12-2v13"></path>
+							<circle cx="6" cy="18" r="3"></circle>
+							<circle cx="18" cy="16" r="3"></circle>
+						</svg>
+						<?php esc_html_e( 'Audio Previews', 'wc-audio-preview' ); ?>
+					</h3>
+				<?php endif; ?>
+				
+				<div class="wcap-preview-list">
+					<?php
+					foreach ( $valid_audios as $audio_data ) {
+						$key = $audio_data['key'];
+						$value = $audio_data['name'];
+						$audio_url = $audio_data['url'];
+						
+						// Determine if it's a CDN URL
+						$is_cdn = $this->wcap_is_cdn_url($audio_url);
+						
+						// Check if we need iframe player (for Google Drive)
+						$needs_iframe = $this->wcap_needs_iframe_player($audio_url);
+						
+						if ($needs_iframe && $is_cdn && $is_cdn['service'] === 'google_drive') {
+							// Use iframe for Google Drive
+							$this->render_google_drive_player($key, $value, $audio_url);
+						} else {
+							// Use regular audio player
+							$this->render_audio_player($key, $value, $audio_url, $is_cdn);
+						}
+					}
+					?>
+				</div>
+			</div>
+			<?php
 		}
 		return true;
 	}
 
+	/**
+	 * Render regular audio player
+	 *
+	 * @param int    $key       Audio key
+	 * @param string $name      Audio name
+	 * @param string $audio_url Audio URL
+	 * @param array  $is_cdn    CDN info
+	 */
+	private function render_audio_player($key, $name, $audio_url, $is_cdn) {
+		// Convert CDN URLs to playable format
+		$playable_url = $this->wcap_convert_cdn_url_for_playback($audio_url);
+		$mime_type = $this->wcap_get_audio_mime_type($playable_url);
+		?>
+		
+		<div class="wcap-preview-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
+			<button class="wcap-preview-button" type="button" aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+				<div class="wcap-button-content">
+					<span class="wcap-play-icon">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</span>
+					<span class="wcap-pause-icon" style="display: none;">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+						</svg>
+					</span>
+					<span class="wcap-loading-spinner" style="display: none;">
+						<svg class="wcap-spinner" width="24" height="24" viewBox="0 0 24 24">
+							<circle class="wcap-spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none"/>
+						</svg>
+					</span>
+					<div class="wcap-preview-info">
+						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
+						<?php if ($is_cdn): ?>
+							<span class="wcap-preview-badge"><?php echo esc_html( $is_cdn['service_name'] ); ?></span>
+						<?php endif; ?>
+					</div>
+				</div>
+				<div class="wcap-progress-container" style="display: none;">
+					<div class="wcap-progress-bar">
+						<div class="wcap-progress-fill"></div>
+					</div>
+					<span class="wcap-time">0:00 / 0:00</span>
+				</div>
+			</button>
+			
+			<audio class="wcap-audio-element" 
+				   id="wcap-audio-<?php echo esc_attr( $key ); ?>" 
+				   preload="none"
+				   data-name="<?php echo esc_attr( $name ); ?>">
+				<source src="<?php echo esc_url($playable_url); ?>" type="<?php echo esc_attr($mime_type); ?>" />
+				<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
+			</audio>
+		</div>
+		
+		<?php
+	}
+
+	/**
+	 * Render Google Drive player with iframe
+	 *
+	 * @param int    $key       Audio key
+	 * @param string $name      Audio name
+	 * @param string $audio_url Audio URL
+	 */
+	private function render_google_drive_player($key, $name, $audio_url) {
+		// Extract Google Drive file ID
+		$file_id = $this->extract_google_drive_id($audio_url);
+		if (!$file_id) {
+			// Fallback to regular player if can't extract ID
+			$this->render_audio_player($key, $name, $audio_url, array('service' => 'google_drive', 'service_name' => 'Google Drive'));
+			return;
+		}
+		
+		$iframe_url = 'https://drive.google.com/file/d/' . $file_id . '/preview';
+		?>
+		
+		<div class="wcap-preview-item wcap-gdrive-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
+			<button class="wcap-preview-button wcap-gdrive-button" type="button" 
+					onclick="wcapToggleGDrivePlayer('<?php echo esc_js( $key ); ?>')"
+					aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+				<div class="wcap-button-content">
+					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</span>
+					<span class="wcap-pause-icon" id="wcap-pause-<?php echo esc_attr( $key ); ?>" style="display: none;">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+						</svg>
+					</span>
+					<div class="wcap-preview-info">
+						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
+						<span class="wcap-preview-badge">Google Drive</span>
+					</div>
+				</div>
+			</button>
+			<div class="wcap-gdrive-player" id="wcap-gdrive-<?php echo esc_attr( $key ); ?>" style="display: none;">
+				<iframe 
+					src="" 
+					data-src="<?php echo esc_url($iframe_url); ?>"
+					width="100%" 
+					height="80" 
+					frameborder="0"
+					allow="autoplay"
+					allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+		
+		<script>
+		function wcapToggleGDrivePlayer(key) {
+			var player = document.getElementById('wcap-gdrive-' + key);
+			var button = player.previousElementSibling;
+			var iframe = player.querySelector('iframe');
+			var playIcon = document.getElementById('wcap-play-' + key);
+			var pauseIcon = document.getElementById('wcap-pause-' + key);
+			
+			// Close all other players
+			document.querySelectorAll('.wcap-gdrive-player').forEach(function(p) {
+				if (p.id !== 'wcap-gdrive-' + key && p.style.display !== 'none') {
+					var otherIframe = p.querySelector('iframe');
+					var otherKey = p.id.replace('wcap-gdrive-', '');
+					var otherPlayIcon = document.getElementById('wcap-play-' + otherKey);
+					var otherPauseIcon = document.getElementById('wcap-pause-' + otherKey);
+					
+					p.style.display = 'none';
+					p.previousElementSibling.classList.remove('playing');
+					otherIframe.src = '';
+					
+					if (otherPlayIcon && otherPauseIcon) {
+						otherPlayIcon.style.display = 'block';
+						otherPauseIcon.style.display = 'none';
+					}
+				}
+			});
+			
+			// Toggle this player
+			if (player.style.display === 'none') {
+				player.style.display = 'block';
+				button.classList.add('playing');
+				iframe.src = iframe.getAttribute('data-src');
+				playIcon.style.display = 'none';
+				pauseIcon.style.display = 'block';
+			} else {
+				player.style.display = 'none';
+				button.classList.remove('playing');
+				iframe.src = '';
+				playIcon.style.display = 'block';
+				pauseIcon.style.display = 'none';
+			}
+		}
+		</script>
+		
+		<?php
+	}
+
+	/**
+	 * Extract Google Drive file ID from URL
+	 *
+	 * @param string $url Google Drive URL
+	 * @return string|false File ID or false
+	 */
+	private function extract_google_drive_id($url) {
+		$patterns = array(
+			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
+			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
+			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i'
+		);
+		
+		foreach ($patterns as $pattern) {
+			if (preg_match($pattern, $url, $matches)) {
+				return $matches[1];
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Check if URL needs iframe player
+	 *
+	 * @param string $url Audio URL
+	 * @return bool
+	 */
+	private function wcap_needs_iframe_player($url) {
+		// Currently only Google Drive needs iframe
+		// You can extend this for other services that need special handling
+		return strpos($url, 'drive.google.com') !== false;
+	}
+
+	/**
+	 * Convert CDN URLs to playable format
+	 *
+	 * @param string $url The original URL
+	 * @return string The playable URL
+	 */
+	private function wcap_convert_cdn_url_for_playback($url) {
+		if (empty($url)) {
+			return $url;
+		}
+		
+		// Google Drive conversion (for non-iframe fallback)
+		$google_drive_patterns = array(
+			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
+			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
+			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i'
+		);
+		
+		foreach ($google_drive_patterns as $pattern) {
+			if (preg_match($pattern, $url, $matches)) {
+				$file_id = $matches[1];
+				// Try direct download URL (may not work for all files)
+				return 'https://drive.google.com/uc?export=download&id=' . $file_id;
+			}
+		}
+		
+		// Dropbox conversion
+		if (strpos($url, 'dropbox.com') !== false) {
+			// Convert sharing link to direct download link
+			$url = str_replace('?dl=0', '?raw=1', $url);
+			$url = str_replace('www.dropbox.com', 'dl.dropboxusercontent.com', $url);
+		}
+		
+		// OneDrive conversion
+		if (strpos($url, '1drv.ms') !== false || strpos($url, 'onedrive.live.com') !== false) {
+			// OneDrive direct download format
+			$url = str_replace('embed', 'download', $url);
+		}
+		
+		// Box.com conversion
+		if (strpos($url, 'box.com') !== false) {
+			$url = str_replace('/s/', '/shared/static/', $url);
+		}
+		
+		return $url;
+	}
+
+	/**
+	 * Check if URL is from a CDN service
+	 *
+	 * @param string $url The URL to check
+	 * @return array|false Service info or false
+	 */
+	private function wcap_is_cdn_url($url) {
+		if (empty($url)) {
+			return false;
+		}
+		
+		$services = array(
+			'google_drive' => array(
+				'name' => 'Google Drive',
+				'patterns' => array(
+					'/drive\.google\.com/i'
+				)
+			),
+			'dropbox' => array(
+				'name' => 'Dropbox',
+				'patterns' => array(
+					'/dropbox\.com/i',
+					'/dl\.dropboxusercontent\.com/i'
+				)
+			),
+			'onedrive' => array(
+				'name' => 'OneDrive',
+				'patterns' => array(
+					'/1drv\.ms/i',
+					'/onedrive\.live\.com/i'
+				)
+			),
+			'box' => array(
+				'name' => 'Box',
+				'patterns' => array(
+					'/box\.com/i'
+				)
+			),
+			'soundcloud' => array(
+				'name' => 'SoundCloud',
+				'patterns' => array(
+					'/soundcloud\.com/i'
+				)
+			),
+			's3' => array(
+				'name' => 'Amazon S3',
+				'patterns' => array(
+					'/s3\.amazonaws\.com/i',
+					'/\.s3\./i',
+					'/\.s3-/i'
+				)
+			),
+			'cloudfront' => array(
+				'name' => 'CloudFront',
+				'patterns' => array(
+					'/cloudfront\.net/i'
+				)
+			),
+			'mediafire' => array(
+				'name' => 'MediaFire',
+				'patterns' => array(
+					'/mediafire\.com/i'
+				)
+			)
+		);
+		
+		foreach ($services as $service_key => $service) {
+			foreach ($service['patterns'] as $pattern) {
+				if (preg_match($pattern, $url)) {
+					return array(
+						'service' => $service_key,
+						'service_name' => $service['name']
+					);
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Get MIME type for audio file
+	 *
+	 * @param string $url The audio URL
+	 * @return string The MIME type
+	 */
 	private function wcap_get_audio_mime_type($url) {
-		$extension = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+		// For CDN URLs where we can't determine extension
+		if (strpos($url, 'drive.google.com') !== false || 
+			strpos($url, 'dropbox.com') !== false ||
+			strpos($url, 'soundcloud.com') !== false ||
+			strpos($url, '1drv.ms') !== false ||
+			strpos($url, 'box.com') !== false ||
+			strpos($url, 'mediafire.com') !== false) {
+			return 'audio/mpeg'; // Default to MP3 as most compatible
+		}
+		
+		// Clean URL from query parameters
+		$clean_url = strtok($url, '?');
+		$extension = strtolower(pathinfo($clean_url, PATHINFO_EXTENSION));
+		
 		$mime_types = array(
 			'mp3' => 'audio/mpeg',
 			'wav' => 'audio/wav',
 			'ogg' => 'audio/ogg',
-			'm4a' => 'audio/mp4'
+			'm4a' => 'audio/mp4',
+			'mp4' => 'audio/mp4',
+			'aac' => 'audio/aac',
+			'flac' => 'audio/flac',
+			'wma' => 'audio/x-ms-wma',
+			'webm' => 'audio/webm',
+			'opus' => 'audio/opus',
+			'oga' => 'audio/ogg'
 		);
-		$mime_types = apply_filters( 'wcap_audio_mime_types', $mime_types );
+		
+		$mime_types = apply_filters('wcap_audio_mime_types', $mime_types);
 		return isset($mime_types[$extension]) ? $mime_types[$extension] : 'audio/mpeg';
 	}
 
 }
+
+// Add inline styles for Google Drive player
+add_action('wp_head', function() {
+	if (is_product()) {
+		?>
+		<style>
+		/* Google Drive Player Styles */
+		.wcap-gdrive-player {
+			padding: 10px;
+			background: rgba(0, 0, 0, 0.02);
+			border-radius: 0 0 6px 6px;
+			margin-top: -1px;
+		}
+		
+		.wcap-gdrive-player iframe {
+			border-radius: 4px;
+			background: white;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		
+		.wcap-gdrive-item.playing .wcap-preview-button {
+			border-radius: 6px 6px 0 0;
+			background: rgba(0, 0, 0, 0.04);
+		}
+		
+		.wcap-gdrive-button {
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+		}
+		
+		/* Fix for Google Drive badge overlap */
+		.wcap-gdrive-item .wcap-button-content {
+			position: relative;
+			width: 100%;
+		}
+		
+		.wcap-gdrive-item .wcap-play-icon,
+		.wcap-gdrive-item .wcap-pause-icon {
+			position: relative;
+			z-index: 2;
+		}
+		
+		.wcap-gdrive-item .wcap-preview-info {
+			margin-left: 0;
+			z-index: 1;
+		}
+		
+		/* Ensure proper spacing */
+		.wcap-gdrive-item .wcap-preview-badge {
+			margin-left: auto;
+		}
+		</style>
+		<?php
+	}
+});
