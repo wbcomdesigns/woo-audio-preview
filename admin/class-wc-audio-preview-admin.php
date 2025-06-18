@@ -103,8 +103,12 @@ class Wc_Audio_Preview_Admin {
 			'/[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i'
 		),
 		'google_drive' => array(
-			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)/i',
-			'/drive\.google\.com\/uc\?id=([a-zA-Z0-9-_]+)/i'
+			// Standard sharing link pattern (with or without /view and query params)
+			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
+			// Direct download pattern
+			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
+			// Open link pattern
+			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i'
 		),
 		'dropbox' => array(
 			'/dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i',
@@ -548,7 +552,7 @@ class Wc_Audio_Preview_Admin {
 				<ul>
 					<li><strong>Direct URL:</strong> https://example.com/audio/sample.mp3</li>
 					<li><strong>Amazon S3:</strong> https://s3.amazonaws.com/bucket/audio.mp3</li>
-					<li><strong>Google Drive:</strong> https://drive.google.com/file/d/[ID]/view</li>
+					<li><strong>Google Drive:</strong> https://drive.google.com/file/d/[ID]/view?usp=sharing</li>
 					<li><strong>Dropbox:</strong> https://dropbox.com/s/[ID]/audio.mp3</li>
 				</ul>
 			</div>
@@ -575,16 +579,37 @@ class Wc_Audio_Preview_Admin {
 		foreach ( $this->cdn_patterns as $service => $patterns ) {
 			foreach ( $patterns as $pattern ) {
 				if ( preg_match( $pattern, $url, $matches ) ) {
-					return array(
+					$result = array(
 						'service' => $service,
 						'id' => isset( $matches[1] ) ? $matches[1] : '',
 						'is_cdn' => true,
 						'original_url' => $url
 					);
+					
+					// Convert Google Drive URLs to playable format
+					if ( $service === 'google_drive' && ! empty( $matches[1] ) ) {
+						$result['playable_url'] = $this->convert_google_drive_url( $url, $matches[1] );
+					}
+					
+					return $result;
 				}
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Convert Google Drive sharing URL to direct download URL
+	 *
+	 * @since    1.5.0
+	 * @param    string $url      Google Drive URL.
+	 * @param    string $file_id  Extracted file ID.
+	 * @return   string           Direct download URL.
+	 */
+	private function convert_google_drive_url( $url, $file_id ) {
+		// Convert to direct download format
+		// Note: This requires the file to be publicly accessible
+		return 'https://drive.google.com/uc?export=download&id=' . $file_id;
 	}
 
 	/**
@@ -764,6 +789,13 @@ class Wc_Audio_Preview_Admin {
 
 		// Check file extension for direct URLs
 		$file_extension = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+		
+		// For URLs with query parameters, extract extension before query string
+		if ( strpos( $url, '?' ) !== false ) {
+			$url_parts = explode( '?', $url );
+			$file_extension = strtolower( pathinfo( $url_parts[0], PATHINFO_EXTENSION ) );
+		}
+		
 		if ( ! in_array( $file_extension, $this->allowed_file_types, true ) ) {
 			$result['message'] = sprintf( 
 				__( 'Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services.', 'wc-audio-preview' ),
@@ -987,6 +1019,16 @@ class Wc_Audio_Preview_Admin {
 			
 			.woo-audio-preview-table .sort:hover {
 				opacity: 1;
+			}
+			
+			/* Google Drive specific styling */
+			.wcap-service-google_drive {
+				background: #e8f5e9;
+				border-color: #4caf50;
+			}
+			
+			.wcap-service-google_drive .service-icon {
+				color: #4caf50;
 			}
 		';
 	}

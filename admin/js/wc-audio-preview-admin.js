@@ -513,8 +513,11 @@
     
     getFileExtension: function(url) {
       if (!url) return '';
+      // Clean URL from query parameters and hash
       const cleanUrl = url.split('?')[0].split('#')[0];
-      return cleanUrl.split('.').pop().toLowerCase();
+      // Extract extension from the clean URL
+      const parts = cleanUrl.split('.');
+      return parts.length > 1 ? parts.pop().toLowerCase() : '';
     },
 
     isValidAudioType: function(extension) {
@@ -762,6 +765,16 @@ jQuery(document).ready(function($) {
         margin-left: auto;
         font-weight: bold;
         color: #28a745;
+      }
+      
+      /* Google Drive specific styling */
+      .wcap-service-google_drive {
+        background: #e8f5e9;
+        border-color: #4caf50;
+      }
+      
+      .wcap-service-google_drive .service-icon {
+        color: #4caf50;
       }
       
       .wcap_audio_urls.cdn-detected {
