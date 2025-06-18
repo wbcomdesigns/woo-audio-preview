@@ -1,6 +1,6 @@
 <?php
 /**
- * The admin-specific functionality of the plugin.
+ * Enhanced admin-specific functionality supporting media library and CDN URLs
  *
  * @link       http://wbcomdesigns.com
  * @since      1.0.0
@@ -10,10 +10,10 @@
  */
 
 /**
- * The admin-specific functionality of the plugin.
+ * Enhanced admin-specific functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
+ * Now supports media library integration and CDN/external URL validation
+ * with improved UI matching the Document Preview plugin.
  *
  * @package    Wc_Audio_Preview
  * @subpackage Wc_Audio_Preview/admin
@@ -38,7 +38,7 @@ class Wc_Audio_Preview_Admin {
 	 * @var      string    $version    The current version of this plugin.
 	 */
 	private $version;
-
+	
 	/**
 	 * Plugin_settings_tabs
 	 *
@@ -47,6 +47,70 @@ class Wc_Audio_Preview_Admin {
 	 * @var mixed    $plugin_settings_tabs  The Settings tab.
 	 */
 	public $plugin_settings_tabs;
+
+	/**
+	 * Allowed audio file types
+	 *
+	 * @since    1.5.0
+	 * @access   private
+	 * @var      array    $allowed_file_types    Allowed file extensions.
+	 */
+	private $allowed_file_types = array( 'mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac', 'wma', 'webm' );
+
+	/**
+	 * Allowed MIME types for audio files
+	 *
+	 * @since    1.5.0
+	 * @access   private
+	 * @var      array    $allowed_mime_types    Allowed MIME types.
+	 */
+	private $allowed_mime_types = array(
+		'audio/mpeg',
+		'audio/mp3',
+		'audio/wav',
+		'audio/wave',
+		'audio/x-wav',
+		'audio/ogg',
+		'audio/mp4',
+		'audio/x-m4a',
+		'audio/aac',
+		'audio/flac',
+		'audio/x-ms-wma',
+		'audio/webm'
+	);
+
+	/**
+	 * CDN and streaming service patterns
+	 *
+	 * @since    1.5.0
+	 * @access   private
+	 * @var      array    $cdn_patterns    Patterns for CDN URLs.
+	 */
+	private $cdn_patterns = array(
+		'soundcloud' => array(
+			'/soundcloud\.com\/[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+/i',
+			'/api\.soundcloud\.com\/tracks\/[0-9]+/i'
+		),
+		'spotify' => array(
+			'/open\.spotify\.com\/track\/[a-zA-Z0-9]+/i',
+			'/spotify:track:[a-zA-Z0-9]+/i'
+		),
+		'amazon_s3' => array(
+			'/s3\.amazonaws\.com\/[^\/]+\/.+\.(mp3|wav|ogg|m4a)/i',
+			'/[a-zA-Z0-9-]+\.s3\.[a-zA-Z0-9-]+\.amazonaws\.com\/.+\.(mp3|wav|ogg|m4a)/i'
+		),
+		'cloudfront' => array(
+			'/[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i'
+		),
+		'google_drive' => array(
+			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)/i',
+			'/drive\.google\.com\/uc\?id=([a-zA-Z0-9-_]+)/i'
+		),
+		'dropbox' => array(
+			'/dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i',
+			'/dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i'
+		)
+	);
 
 	/**
 	 * Initialize the class and set its properties.
@@ -93,6 +157,9 @@ class Wc_Audio_Preview_Admin {
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {//phpcs:ignore
 			
 			wp_enqueue_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css'. $rtl_css .'/wc-audio-preview-admin'.$css_extension, array(), $this->version, 'all' );
+			
+			// Add enhanced styles for better UI
+			wp_add_inline_style( $this->plugin_name, $this->get_enhanced_styles() );
 		}
 	}
 
@@ -120,21 +187,68 @@ class Wc_Audio_Preview_Admin {
 		} else {
 			$js_extension = '.min.js';
 		}
-		$extensions = ['mp3', 'wav', 'ogg', 'm4a'];
 		
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
 			
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin'.$js_extension, array( 'jquery','wp-i18n' ), $this->version, false );
+			// Enqueue media uploader
+			wp_enqueue_media();
+			
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wc-audio-preview-admin'.$js_extension, array( 'jquery','wp-i18n', 'media-upload' ), $this->version, false );
+			
+			// Enhanced localize script with CDN support
 			wp_localize_script(
 			$this->plugin_name,
 			'wcap_ajax_object',
 				array(
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'nonce'    => wp_create_nonce( 'ajax-nonce' ),
-					'allowedExtensions' => apply_filters('wcap_allowed_audio_extensions', $extensions),
+					'allowedExtensions' => apply_filters('wcap_allowed_audio_extensions', $this->allowed_file_types),
+					'cdn_patterns' => $this->get_cdn_patterns_for_js(),
+					'error_messages' => array(
+						'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'wc-audio-preview' ),
+						'file_required' => __( 'Please select a file or enter a file URL.', 'wc-audio-preview' ),
+						'name_required' => __( 'Audio name is required.', 'wc-audio-preview' ),
+						'url_invalid' => __( 'Please enter a valid URL.', 'wc-audio-preview' ),
+						'file_too_large' => __( 'File size is too large. Maximum allowed size is 50MB.', 'wc-audio-preview' ),
+						'cdn_detected' => __( 'CDN/streaming service link detected! This will work great for preview.', 'wc-audio-preview' ),
+					),
+					'supported_services' => $this->get_supported_services_info(),
 				)
 			);
 		}
+	}
+
+	/**
+	 * Get CDN patterns formatted for JavaScript
+	 *
+	 * @since    1.5.0
+	 * @return   array    Patterns for JS.
+	 */
+	private function get_cdn_patterns_for_js() {
+		$js_patterns = array();
+		foreach ( $this->cdn_patterns as $service => $patterns ) {
+			$js_patterns[ $service ] = array_map( function( $pattern ) {
+				return str_replace( '\\', '\\\\', $pattern );
+			}, $patterns );
+		}
+		return $js_patterns;
+	}
+
+	/**
+	 * Get supported services information
+	 *
+	 * @since    1.5.0
+	 * @return   array    Services information.
+	 */
+	private function get_supported_services_info() {
+		return array(
+			'soundcloud' => 'SoundCloud',
+			'spotify' => 'Spotify',
+			'amazon_s3' => 'Amazon S3',
+			'cloudfront' => 'CloudFront',
+			'google_drive' => 'Google Drive',
+			'dropbox' => 'Dropbox'
+		);
 	}
 
 	/**
@@ -280,13 +394,13 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Register meta box(es).
+	 * Register enhanced meta box
 	 */
 	public function wcap_register_meta_boxes() {
 		global $post;
 		$label_text = sprintf(
-			__( 'Audio Preview Item %s', 'wc-audio-preview' ),
-			'<span class="wcap-required-span">' . __( '( MP3, WAV, OGG, M4A allowed. External URLs supported. )', 'wc-audio-preview' ) . '</span>'
+			__( 'Audio Preview Items %s', 'wc-audio-preview' ),
+			'<span class="wcap-required-span">' . __( '(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)', 'wc-audio-preview' ) . '</span>'
 		);
 
 		add_meta_box(
@@ -299,7 +413,7 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Meta box display callback.
+	 * Enhanced meta box display callback
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
@@ -310,57 +424,173 @@ class Wc_Audio_Preview_Admin {
 		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
 		?>
 		<div class="form-field preview_files">
+			<div class="wcap-error-messages"></div>
+			
+			<!-- Enhanced help section -->
+			<div class="wcap-help-section">
+				<h4><?php esc_html_e( '🎵 Supported Formats & Services', 'wc-audio-preview' ); ?></h4>
+				<div class="wcap-supported-grid">
+					<div>
+						<strong><?php esc_html_e( '🎵 Audio Files:', 'wc-audio-preview' ); ?></strong><br>
+						MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM
+					</div>
+					<div>
+						<strong><?php esc_html_e( '☁️ CDN Services:', 'wc-audio-preview' ); ?></strong><br>
+						Amazon S3, CloudFront, Google Drive, Dropbox
+					</div>
+					<div>
+						<strong><?php esc_html_e( '🎧 Streaming:', 'wc-audio-preview' ); ?></strong><br>
+						SoundCloud, Direct URLs
+					</div>
+				</div>
+				<p class="wcap-help-tip">
+					<?php esc_html_e( '💡 Tip: You can upload files to Media Library, use direct URLs, or paste CDN/streaming links.', 'wc-audio-preview' ); ?>
+				</p>
+			</div>
+			
 			<table class="widefat woo-audio-preview-table" id="wcap-audio-table">
 				<thead>
 					<tr>
 						<th class="sort">&nbsp;</th>
-						<th><?php esc_html_e( 'Name', 'wc-audio-preview' ); ?> <span class="woocommerce-help-tip"><span class="tooltiptext"><?php esc_html_e( 'Enter the Title of audio file', 'wc-audio-preview' ); ?></span>
-					</span></th>
-						<th colspan="2"><?php esc_html_e( 'Audio URL', 'wc-audio-preview' ); ?> <span class="woocommerce-help-tip"><span class="tooltiptext"> <?php esc_html_e( 'Enter the path to the audio file', 'wc-audio-preview' ); ?></span>
-					</span></th>
+						<th>
+							<?php esc_html_e( 'Audio Name', 'wc-audio-preview' ); ?>
+							<span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Enter a descriptive name for the audio file', 'wc-audio-preview' ); ?>"></span>
+						</th>
+						<th>
+							<?php esc_html_e( 'Audio URL or CDN Link', 'wc-audio-preview' ); ?>
+							<span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Enter URL, upload from Media Library, or paste CDN/streaming link', 'wc-audio-preview' ); ?>"></span>
+						</th>
+						<th><?php esc_html_e( 'Choose File', 'wc-audio-preview' ); ?></th>
 						<th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody class="ui-sortable wcap_preview-tr">
-				<p class="wcap-del-msg"><?php esc_html_e( 'Error', 'wc-audio-preview' ); ?></p>
 				<?php
-				$preview_data = get_post_meta( $post->ID, 'wcap_preview_attachment', true );
-
-				?>
-				<?php if ( ! empty( $wcap_audio ) ) : ?>
-						<?php foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) : ?>
-							<tr class="wcap-audio-file">
-								<td class="sort"></td>
-								<td class="file_name"><input class="input_text" placeholder="Audio Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $wcap_audio['wcap_audio_names'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_names'][ $key ] ) : ''; ?>" type="text" ></td>
-								<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? esc_attr( $wcap_audio['wcap_audio_urls'][ $key ] ) : ''; ?>" type="text"></td>
-								<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" class="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
-								<td width="15%">
-								<a href="javascript:void(0)"  class="tooltip wcap-add-audio-cl button button-primary button-small"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?><span class="tooltiptext"><?php esc_html_e('Add a new audio file', 'wc-audio-preview' ); ?></span></a>&nbsp;
-								<?php if ( count( $wcap_audio['wcap_audio_names'] ) > 1 ) : ?>
-								<a href="javascript:void(0)" data-p_id="<?php echo esc_attr( $post->ID ); ?>" data-file="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>"class="tooltip wcap-delete-audio-cl button button-primary button-small" id="wcap-delete-audio-id"><?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?><span class="tooltiptext"> <?php esc_html_e('Remove this audio file', 'wc-audio-preview' ); ?></span></a></td>
+				if ( ! empty( $wcap_audio ) && ! empty( $wcap_audio['wcap_audio_names'] ) ) :
+					foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) :
+						$audio_url = isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? $wcap_audio['wcap_audio_urls'][ $key ] : '';
+						$cdn_info = $this->is_cdn_url( $audio_url );
+						$row_class = $cdn_info ? 'wcap-audio-file wcap-cdn-row' : 'wcap-audio-file';
+						?>
+						<tr class="<?php echo esc_attr( $row_class ); ?>">
+							<td class="sort" data-label="<?php esc_attr_e( 'Sort', 'wc-audio-preview' ); ?>"></td>
+							<td class="file_name" data-label="<?php esc_attr_e( 'Name', 'wc-audio-preview' ); ?>">
+								<input class="input_text wcap-file-name" 
+									   placeholder="<?php esc_attr_e( 'Audio Name', 'wc-audio-preview' ); ?>" 
+									   name="wcap_audio[wcap_audio_names][]" 
+									   value="<?php echo esc_attr( $value ); ?>" 
+									   type="text" 
+									   required>
+							</td>
+							<td class="file_url" data-label="<?php esc_attr_e( 'Audio URL', 'wc-audio-preview' ); ?>">
+								<input class="input_text wcap_audio_urls" 
+									   placeholder="<?php esc_attr_e( 'Enter URL or choose from Media Library', 'wc-audio-preview' ); ?>" 
+									   name="wcap_audio[wcap_audio_urls][]" 
+									   value="<?php echo esc_url( $audio_url ); ?>" 
+									   type="url">
+								<?php if ( $cdn_info ) : ?>
+									<div class="wcap-service-indicator">
+										🔗 <?php echo esc_html( ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) ) ); ?> link detected
+									</div>
 								<?php endif; ?>
-							</tr>
-						<?php endforeach; ?>
-					<?php else : ?>
-						<tr class="wcap-audio-file">
-							<td class="sort"></td>
-							<td class="file_name"><input class="input_text" placeholder="Audio Name" name="wcap_audio[wcap_audio_names][]" value="<?php echo isset( $preview_data['name'] ) ? esc_attr( $preview_data['name'] ) : ''; ?>" type="text" ></td>
-							<td class="file_url"><input class="input_text" placeholder="http://" id="wcap_audio_urls" name="wcap_audio[wcap_audio_urls][]" value="<?php echo isset( $preview_data['url'] ) ? esc_attr( $preview_data['url'] ) : ''; ?>" type="text"></td>
-							<td class="file_url_choose" width="1%"><input type="file" id="wcap_preview_attachment" class="wcap_preview_attachment" name="wcap_audio[wcap_preview_attachment][]" value="<?php echo isset( $preview_data['file'] ) ? esc_attr( $preview_data['file'] ) : ''; ?>" size="25"/></td>
-							<td width="15%">
-							<a href="javascript:void(0)" class="tooltip wcap-add-audio-cl button button-primary button-small"><?php esc_html_e( 'Add', 'wc-audio-preview' ); ?><span class="tooltiptext"> <?php esc_html_e('Add a new audio file', 'wc-audio-preview' ); ?></span></a>&nbsp;
+							</td>
+							<td class="file_url_choose" width="1%" data-label="<?php esc_attr_e( 'Choose', 'wc-audio-preview' ); ?>">
+								<button type="button" class="button wcap-media-button"><?php esc_html_e( 'Media Library', 'wc-audio-preview' ); ?></button>
+							</td>
+							<td width="15%" data-label="<?php esc_attr_e( 'Actions', 'wc-audio-preview' ); ?>">
+								<button type="button" class="wcap-add-audio-cl button button-primary button-small" title="<?php esc_attr_e( 'Add a new audio file', 'wc-audio-preview' ); ?>">
+									<?php esc_html_e( 'Add', 'wc-audio-preview' ); ?>
+								</button>
+								<button type="button" class="wcap-delete-audio-cl button button-secondary button-small" data-p_id="<?php echo esc_attr( $post->ID ); ?>" title="<?php esc_attr_e( 'Remove this audio file', 'wc-audio-preview' ); ?>">
+									<?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?>
+								</button>
+							</td>
 						</tr>
-					<?php endif; ?>
-					</tbody>
-				</table>
+					<?php 
+					endforeach; 
+				else : 
+					?>
+					<tr class="wcap-audio-file">
+						<td class="sort" data-label="<?php esc_attr_e( 'Sort', 'wc-audio-preview' ); ?>"></td>
+						<td class="file_name" data-label="<?php esc_attr_e( 'Name', 'wc-audio-preview' ); ?>">
+							<input class="input_text wcap-file-name" 
+								   placeholder="<?php esc_attr_e( 'Audio Name', 'wc-audio-preview' ); ?>" 
+								   name="wcap_audio[wcap_audio_names][]" 
+								   value="" 
+								   type="text" 
+								   required>
+						</td>
+						<td class="file_url" data-label="<?php esc_attr_e( 'Audio URL', 'wc-audio-preview' ); ?>">
+							<input class="input_text wcap_audio_urls" 
+								   placeholder="<?php esc_attr_e( 'Enter URL or choose from Media Library', 'wc-audio-preview' ); ?>" 
+								   name="wcap_audio[wcap_audio_urls][]" 
+								   value="" 
+								   type="url">
+						</td>
+						<td class="file_url_choose" width="1%" data-label="<?php esc_attr_e( 'Choose', 'wc-audio-preview' ); ?>">
+							<button type="button" class="button wcap-media-button"><?php esc_html_e( 'Media Library', 'wc-audio-preview' ); ?></button>
+						</td>
+						<td width="15%" data-label="<?php esc_attr_e( 'Actions', 'wc-audio-preview' ); ?>">
+							<button type="button" class="wcap-add-audio-cl button button-primary button-small" title="<?php esc_attr_e( 'Add a new audio file', 'wc-audio-preview' ); ?>">
+								<?php esc_html_e( 'Add', 'wc-audio-preview' ); ?>
+							</button>
+							<button type="button" class="wcap-delete-audio-cl button button-secondary button-small" data-p_id="<?php echo esc_attr( $post->ID ); ?>" title="<?php esc_attr_e( 'Remove this audio file', 'wc-audio-preview' ); ?>">
+								<?php esc_html_e( 'Remove', 'wc-audio-preview' ); ?>
+							</button>
+						</td>
+					</tr>
+				<?php endif; ?>
+				</tbody>
+			</table>
+			
+			<div class="wcap-usage-examples">
+				<h4><?php esc_html_e( '📋 Example URLs:', 'wc-audio-preview' ); ?></h4>
+				<ul>
+					<li><strong>Direct URL:</strong> https://example.com/audio/sample.mp3</li>
+					<li><strong>Amazon S3:</strong> https://s3.amazonaws.com/bucket/audio.mp3</li>
+					<li><strong>Google Drive:</strong> https://drive.google.com/file/d/[ID]/view</li>
+					<li><strong>Dropbox:</strong> https://dropbox.com/s/[ID]/audio.mp3</li>
+				</ul>
+			</div>
+			
+			<p class="description">
+				<?php esc_html_e( 'Add audio preview files for your product. Customers will be able to listen to these samples before purchasing. Supports media library uploads, direct URLs, and CDN/streaming services.', 'wc-audio-preview' ); ?>
+			</p>
 		</div>
 		<?php
 	}
 
 	/**
-	 * Save meta box content.
+	 * Check if URL is from a CDN or streaming service
 	 *
-	 * @param int $post_id Post ID Get a Post ID.
+	 * @since    1.5.0
+	 * @param    string $url The URL to check.
+	 * @return   array|false Service info or false if not CDN.
+	 */
+	private function is_cdn_url( $url ) {
+		if ( empty( $url ) ) {
+			return false;
+		}
+
+		foreach ( $this->cdn_patterns as $service => $patterns ) {
+			foreach ( $patterns as $pattern ) {
+				if ( preg_match( $pattern, $url, $matches ) ) {
+					return array(
+						'service' => $service,
+						'id' => isset( $matches[1] ) ? $matches[1] : '',
+						'is_cdn' => true,
+						'original_url' => $url
+					);
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Enhanced save meta box with CDN support
+	 *
+	 * @param int $post_id Post ID.
 	 */
 	public function wcap_save_meta_box( $post_id ) {
 		// Add nonce for security and authentication.
@@ -392,153 +622,176 @@ class Wc_Audio_Preview_Admin {
 		}
 
 		if ( isset( $_POST['post_type'] ) && 'product' === $_POST['post_type'] ) {
-			$supported_types = apply_filters( 'wcap_supported_audio_types', array( 'mp3', 'wav', 'ogg', 'm4a' ) );
+			$supported_types = apply_filters( 'wcap_supported_audio_types', $this->allowed_file_types );
 			$supported_mimes = apply_filters( 'wcap_supported_audio_mimes', array(
 				'mp3' => array( 'audio/mpeg', 'audio/mp3', 'audio/mpeg3', 'audio/x-mpeg-3' ),
 				'wav' => array( 'audio/wav', 'audio/x-wav', 'audio/wave' ),
 				'ogg' => array( 'audio/ogg', 'application/ogg' ),
-				'm4a' => array( 'audio/mp4', 'audio/x-m4a' )
+				'm4a' => array( 'audio/mp4', 'audio/x-m4a' ),
+				'aac' => array( 'audio/aac', 'audio/x-aac' ),
+				'flac' => array( 'audio/flac', 'audio/x-flac' ),
+				'wma' => array( 'audio/x-ms-wma' ),
+				'webm' => array( 'audio/webm' )
 			) ); 
-			if ( isset( $_POST['wcap_audio'] ) && ! empty( $_POST['wcap_audio'] ) ) {
-				if ( isset( $_FILES['wcap_audio']['name'] ) && ! empty( $_FILES['wcap_audio']['name'] ) ) {
-					$audio_data = array();
-					
-					$wcap_upload_audio = map_deep( wp_unslash( $_FILES['wcap_audio'] ), 'sanitize_text_field' );
-					foreach ( $wcap_upload_audio['name']['wcap_preview_attachment'] as $key => $value ) {
+			
+			// Process audio data
+			if ( ! isset( $_POST['wcap_audio'] ) || empty( $_POST['wcap_audio'] ) ) {
+				delete_post_meta( $post_id, 'wcap_audio' );
+				return;
+			}
 
-						if ( empty( $value ) || empty( $wcap_upload_audio['tmp_name']['wcap_preview_attachment'][$key] ) ) {
-							continue;
-						}
+			$wcap_audio = wp_unslash( $_POST['wcap_audio'] );
+			$processed_audio = array(
+				'wcap_audio_names' => array(),
+				'wcap_audio_urls' => array(),
+				'wcap_audio_source' => array()
+			);
 
-						$uploadedfile = array(
-							'name'     => $wcap_upload_audio['name']['wcap_preview_attachment'][ $key ],
-							'type'     => $wcap_upload_audio['type']['wcap_preview_attachment'][ $key ],
-							'tmp_name' => $wcap_upload_audio['tmp_name']['wcap_preview_attachment'][ $key ],
-							'error'    => $wcap_upload_audio['error']['wcap_preview_attachment'][ $key ],
-							'size'     => $wcap_upload_audio['size']['wcap_preview_attachment'][ $key ],
+			$has_valid_audio = false;
+			$error_messages = array();
+			$success_messages = array();
+
+			if ( isset( $wcap_audio['wcap_audio_names'] ) && isset( $wcap_audio['wcap_audio_urls'] ) ) {
+				foreach ( $wcap_audio['wcap_audio_names'] as $key => $audio_name ) {
+					$audio_url = isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? $wcap_audio['wcap_audio_urls'][ $key ] : '';
+
+					// Skip empty entries
+					if ( empty( $audio_name ) && empty( $audio_url ) ) {
+						continue;
+					}
+
+					// Validate audio name
+					if ( empty( $audio_name ) ) {
+						$error_messages[] = __( 'Audio name is required for all files.', 'wc-audio-preview' );
+						continue;
+					}
+
+					// Validate audio URL
+					if ( empty( $audio_url ) ) {
+						$error_messages[] = sprintf( __( 'Audio URL is required for: %s', 'wc-audio-preview' ), $audio_name );
+						continue;
+					}
+
+					// Validate URL
+					$validation = $this->validate_audio_url( $audio_url );
+					if ( ! $validation['success'] ) {
+						$error_messages[] = sprintf( __( 'Error with audio "%s": %s', 'wc-audio-preview' ), $audio_name, $validation['message'] );
+						continue;
+					}
+
+					// Add valid audio
+					$processed_audio['wcap_audio_names'][] = sanitize_text_field( $audio_name );
+					$processed_audio['wcap_audio_urls'][] = esc_url_raw( $audio_url );
+					$processed_audio['wcap_audio_source'][] = $validation['source'];
+					$has_valid_audio = true;
+
+					// Add success message for CDN URLs
+					if ( $validation['source'] === 'cdn' ) {
+						$success_messages[] = sprintf( 
+							__( 'Successfully added %s audio: %s', 'wc-audio-preview' ),
+							ucfirst( str_replace( '_', ' ', $validation['service'] ) ),
+							$audio_name
 						);
-						$file_ext = strtolower( pathinfo( $uploadedfile['name'], PATHINFO_EXTENSION ) );
-						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
-						
-						if ( ! in_array( $file_ext, $supported_types ) || !$file_type['type'] ) {
-							wp_die( esc_html__( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
-						}
-
-						if ( $uploadedfile['size'] > 10485760 ) {
-							wp_die( esc_html__( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
-						}
-						// Use the WordPress API to upload the file.
-						if ( ! function_exists( 'wp_handle_upload' ) ) {
-							require_once ABSPATH . 'wp-admin/includes/file.php';
-						}
-						$upload_overrides         = array( 'test_form' => false );
-
-						add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-						$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-						remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-						$_POST['wcap_audio']['wcap_audio_urls'][ $key ] = $movefile['url'];
-
-					}
-					if (isset($_POST['wcap_audio']['wcap_audio_names']) && is_array($_POST['wcap_audio']['wcap_audio_names'])) {
-						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized inside the loop
-						foreach (wp_unslash($_POST['wcap_audio']['wcap_audio_names']) as $key => $name) {
-							$audio_data['wcap_audio_names'][$key] = sanitize_text_field(wp_unslash($name));
-						}
-					}
-
-					// Sanitize URLs
-					if (isset($_POST['wcap_audio']['wcap_audio_urls']) && is_array($_POST['wcap_audio']['wcap_audio_urls'])) {
-						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized inside the loop
-						foreach (wp_unslash($_POST['wcap_audio']['wcap_audio_urls']) as $key => $url) {
-							if (!empty($url)) {
-								$cleaned_url = esc_url_raw(wp_unslash($url));
-								$file_ext = strtolower(pathinfo(parse_url($cleaned_url, PHP_URL_PATH), PATHINFO_EXTENSION));
-								if (!in_array($file_ext, array('mp3', 'wav', 'ogg', 'm4a'))) {
-									wp_die(esc_html__('External URL must point to a valid audio file (MP3, WAV, OGG, M4A)', 'wc-audio-preview'));
-								}
-								if (!empty($cleaned_url) && filter_var($cleaned_url, FILTER_VALIDATE_URL)) {
-									$audio_data['wcap_audio_urls'][$key] = $cleaned_url;
-									$audio_data['wcap_audio_source'][$key] = 'external';
-								} else if (!empty($url)) {
-									wp_die(esc_html__('Invalid URL provided', 'wc-audio-preview'));
-								}
-							}elseif (!empty($_FILES['wcap_audio']['name']['wcap_preview_attachment'][$key])) {
-								// File uploaded - handle upload
-								// ... existing upload code ...
-								$audio_data['wcap_audio_source'][$key] = 'local';
-							}
-						}
-					}
-					// Update post meta with sanitized data
-    				update_post_meta($post_id, 'wcap_audio', $audio_data);
-				}
-			}
-
-			if ( isset( $_POST['wcap_audio_names'] ) ) {
-				$wcap_audio     = isset( $_FILES['wcap_preview_attachment'] ) ? map_deep( wp_unslash( $_FILES['wcap_preview_attachment'] ), 'sanitize_text_field' ) : '';
-				$wcap_audio_names = sanitize_text_field( wp_unslash( $_POST['wcap_audio_names'] ) );
-				if ( '' == $wcap_audio_names && ! empty( $wcap_audio['name'] )) {
-					$file_name                 = explode( '.', $wcap_audio['name'] );
-					$_POST['wcap_audio_names'] = $file_name[0];
-				}
-				if ( isset( $_POST['wcap_audio_names'] ) && ! empty( $_POST['wcap_audio_names'] ) ) {
-					// Make sure the file array isn't empty.
-					if ( ! empty( $_FILES['wcap_preview_attachment']['name'] ) ) {
-						$uploadedfile = $wcap_audio;
-
-						$file_ext = strtolower( pathinfo( $uploadedfile['name'], PATHINFO_EXTENSION ) );
-						$file_type = wp_check_filetype_and_ext( $uploadedfile['tmp_name'], $uploadedfile['name'] );
-						
-						if ( ! in_array( $file_ext, $supported_types ) || !$file_type['type'] ) {
-							wp_die( esc_html__( 'Invalid audio file. Allowed formats: MP3, WAV, OGG, M4A', 'wc-audio-preview' ) );
-						}
-
-						if ( $uploadedfile['size'] > 10485760 ) {
-							wp_die( esc_html__( 'File size exceeds 10MB limit', 'wc-audio-preview' ) );
-						}
-
-						
-						if ( ! function_exists( 'wp_handle_upload' ) ) {
-							require_once ABSPATH . 'wp-admin/includes/file.php';
-						}
-						$upload_overrides = array( 'test_form' => false );
-
-						add_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-						$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-						remove_filter( 'upload_dir', array( $this, 'wcap_set_upload_dir' ) );
-
-						if ( $movefile && ! isset( $movefile['error'] ) ) {
-							$movefile['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
-							update_post_meta( $post_id, 'wcap_preview_attachment', $movefile );
-						} else {
-
-							echo wp_kses_post( $movefile['error'] );
-							$this->wcap_log_error($movefile['error']);
-							add_settings_error('wcap_audio', 'upload_error', 'Error uploading audio file: ' . ($movefile['error'] ?? 'Unknown error'), 'error');
-							return;
-						}
-					} else {
-						if ( isset( $_POST['wcap_audio_urls'] ) && ! empty( $_POST['wcap_audio_urls'] ) ) {
-							$upload_file   = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
-							$file_ext      = strtolower( pathinfo( $upload_file, PATHINFO_EXTENSION ) );
-							$file_type     = wp_check_filetype( $upload_file );
-							
-							if ( in_array( $file_ext, $supported_types ) ) {
-								$mp3url         = array();
-								$mp3url['name'] = map_deep( wp_unslash( $_POST['wcap_audio_names'] ), 'sanitize_text_field' );
-								$mp3url['url']  = map_deep( wp_unslash( $_POST['wcap_audio_urls'] ), 'sanitize_text_field' );
-								update_post_meta( $post_id, 'wcap_preview_attachment', $mp3url );
-							}
-						}
 					}
 				}
 			}
-			if ( isset( $_POST['wcap_display_audio_players'] ) ) {
-				update_post_meta( $post_id, 'wcap_display_audio_players', 'yes' );
+
+			// Display messages
+			if ( ! empty( $error_messages ) ) {
+				foreach ( $error_messages as $error ) {
+					$this->add_admin_notice( $error, 'error' );
+				}
+			}
+
+			if ( ! empty( $success_messages ) ) {
+				foreach ( $success_messages as $success ) {
+					$this->add_admin_notice( $success, 'success' );
+				}
+			}
+
+			// Save or delete meta
+			if ( $has_valid_audio ) {
+				update_post_meta( $post_id, 'wcap_audio', $processed_audio );
+				if ( empty( $error_messages ) ) {
+					$this->add_admin_notice( __( 'Audio previews saved successfully.', 'wc-audio-preview' ), 'success' );
+				}
 			} else {
-				update_post_meta( $post_id, 'wcap_display_audio_players', 'no' );
+				delete_post_meta( $post_id, 'wcap_audio' );
+				if ( empty( $error_messages ) ) {
+					$this->add_admin_notice( __( 'No valid audio files found. Audio previews have been removed.', 'wc-audio-preview' ), 'warning' );
+				}
 			}
 		}
+	}
+
+	/**
+	 * Validate audio URL
+	 *
+	 * @since    1.5.0
+	 * @param    string $url Audio URL to validate.
+	 * @return   array       Validation result.
+	 */
+	private function validate_audio_url( $url ) {
+		$result = array(
+			'success' => false,
+			'message' => '',
+			'source' => 'direct',
+			'service' => ''
+		);
+
+		if ( empty( $url ) ) {
+			$result['message'] = __( 'Audio URL cannot be empty.', 'wc-audio-preview' );
+			return $result;
+		}
+
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			$result['message'] = __( 'Please enter a valid URL.', 'wc-audio-preview' );
+			return $result;
+		}
+
+		// Check if it's a CDN URL
+		$cdn_info = $this->is_cdn_url( $url );
+		if ( $cdn_info ) {
+			$result['success'] = true;
+			$result['source'] = 'cdn';
+			$result['service'] = $cdn_info['service'];
+			$result['message'] = sprintf( 
+				__( 'CDN %s link detected and validated.', 'wc-audio-preview' ),
+				ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) )
+			);
+			return $result;
+		}
+
+		// Check file extension for direct URLs
+		$file_extension = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+		if ( ! in_array( $file_extension, $this->allowed_file_types, true ) ) {
+			$result['message'] = sprintf( 
+				__( 'Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services.', 'wc-audio-preview' ),
+				implode( ', ', array_map( 'strtoupper', $this->allowed_file_types ) )
+			);
+			return $result;
+		}
+
+		$result['success'] = true;
+		$result['source'] = 'direct';
+		return $result;
+	}
+
+	/**
+	 * Display admin notice
+	 *
+	 * @since    1.5.0
+	 * @param    string $message Message to display.
+	 * @param    string $type    Notice type.
+	 */
+	private function add_admin_notice( $message, $type = 'error' ) {
+		add_action( 'admin_notices', function() use ( $message, $type ) {
+			printf(
+				'<div class="notice notice-%s wcap-admin-notice is-dismissible"><p>%s</p></div>',
+				esc_attr( $type ),
+				esc_html( $message )
+			);
+		});
 	}
 
 	/**
@@ -651,6 +904,91 @@ class Wc_Audio_Preview_Admin {
 				update_option('wcap_admin_errors', $errors);
 			}
 		}
+	}
+
+	/**
+	 * Get enhanced styles for the admin area
+	 *
+	 * @since    1.5.0
+	 * @return   string    CSS styles.
+	 */
+	private function get_enhanced_styles() {
+		return '
+			.wcap-help-section {
+				margin-bottom: 20px;
+				padding: 15px;
+				background: #f0f8ff;
+				border-left: 4px solid #0073aa;
+				border-radius: 4px;
+			}
+			
+			.wcap-help-section h4 {
+				margin: 0 0 10px 0;
+				color: #0073aa;
+			}
+			
+			.wcap-supported-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 15px;
+				font-size: 13px;
+			}
+			
+			.wcap-help-tip {
+				margin: 10px 0 0 0;
+				font-style: italic;
+				color: #666;
+			}
+			
+			.wcap-cdn-row {
+				background-color: #f0f8ff;
+			}
+			
+			.wcap-service-indicator {
+				font-size: 11px;
+				color: #0073aa;
+				margin-top: 3px;
+				font-style: italic;
+			}
+			
+			.wcap-usage-examples {
+				margin-top: 15px;
+				padding: 12px;
+				background: #f9f9f9;
+				border-radius: 4px;
+				font-size: 13px;
+			}
+			
+			.wcap-usage-examples h4 {
+				margin: 0 0 8px 0;
+				color: #333;
+			}
+			
+			.wcap-usage-examples ul {
+				margin: 0;
+				padding-left: 20px;
+				color: #666;
+			}
+			
+			.woo-audio-preview-table .wcap-media-button {
+				white-space: nowrap;
+				min-width: 100px;
+			}
+			
+			.woo-audio-preview-table .sort {
+				cursor: move;
+				width: 20px;
+				text-align: center;
+				background: url("data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'><path d=\'M9 3h6v2H9zm0 4h6v2H9zm0 4h6v2H9zm0 4h6v2H9z\' fill=\'%23666\'/></svg>") no-repeat center;
+				background-size: 16px;
+				opacity: 0.6;
+				transition: opacity 0.3s ease;
+			}
+			
+			.woo-audio-preview-table .sort:hover {
+				opacity: 1;
+			}
+		';
 	}
 
 }
