@@ -143,8 +143,9 @@
           /[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i
         ],
         dropbox: [
-          /dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i,
-          /dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i
+          /dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/(.+\.(mp3|wav|ogg|m4a|flac))(?:\?.*)?/i,
+          /dropbox\.com\/scl\/fi\/([a-zA-Z0-9_-]+)\/(.+\.(mp3|wav|ogg|m4a|flac))(?:\?.*)?/i,
+          /dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/(.+\.(mp3|wav|ogg|m4a|flac))(?:\?.*)?/i
         ]
       };
       
