@@ -662,7 +662,22 @@ class Wc_Audio_Preview_Admin {
 				return;
 			}
 
-			$wcap_audio = wp_unslash( $_POST['wcap_audio'] );
+			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized below.
+				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] );
+
+				$sanitized_wcap_audio = array();
+
+				if ( isset( $wcap_audio_raw['wcap_audio_names'] ) && is_array( $wcap_audio_raw['wcap_audio_names'] ) ) {
+					$sanitized_wcap_audio['wcap_audio_names'] = array_map( 'sanitize_text_field', $wcap_audio_raw['wcap_audio_names'] );
+				}
+
+				if ( isset( $wcap_audio_raw['wcap_audio_urls'] ) && is_array( $wcap_audio_raw['wcap_audio_urls'] ) ) {
+					$sanitized_wcap_audio['wcap_audio_urls'] = array_map( 'esc_url_raw', $wcap_audio_raw['wcap_audio_urls'] );
+				}
+
+			}
+
 			$processed_audio = array(
 				'wcap_audio_names' => array(),
 				'wcap_audio_urls' => array(),
@@ -673,9 +688,9 @@ class Wc_Audio_Preview_Admin {
 			$error_messages = array();
 			$success_messages = array();
 
-			if ( isset( $wcap_audio['wcap_audio_names'] ) && isset( $wcap_audio['wcap_audio_urls'] ) ) {
-				foreach ( $wcap_audio['wcap_audio_names'] as $key => $audio_name ) {
-					$audio_url = isset( $wcap_audio['wcap_audio_urls'][ $key ] ) ? $wcap_audio['wcap_audio_urls'][ $key ] : '';
+			if ( isset( $sanitized_wcap_audio['wcap_audio_names'] ) && isset( $sanitized_wcap_audio['wcap_audio_urls'] ) ) {
+				foreach ( $sanitized_wcap_audio['wcap_audio_names'] as $key => $audio_name ) {
+					$audio_url = isset( $sanitized_wcap_audio['wcap_audio_urls'][ $key ] ) ? $sanitized_wcap_audio['wcap_audio_urls'][ $key ] : '';
 
 					// Skip empty entries
 					if ( empty( $audio_name ) && empty( $audio_url ) ) {
