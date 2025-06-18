@@ -229,13 +229,8 @@ class Wc_Audio_Preview_Admin {
 	 * @return   array    Patterns for JS.
 	 */
 	private function get_cdn_patterns_for_js() {
-		$js_patterns = array();
-		foreach ( $this->cdn_patterns as $service => $patterns ) {
-			$js_patterns[ $service ] = array_map( function( $pattern ) {
-				return str_replace( '\\', '\\\\', $pattern );
-			}, $patterns );
-		}
-		return $js_patterns;
+		// Return empty array since we're using hardcoded patterns in JS
+		return array();
 	}
 
 	/**
@@ -774,7 +769,7 @@ class Wc_Audio_Preview_Admin {
 			return $result;
 		}
 
-		// Check if it's a CDN URL
+		// Check if it's a CDN URL first (before checking file extensions)
 		$cdn_info = $this->is_cdn_url( $url );
 		if ( $cdn_info ) {
 			$result['success'] = true;
@@ -787,16 +782,19 @@ class Wc_Audio_Preview_Admin {
 			return $result;
 		}
 
-		// Check file extension for direct URLs
-		$file_extension = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+		// For non-CDN URLs, check file extension
+		$file_extension = '';
 		
-		// For URLs with query parameters, extract extension before query string
+		// Extract extension, handling query parameters
 		if ( strpos( $url, '?' ) !== false ) {
 			$url_parts = explode( '?', $url );
 			$file_extension = strtolower( pathinfo( $url_parts[0], PATHINFO_EXTENSION ) );
+		} else {
+			$file_extension = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
 		}
 		
-		if ( ! in_array( $file_extension, $this->allowed_file_types, true ) ) {
+		// If no extension found or invalid extension for direct URLs
+		if ( empty( $file_extension ) || ! in_array( $file_extension, $this->allowed_file_types, true ) ) {
 			$result['message'] = sprintf( 
 				__( 'Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services.', 'wc-audio-preview' ),
 				implode( ', ', array_map( 'strtoupper', $this->allowed_file_types ) )

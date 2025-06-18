@@ -120,10 +120,36 @@
      * Get CDN service info
      */
     getCdnServiceInfo: function(url) {
-      for (const [service, patterns] of Object.entries(this.cdnPatterns)) {
-        for (let i = 0; i < patterns.length; i++) {
-          // Convert pattern string to RegExp
-          const pattern = new RegExp(patterns[i].replace(/\\\\/g, '\\'));
+      // Predefined patterns for CDN services
+      const patterns = {
+        google_drive: [
+          /drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i,
+          /drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i,
+          /drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i
+        ],
+        soundcloud: [
+          /soundcloud\.com\/[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+/i,
+          /api\.soundcloud\.com\/tracks\/[0-9]+/i
+        ],
+        spotify: [
+          /open\.spotify\.com\/track\/[a-zA-Z0-9]+/i,
+          /spotify:track:[a-zA-Z0-9]+/i
+        ],
+        amazon_s3: [
+          /s3\.amazonaws\.com\/[^\/]+\/.+\.(mp3|wav|ogg|m4a)/i,
+          /[a-zA-Z0-9-]+\.s3\.[a-zA-Z0-9-]+\.amazonaws\.com\/.+\.(mp3|wav|ogg|m4a)/i
+        ],
+        cloudfront: [
+          /[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i
+        ],
+        dropbox: [
+          /dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i,
+          /dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i
+        ]
+      };
+      
+      for (const [service, servicePatterns] of Object.entries(patterns)) {
+        for (const pattern of servicePatterns) {
           if (pattern.test(url)) {
             return {
               service: service,
@@ -133,6 +159,7 @@
           }
         }
       }
+      
       return null;
     },
 
@@ -414,16 +441,24 @@
           errors.push('Please enter a valid URL for: ' + audioName);
           $row.find('.wcap_audio_urls').addClass('error');
         } else {
-          // Check if it's CDN or valid file type
+          // Check if it's CDN first, then check file extension
           const serviceInfo = WCAP.getCdnServiceInfo(audioUrl);
-          const fileExtension = WCAP.getFileExtension(audioUrl);
           
-          if (serviceInfo || WCAP.isValidAudioType(fileExtension)) {
+          if (serviceInfo) {
+            // It's a valid CDN URL
             $row.find('.wcap_audio_urls').removeClass('error');
             hasValidAudio = true;
           } else {
-            errors.push('Invalid audio file type or unsupported URL for: ' + audioName);
-            $row.find('.wcap_audio_urls').addClass('error');
+            // For non-CDN URLs, check file extension
+            const fileExtension = WCAP.getFileExtension(audioUrl);
+            
+            if (fileExtension && WCAP.isValidAudioType(fileExtension)) {
+              $row.find('.wcap_audio_urls').removeClass('error');
+              hasValidAudio = true;
+            } else {
+              errors.push('Invalid audio file type or unsupported URL for: ' + audioName);
+              $row.find('.wcap_audio_urls').addClass('error');
+            }
           }
         }
       });
@@ -467,9 +502,9 @@
         return;
       }
       
-      // Check traditional file types
+      // For non-CDN URLs, check file extension
       const fileExtension = WCAP.getFileExtension(url);
-      if (!WCAP.isValidAudioType(fileExtension)) {
+      if (!fileExtension || !WCAP.isValidAudioType(fileExtension)) {
         $input.addClass('error').removeClass('success cdn-detected');
         WCAP.showFieldError($input, wcap_ajax_object.error_messages.invalid_file_type || 'Invalid audio file type.');
         return;
