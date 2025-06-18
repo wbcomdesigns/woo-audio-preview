@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-18T11:49:54+05:30\n"
+"POT-Creation-Date: 2025-06-18T14:15:43+05:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wc-audio-preview\n"
@@ -17,8 +17,8 @@ msgstr ""
 #. Plugin Name of the plugin
 #: woo-product-audio-preview.php
 #: admin/class-admin-review.php:271
-#: admin/class-wc-audio-preview-admin.php:290
-#: admin/class-wc-audio-preview-admin.php:384
+#: admin/class-wc-audio-preview-admin.php:292
+#: admin/class-wc-audio-preview-admin.php:386
 #: admin/wbcom/templates/wbcom-license-page.php:9
 #: woo-product-audio-preview.php:94
 msgid "Audio Preview for WooCommerce"
@@ -122,209 +122,209 @@ msgstr ""
 msgid "No thanks / I already have"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:212
+#: admin/class-wc-audio-preview-admin.php:213
 msgid "Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:213
+#: admin/class-wc-audio-preview-admin.php:214
 msgid "Please select a file or enter a file URL."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:214
+#: admin/class-wc-audio-preview-admin.php:215
 msgid "Audio name is required."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:215
-#: admin/class-wc-audio-preview-admin.php:768
+#: admin/class-wc-audio-preview-admin.php:216
+#: admin/class-wc-audio-preview-admin.php:770
 msgid "Please enter a valid URL."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:216
+#: admin/class-wc-audio-preview-admin.php:217
 msgid "File size is too large. Maximum allowed size is 50MB."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:217
+#: admin/class-wc-audio-preview-admin.php:218
 msgid "CDN/streaming service link detected! This will work great for preview."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:291
+#: admin/class-wc-audio-preview-admin.php:293
 #: admin/wbcom/templates/wbcom-license-page.php:10
 #, php-format
 msgid "Version %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:317
-#: admin/class-wc-audio-preview-admin.php:381
+#: admin/class-wc-audio-preview-admin.php:319
+#: admin/class-wc-audio-preview-admin.php:383
 msgid "Welcome"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:321
+#: admin/class-wc-audio-preview-admin.php:323
 msgid "General (PRO)"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:324
+#: admin/class-wc-audio-preview-admin.php:326
 msgid "FAQ"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:380
+#: admin/class-wc-audio-preview-admin.php:382
 msgid "WB Plugins"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:401
+#: admin/class-wc-audio-preview-admin.php:403
 #, php-format
 msgid "Audio Preview Items %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:402
+#: admin/class-wc-audio-preview-admin.php:404
 msgid "(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:430
+#: admin/class-wc-audio-preview-admin.php:432
 msgid "🎵 Supported Formats & Services"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:433
+#: admin/class-wc-audio-preview-admin.php:435
 msgid "🎵 Audio Files:"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:437
+#: admin/class-wc-audio-preview-admin.php:439
 msgid "☁️ CDN Services:"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:441
+#: admin/class-wc-audio-preview-admin.php:443
 msgid "🎧 Streaming:"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:446
+#: admin/class-wc-audio-preview-admin.php:448
 msgid "💡 Tip: You can upload files to Media Library, use direct URLs, or paste CDN/streaming links."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:455
-#: admin/class-wc-audio-preview-admin.php:478
-#: admin/class-wc-audio-preview-admin.php:516
+#: admin/class-wc-audio-preview-admin.php:457
+#: admin/class-wc-audio-preview-admin.php:480
+#: admin/class-wc-audio-preview-admin.php:518
 msgid "Audio Name"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:456
+#: admin/class-wc-audio-preview-admin.php:458
 msgid "Enter a descriptive name for the audio file"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:459
+#: admin/class-wc-audio-preview-admin.php:461
 msgid "Audio URL or CDN Link"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:460
+#: admin/class-wc-audio-preview-admin.php:462
 msgid "Enter URL, upload from Media Library, or paste CDN/streaming link"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:462
+#: admin/class-wc-audio-preview-admin.php:464
 msgid "Choose File"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:475
-#: admin/class-wc-audio-preview-admin.php:513
+#: admin/class-wc-audio-preview-admin.php:477
+#: admin/class-wc-audio-preview-admin.php:515
 msgid "Sort"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:476
-#: admin/class-wc-audio-preview-admin.php:514
+#: admin/class-wc-audio-preview-admin.php:478
+#: admin/class-wc-audio-preview-admin.php:516
 msgid "Name"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:484
-#: admin/class-wc-audio-preview-admin.php:522
-msgid "Audio URL"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:486
 #: admin/class-wc-audio-preview-admin.php:524
+msgid "Audio URL"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:488
+#: admin/class-wc-audio-preview-admin.php:526
 msgid "Enter URL or choose from Media Library"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:496
-#: admin/class-wc-audio-preview-admin.php:529
+#: admin/class-wc-audio-preview-admin.php:498
+#: admin/class-wc-audio-preview-admin.php:531
 msgid "Choose"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:497
-#: admin/class-wc-audio-preview-admin.php:530
-msgid "Media Library"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:499
 #: admin/class-wc-audio-preview-admin.php:532
-msgid "Actions"
-msgstr ""
-
-#: admin/class-wc-audio-preview-admin.php:500
-#: admin/class-wc-audio-preview-admin.php:533
-msgid "Add a new audio file"
+msgid "Media Library"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:501
 #: admin/class-wc-audio-preview-admin.php:534
-msgid "Add"
+msgid "Actions"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:502
+#: admin/class-wc-audio-preview-admin.php:535
+msgid "Add a new audio file"
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:503
 #: admin/class-wc-audio-preview-admin.php:536
+msgid "Add"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:505
+#: admin/class-wc-audio-preview-admin.php:538
 msgid "Remove this audio file"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:504
-#: admin/class-wc-audio-preview-admin.php:537
+#: admin/class-wc-audio-preview-admin.php:506
+#: admin/class-wc-audio-preview-admin.php:539
 msgid "Remove"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:546
+#: admin/class-wc-audio-preview-admin.php:548
 msgid "📋 Example URLs:"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:556
+#: admin/class-wc-audio-preview-admin.php:558
 msgid "Add audio preview files for your product. Customers will be able to listen to these samples before purchasing. Supports media library uploads, direct URLs, and CDN/streaming services."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:636
+#: admin/class-wc-audio-preview-admin.php:638
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:685
+#: admin/class-wc-audio-preview-admin.php:687
 msgid "Audio name is required for all files."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:691
+#: admin/class-wc-audio-preview-admin.php:693
 #, php-format
 msgid "Audio URL is required for: %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:698
+#: admin/class-wc-audio-preview-admin.php:700
 #, php-format
 msgid "Error with audio \"%s\": %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:711
+#: admin/class-wc-audio-preview-admin.php:713
 #, php-format
 msgid "Successfully added %s audio: %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:736
+#: admin/class-wc-audio-preview-admin.php:738
 msgid "Audio previews saved successfully."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:741
+#: admin/class-wc-audio-preview-admin.php:743
 msgid "No valid audio files found. Audio previews have been removed."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:763
+#: admin/class-wc-audio-preview-admin.php:765
 msgid "Audio URL cannot be empty."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:779
+#: admin/class-wc-audio-preview-admin.php:781
 #, php-format
 msgid "CDN %s link detected and validated."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:799
+#: admin/class-wc-audio-preview-admin.php:801
 #, php-format
 msgid "Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services."
 msgstr ""
@@ -1182,33 +1182,33 @@ msgstr ""
 msgid "Themes & Extension"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:117
+#: public/class-wc-audio-preview-public.php:132
 msgid "Loading..."
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:118
+#: public/class-wc-audio-preview-public.php:133
 msgid "Error loading audio"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:119
+#: public/class-wc-audio-preview-public.php:134
 msgid "Play"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:120
+#: public/class-wc-audio-preview-public.php:135
 msgid "Pause"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:161
+#: public/class-wc-audio-preview-public.php:177
 msgid "Audio Previews"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:209
-#: public/class-wc-audio-preview-public.php:275
+#: public/class-wc-audio-preview-public.php:225
+#: public/class-wc-audio-preview-public.php:291
 #, php-format
 msgid "Play %s"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:246
+#: public/class-wc-audio-preview-public.php:262
 msgid "Your browser does not support the audio element."
 msgstr ""
 
