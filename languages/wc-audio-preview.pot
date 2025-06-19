@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-18T14:15:43+05:30\n"
+"POT-Creation-Date: 2025-06-19T11:15:49+05:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wc-audio-preview\n"
@@ -135,7 +135,7 @@ msgid "Audio name is required."
 msgstr ""
 
 #: admin/class-wc-audio-preview-admin.php:216
-#: admin/class-wc-audio-preview-admin.php:770
+#: admin/class-wc-audio-preview-admin.php:785
 msgid "Please enter a valid URL."
 msgstr ""
 
@@ -288,43 +288,43 @@ msgstr ""
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:687
+#: admin/class-wc-audio-preview-admin.php:702
 msgid "Audio name is required for all files."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:693
+#: admin/class-wc-audio-preview-admin.php:708
 #, php-format
 msgid "Audio URL is required for: %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:700
+#: admin/class-wc-audio-preview-admin.php:715
 #, php-format
 msgid "Error with audio \"%s\": %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:713
+#: admin/class-wc-audio-preview-admin.php:728
 #, php-format
 msgid "Successfully added %s audio: %s"
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:738
+#: admin/class-wc-audio-preview-admin.php:753
 msgid "Audio previews saved successfully."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:743
+#: admin/class-wc-audio-preview-admin.php:758
 msgid "No valid audio files found. Audio previews have been removed."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:765
+#: admin/class-wc-audio-preview-admin.php:780
 msgid "Audio URL cannot be empty."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:781
+#: admin/class-wc-audio-preview-admin.php:796
 #, php-format
 msgid "CDN %s link detected and validated."
 msgstr ""
 
-#: admin/class-wc-audio-preview-admin.php:801
+#: admin/class-wc-audio-preview-admin.php:816
 #, php-format
 msgid "Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services."
 msgstr ""
@@ -1182,33 +1182,34 @@ msgstr ""
 msgid "Themes & Extension"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:132
+#: public/class-wc-audio-preview-public.php:120
 msgid "Loading..."
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:133
+#: public/class-wc-audio-preview-public.php:121
 msgid "Error loading audio"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:134
+#: public/class-wc-audio-preview-public.php:122
 msgid "Play"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:135
+#: public/class-wc-audio-preview-public.php:123
 msgid "Pause"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:177
+#: public/class-wc-audio-preview-public.php:165
 msgid "Audio Previews"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:225
-#: public/class-wc-audio-preview-public.php:291
+#: public/class-wc-audio-preview-public.php:218
+#: public/class-wc-audio-preview-public.php:284
+#: public/class-wc-audio-preview-public.php:377
 #, php-format
 msgid "Play %s"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:262
+#: public/class-wc-audio-preview-public.php:255
 msgid "Your browser does not support the audio element."
 msgstr ""
 

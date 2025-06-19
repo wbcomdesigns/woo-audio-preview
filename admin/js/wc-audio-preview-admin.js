@@ -697,8 +697,11 @@
 
   // Initialize when document is ready
   $(function() {
-    // Only initialize on product edit pages
-    if ($('body').hasClass('post-type-product') && $('.woo-audio-preview-table').length > 0) {
+    const currentUrl = window.location.href;
+    const isProductEditPage = $('body').hasClass('post-type-product');
+    const isWCAPSettingsPage = currentUrl.includes('page=woo-audio-preview-settings');
+    // Only initialize on product edit pages and admin settings
+    if (isProductEditPage || isWCAPSettingsPage  || $('.woo-audio-preview-table').length > 0) {
       WCAP.init();
     }
   });
