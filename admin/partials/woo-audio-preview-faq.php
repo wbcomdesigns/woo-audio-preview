@@ -67,18 +67,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'Can users download the preview file?', 'wc-audio-preview' ); ?>
-					</button>
-					<div class="wbcom-faq-panel">
-						<p> 
-							<?php esc_html_e( 'Yes, preview files are downloadable.', 'wc-audio-preview' ); ?>     
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="wbcom-faq-section-row">
-				<div class="wbcom-faq-admin-row">
-					<button class="wbcom-faq-accordion">
 						<?php esc_html_e( 'What audio formats are supported?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
@@ -86,10 +74,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( 'The plugin supports the following audio formats:', 'wc-audio-preview' ); ?>
 						</p>
 						<ul>
-							<li><?php esc_html_e( 'MP3 - Supported by all browsers', 'wc-audio-preview' ); ?></li>
-							<li><?php esc_html_e( 'WAV - Supported by most modern browsers', 'wc-audio-preview' ); ?></li>
-							<li><?php esc_html_e( 'OGG - Supported by Firefox, Chrome, Opera', 'wc-audio-preview' ); ?></li>
-							<li><?php esc_html_e( 'M4A - Supported by Safari, Chrome, Edge', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'MP3 - Universal compatibility (recommended)', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'WAV - High quality, larger files', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'OGG - Open format, good compression', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( "M4A - Apple's audio format", 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'AAC - Advanced audio coding', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'FLAC - Lossless compression', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'WMA - Windows Media Audio', 'wc-audio-preview' ); ?></li>
+							<li><?php esc_html_e( 'WEBM - Web-optimized format', 'wc-audio-preview' ); ?></li>
 						</ul>
 						<p> 
 							<?php esc_html_e( 'You can either upload files directly or use external URLs to audio files hosted elsewhere.', 'wc-audio-preview' ); ?>
@@ -109,14 +101,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 				</div>
 			</div>
-			<div class="wbcom-faq-section-row">
+			 <div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'What if I need more features?', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( '❓ Why isn’t the OGG audio format working on iPhones or iPads?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
 						<p> 
-							<?php esc_html_e( 'You can hire our team to assist you.', 'wc-audio-preview' ); ?> 
+							<?php esc_html_e( 'The OGG audio format is not natively supported by iOS devices, including iPhones and iPads. This limitation is due to Apple’s system-level media support, which does not include the OGG (Vorbis) codec. As a result, audio files in .ogg format may not play properly or at all on Safari or other browsers on iOS', 'wc-audio-preview' ); ?> 
 						</p>
 					</div>
 				</div>
@@ -124,17 +116,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wbcom-faq-section-row">
 				<div class="wbcom-faq-admin-row">
 					<button class="wbcom-faq-accordion">
-						<?php esc_html_e( 'What if I have a question?', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'How do I reorder audio files?', 'wc-audio-preview' ); ?>
 					</button>
 					<div class="wbcom-faq-panel">
-						<?php $contatct_page = '<a href="https://wbcomdesigns.com/contact/">contact page</a>'; ?>
 						<p>
-							<?php esc_html_e( 'No problem. Please get in touch with us via our', 'wc-audio-preview' ); ?>   
-							<a href="https://wbcomdesigns.com/contact/" target="_blank"><?php echo esc_html( 'contact page.' ); ?></a>  
+							<?php esc_html_e( 'Use the drag handle (⋮⋮⋮) on the left side of each audio row to drag and drop files into your desired order.', 'wc-audio-preview' ); ?>   
 						</p>
 					</div>
 				</div>
-			</div>
+			</div> 
 		</div>
 	</div>
 </div>
