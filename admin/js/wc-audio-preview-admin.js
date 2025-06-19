@@ -3,15 +3,15 @@
 
   /**
    * Enhanced Audio Preview Admin JavaScript
-   * Now supports Media Library integration and CDN URL detection
+   * Supports both dynamic (Pro) and fixed 3 fields (Free) modes
    */
 
-  // Enhanced configuration and constants
   const WCAP = {
     config: {
       allowedTypes: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac', 'wma', 'webm'],
       maxFileSize: 50 * 1024 * 1024, // 50MB in bytes
-      errorContainer: '.wcap-error-messages'
+      errorContainer: '.wcap-error-messages',
+      isFixedMode: true // Set to true for free version with 3 fixed fields
     },
 
     // CDN patterns from PHP
@@ -28,38 +28,50 @@
       this.validateExistingFiles();
       this.initializeCdnDetection();
       this.initializeSortable();
+      this.initFaqAccordion();
     },
 
     /**
      * Bind all event handlers
      */
     bindEvents: function() {
-      // Add new audio row
-      $(document).on('click', '.wcap-add-audio-cl', this.addAudioRow);
+      // Determine mode based on presence of fixed fields
+      if ($('.wcap-fixed-audio-fields').length > 0) {
+        this.config.isFixedMode = true;
+        this.bindFixedModeEvents();
+      } else {
+        this.config.isFixedMode = false;
+        this.bindDynamicModeEvents();
+      }
       
-      // Remove audio row
-      $(document).on('click', '.wcap-delete-audio-cl', this.removeAudioRow);
-      
-      // Media library button
+      // Common events for both modes
       $(document).on('click', '.wcap-media-button', this.openMediaLibrary);
-      
-      // Form validation
       $('body.post-type-product form#post').on('submit', this.validateForm);
-      
-      // Real-time validation with CDN detection
-      $(document).on('blur', '.wcap_audio_urls', this.validateSingleUrl);
-      $(document).on('input', '.wcap_audio_urls', this.debounce(this.detectCdnUrl, 500));
-      $(document).on('blur', '.wcap-file-name', this.validateAudioName);
-      
-      // FAQ accordion
-      this.initFaqAccordion();
+      $(document).on('blur', '.wcap_audio_urls, .wcap-audio-url', this.validateSingleUrl);
+      $(document).on('input', '.wcap_audio_urls, .wcap-audio-url', this.debounce(this.detectCdnUrl, 500));
+      $(document).on('blur', '.wcap-file-name, .wcap-audio-name', this.validateAudioName);
+    },
+
+    /**
+     * Bind events for fixed mode (3 fields)
+     */
+    bindFixedModeEvents: function() {
+      $(document).on('click', '.wcap-clear-button', this.clearField);
+    },
+
+    /**
+     * Bind events for dynamic mode (Pro)
+     */
+    bindDynamicModeEvents: function() {
+      $(document).on('click', '.wcap-add-audio-cl', this.addAudioRow);
+      $(document).on('click', '.wcap-delete-audio-cl', this.removeAudioRow);
     },
 
     /**
      * Initialize CDN URL detection for existing fields
      */
     initializeCdnDetection: function() {
-      $('.wcap_audio_urls').each(function() {
+      $('.wcap_audio_urls, .wcap-audio-url').each(function() {
         WCAP.detectCdnUrl.call(this);
       });
     },
@@ -68,7 +80,7 @@
      * Initialize sortable functionality
      */
     initializeSortable: function() {
-      if (typeof $.fn.sortable !== 'undefined') {
+      if (typeof $.fn.sortable !== 'undefined' && !this.config.isFixedMode) {
         $('.wcap_preview-tr').sortable({
           handle: '.sort',
           placeholder: 'wcap-sort-placeholder',
@@ -84,26 +96,165 @@
     },
 
     /**
+     * Clear field (Fixed mode)
+     */
+    clearField: function(e) {
+      e.preventDefault();
+      
+      const $button = $(this);
+      const fieldIndex = $button.data('field-index');
+      
+      if (confirm('Are you sure you want to clear this audio preview?')) {
+        $(`#wcap_audio_url_${fieldIndex}`).val('').trigger('change');
+        $(`#wcap_audio_name_${fieldIndex}`).val('');
+        $button.hide();
+        
+        // Remove any CDN indicators
+        $button.closest('.wcap-field-row').find('.wcap-service-indicator').remove();
+      }
+    },
+
+    /**
+     * Add new audio row (Dynamic mode)
+     */
+    addAudioRow: function(e) {
+      e.preventDefault();
+      
+      const newRow = WCAP.createAudioRow();
+      $('.woo-audio-preview-table tbody').append(newRow);
+      
+      // Focus on the new file name input
+      newRow.find('.wcap-file-name').focus();
+      
+      // Initialize sortable for new row
+      WCAP.initializeSortable();
+    },
+
+    /**
+     * Create new audio row HTML (Dynamic mode)
+     */
+    createAudioRow: function() {
+      const rowHtml = `
+        <tr class="wcap-audio-file">
+          <td class="sort" data-label="Sort"></td>
+          <td class="file_name" data-label="Name">
+            <input class="input_text wcap-file-name" 
+                   placeholder="Audio Name" 
+                   name="wcap_audio[wcap_audio_names][]" 
+                   value="" 
+                   type="text" 
+                   required>
+          </td>
+          <td class="file_url" data-label="Audio URL">
+            <input class="input_text wcap_audio_urls" 
+                   placeholder="Enter URL or choose from Media Library" 
+                   name="wcap_audio[wcap_audio_urls][]" 
+                   value="" 
+                   type="url">
+          </td>
+          <td class="file_url_choose" width="1%" data-label="Choose">
+            <button type="button" class="button wcap-media-button">Media Library</button>
+          </td>
+          <td width="15%" data-label="Actions">
+            <button type="button" class="wcap-add-audio-cl button button-primary button-small" title="Add a new audio file">
+              Add
+            </button>
+            <button type="button" class="wcap-delete-audio-cl button button-secondary button-small" title="Remove this audio file">
+              Remove
+            </button>
+          </td>
+        </tr>`;
+      
+      return $(rowHtml);
+    },
+
+    /**
+     * Remove audio row (Dynamic mode)
+     */
+    removeAudioRow: function(e) {
+      e.preventDefault();
+      
+      const $row = $(this).closest('tr');
+      const $table = $row.closest('table');
+      
+      // Confirm deletion if there's content
+      const audioName = $row.find('.wcap-file-name').val();
+      const audioUrl = $row.find('.wcap_audio_urls').val();
+      
+      if (audioName || audioUrl) {
+        if (!confirm('Are you sure you want to remove this audio file?')) {
+          return;
+        }
+      }
+      
+      // If this row has a file URL, make AJAX call to delete
+      if (audioUrl) {
+        const postId = $(this).data('p_id');
+        const data = {
+          action: 'wcap_delete_audio_ajax',
+          file_url: audioUrl,
+          p_id: postId,
+          nonce: wcap_ajax_object.nonce
+        };
+        
+        $.post(wcap_ajax_object.ajax_url, data, function(response) {
+          console.log('Audio file removed from server');
+        });
+      }
+      
+      $row.fadeOut(300, function() {
+        $(this).remove();
+        
+        // Ensure at least one row exists
+        if ($table.find('.wcap-audio-file').length === 0) {
+          WCAP.addAudioRow(e);
+        }
+      });
+    },
+
+    /**
      * Detect CDN URL
      */
     detectCdnUrl: function() {
       const $input = $(this);
       const url = $.trim($input.val());
-      const $row = $input.closest('tr');
+      let $row, $nameField;
       
-      if (!url) {
-        WCAP.removeServiceIndicator($row);
-        return;
+      if (WCAP.config.isFixedMode) {
+        // Fixed mode
+        const fieldIndex = $input.attr('id').replace('wcap_audio_url_', '');
+        $row = $input.closest('.wcap-field-row');
+        $nameField = $(`#wcap_audio_name_${fieldIndex}`);
+        
+        if (!url) {
+          WCAP.removeCdnIndicator(fieldIndex);
+          WCAP.showClearButton(fieldIndex);
+          return;
+        }
+      } else {
+        // Dynamic mode
+        $row = $input.closest('tr');
+        $nameField = $row.find('.wcap-file-name');
+        
+        if (!url) {
+          WCAP.removeServiceIndicator($row);
+          return;
+        }
       }
 
       const serviceInfo = WCAP.getCdnServiceInfo(url);
       
       if (serviceInfo) {
-        WCAP.showServiceIndicator($row, serviceInfo);
+        if (WCAP.config.isFixedMode) {
+          const fieldIndex = $input.attr('id').replace('wcap_audio_url_', '');
+          WCAP.showCdnIndicator(fieldIndex, serviceInfo);
+        } else {
+          WCAP.showServiceIndicator($row, serviceInfo);
+        }
+        
         $input.removeClass('error').addClass('cdn-detected');
         
         // Auto-fill name if empty
-        const $nameField = $row.find('.wcap-file-name');
         if (!$nameField.val()) {
           const suggestedName = WCAP.generateAudioName(url, serviceInfo);
           if (suggestedName) {
@@ -111,9 +262,62 @@
           }
         }
       } else {
-        WCAP.removeServiceIndicator($row);
+        if (WCAP.config.isFixedMode) {
+          const fieldIndex = $input.attr('id').replace('wcap_audio_url_', '');
+          WCAP.removeCdnIndicator(fieldIndex);
+        } else {
+          WCAP.removeServiceIndicator($row);
+        }
         $input.removeClass('cdn-detected');
       }
+      
+      // Show/hide clear button for fixed mode
+      if (WCAP.config.isFixedMode) {
+        const fieldIndex = $input.attr('id').replace('wcap_audio_url_', '');
+        WCAP.showClearButton(fieldIndex);
+      }
+    },
+
+    /**
+     * Show/hide clear button (Fixed mode)
+     */
+    showClearButton: function(fieldIndex) {
+      const $clearButton = $(`.wcap-clear-button[data-field-index="${fieldIndex}"]`);
+      const $urlField = $(`#wcap_audio_url_${fieldIndex}`);
+      
+      if ($urlField.val()) {
+        if ($clearButton.length === 0) {
+          // Create clear button if it doesn't exist
+          const clearBtn = `<button type="button" class="button wcap-clear-button" data-field-index="${fieldIndex}">Clear</button>`;
+          $urlField.siblings('.wcap-media-button').after(' ').after(clearBtn);
+        } else {
+          $clearButton.show();
+        }
+      } else {
+        $clearButton.hide();
+      }
+    },
+
+    /**
+     * Show CDN indicator (Fixed mode)
+     */
+    showCdnIndicator: function(fieldIndex, cdnInfo) {
+      const $fieldRow = $(`#wcap_audio_url_${fieldIndex}`).closest('.wcap-field-row');
+      
+      // Remove existing indicator
+      $fieldRow.find('.wcap-service-indicator').remove();
+      
+      // Add new indicator
+      const indicator = `<div class="wcap-service-indicator">🔗 ${cdnInfo.serviceName} link detected</div>`;
+      $fieldRow.append(indicator);
+    },
+
+    /**
+     * Remove CDN indicator (Fixed mode)
+     */
+    removeCdnIndicator: function(fieldIndex) {
+      const $fieldRow = $(`#wcap_audio_url_${fieldIndex}`).closest('.wcap-field-row');
+      $fieldRow.find('.wcap-service-indicator').remove();
     },
 
     /**
@@ -198,7 +402,7 @@
     },
 
     /**
-     * Show service indicator
+     * Show service indicator (Dynamic mode)
      */
     showServiceIndicator: function($row, serviceInfo) {
       WCAP.removeServiceIndicator($row);
@@ -219,7 +423,7 @@
     },
 
     /**
-     * Remove service indicator
+     * Remove service indicator (Dynamic mode)
      */
     removeServiceIndicator: function($row) {
       $row.find('.wcap-service-indicator').remove();
@@ -242,113 +446,27 @@
     },
 
     /**
-     * Add new audio row
-     */
-    addAudioRow: function(e) {
-      e.preventDefault();
-      
-      const newRow = WCAP.createAudioRow();
-      $('.woo-audio-preview-table tbody').append(newRow);
-      
-      // Focus on the new file name input
-      newRow.find('.wcap-file-name').focus();
-      
-      // Initialize sortable for new row
-      WCAP.initializeSortable();
-    },
-
-    /**
-     * Create new audio row HTML
-     */
-    createAudioRow: function() {
-      const rowHtml = `
-        <tr class="wcap-audio-file">
-          <td class="sort" data-label="Sort"></td>
-          <td class="file_name" data-label="Name">
-            <input class="input_text wcap-file-name" 
-                   placeholder="Audio Name" 
-                   name="wcap_audio[wcap_audio_names][]" 
-                   value="" 
-                   type="text" 
-                   required>
-          </td>
-          <td class="file_url" data-label="Audio URL">
-            <input class="input_text wcap_audio_urls" 
-                   placeholder="Enter URL or choose from Media Library" 
-                   name="wcap_audio[wcap_audio_urls][]" 
-                   value="" 
-                   type="url">
-          </td>
-          <td class="file_url_choose" width="1%" data-label="Choose">
-            <button type="button" class="button wcap-media-button">Media Library</button>
-          </td>
-          <td width="15%" data-label="Actions">
-            <button type="button" class="wcap-add-audio-cl button button-primary button-small" title="Add a new audio file">
-              Add
-            </button>
-            <button type="button" class="wcap-delete-audio-cl button button-secondary button-small" title="Remove this audio file">
-              Remove
-            </button>
-          </td>
-        </tr>`;
-      
-      return $(rowHtml);
-    },
-
-    /**
-     * Remove audio row
-     */
-    removeAudioRow: function(e) {
-      e.preventDefault();
-      
-      const $row = $(this).closest('tr');
-      const $table = $row.closest('table');
-      
-      // Confirm deletion if there's content
-      const audioName = $row.find('.wcap-file-name').val();
-      const audioUrl = $row.find('.wcap_audio_urls').val();
-      
-      if (audioName || audioUrl) {
-        if (!confirm('Are you sure you want to remove this audio file?')) {
-          return;
-        }
-      }
-      
-      // If this row has a file URL, make AJAX call to delete
-      if (audioUrl) {
-        const postId = $(this).data('p_id');
-        const data = {
-          action: 'wcap_delete_audio_ajax',
-          file_url: audioUrl,
-          p_id: postId,
-          nonce: wcap_ajax_object.nonce
-        };
-        
-        $.post(wcap_ajax_object.ajax_url, data, function(response) {
-          console.log('Audio file removed from server');
-        });
-      }
-      
-      $row.fadeOut(300, function() {
-        $(this).remove();
-        
-        // Ensure at least one row exists
-        if ($table.find('.wcap-audio-file').length === 0) {
-          WCAP.addAudioRow(e);
-        }
-      });
-    },
-
-    /**
      * Open WordPress Media Library
      */
     openMediaLibrary: function(e) {
       e.preventDefault();
       
       const $button = $(this);
-      const $row = $button.closest('tr');
-      const $urlField = $row.find('.wcap_audio_urls');
-      const rowIndex = $row.index();
+      let $row, $urlField, $nameField, rowIndex;
+      
+      if (WCAP.config.isFixedMode) {
+        // Fixed mode
+        const fieldIndex = $button.data('field-index');
+        $urlField = $(`#wcap_audio_url_${fieldIndex}`);
+        $nameField = $(`#wcap_audio_name_${fieldIndex}`);
+        rowIndex = fieldIndex;
+      } else {
+        // Dynamic mode
+        $row = $button.closest('tr');
+        $urlField = $row.find('.wcap_audio_urls');
+        $nameField = $row.find('.wcap-file-name');
+        rowIndex = $row.index();
+      }
       
       let mediaUploader = WCAP.mediaUploaders.get(rowIndex);
       
@@ -373,13 +491,16 @@
             $urlField.val(attachment.url).trigger('change');
             
             // Auto-fill name if empty
-            const $nameField = $row.find('.wcap-file-name');
             if (!$nameField.val()) {
               $nameField.val(attachment.title || attachment.filename);
             }
             
             // Remove any CDN indicators since this is a media library file
-            WCAP.removeServiceIndicator($row);
+            if (WCAP.config.isFixedMode) {
+              WCAP.removeCdnIndicator(rowIndex);
+            } else {
+              WCAP.removeServiceIndicator($row);
+            }
             
             WCAP.showSuccess('Audio file selected successfully!');
           }
@@ -416,53 +537,87 @@
       const errors = [];
       let hasValidAudio = false;
       
-      $('.wcap-audio-file').each(function() {
-        const $row = $(this);
-        const audioName = $.trim($row.find('.wcap-file-name').val());
-        const audioUrl = $.trim($row.find('.wcap_audio_urls').val());
-        
-        // Skip completely empty rows
-        if (!audioName && !audioUrl) {
-          return true; // continue
-        }
-        
-        // Validate audio name
-        if (!audioName) {
-          errors.push('Audio name is required for all files.');
-          $row.find('.wcap-file-name').addClass('error');
-        } else {
-          $row.find('.wcap-file-name').removeClass('error');
-        }
-        
-        // Validate audio URL
-        if (!audioUrl) {
-          errors.push('Audio URL is required when audio name is provided.');
-          $row.find('.wcap_audio_urls').addClass('error');
-        } else if (!WCAP.isValidUrl(audioUrl)) {
-          errors.push('Please enter a valid URL for: ' + audioName);
-          $row.find('.wcap_audio_urls').addClass('error');
-        } else {
-          // Check if it's CDN first, then check file extension
-          const serviceInfo = WCAP.getCdnServiceInfo(audioUrl);
+      if (WCAP.config.isFixedMode) {
+        // Fixed mode validation
+        $('.wcap-audio-field-group').each(function(index) {
+          const $nameField = $(this).find('.wcap-audio-name');
+          const $urlField = $(this).find('.wcap-audio-url');
+          const name = $.trim($nameField.val());
+          const url = $.trim($urlField.val());
           
-          if (serviceInfo) {
-            // It's a valid CDN URL
-            $row.find('.wcap_audio_urls').removeClass('error');
-            hasValidAudio = true;
-          } else {
-            // For non-CDN URLs, check file extension
-            const fileExtension = WCAP.getFileExtension(audioUrl);
+          // Clear previous errors
+          WCAP.hideFieldError($nameField);
+          WCAP.hideFieldError($urlField);
+          $nameField.removeClass('error');
+          $urlField.removeClass('error');
+          
+          // If either field has content, both are required
+          if (name || url) {
+            if (!name) {
+              $nameField.addClass('error');
+              WCAP.showFieldError($nameField, 'Audio name is required when URL is provided.');
+              errors.push('Audio name is required for all files.');
+            }
             
-            if (fileExtension && WCAP.isValidAudioType(fileExtension)) {
+            if (!url) {
+              $urlField.addClass('error');
+              WCAP.showFieldError($urlField, 'Audio URL is required when name is provided.');
+              errors.push('Audio URL is required when name is provided.');
+            } else {
+              hasValidAudio = true;
+            }
+          }
+        });
+      } else {
+        // Dynamic mode validation
+        $('.wcap-audio-file').each(function() {
+          const $row = $(this);
+          const audioName = $.trim($row.find('.wcap-file-name').val());
+          const audioUrl = $.trim($row.find('.wcap_audio_urls').val());
+          
+          // Skip completely empty rows
+          if (!audioName && !audioUrl) {
+            return true; // continue
+          }
+          
+          // Validate audio name
+          if (!audioName) {
+            errors.push('Audio name is required for all files.');
+            $row.find('.wcap-file-name').addClass('error');
+          } else {
+            $row.find('.wcap-file-name').removeClass('error');
+          }
+          
+          // Validate audio URL
+          if (!audioUrl) {
+            errors.push('Audio URL is required when audio name is provided.');
+            $row.find('.wcap_audio_urls').addClass('error');
+          } else if (!WCAP.isValidUrl(audioUrl)) {
+            errors.push('Please enter a valid URL for: ' + audioName);
+            $row.find('.wcap_audio_urls').addClass('error');
+          } else {
+            // Check if it's CDN first, then check file extension
+            const serviceInfo = WCAP.getCdnServiceInfo(audioUrl);
+            
+            if (serviceInfo) {
+              // It's a valid CDN URL
               $row.find('.wcap_audio_urls').removeClass('error');
               hasValidAudio = true;
             } else {
-              errors.push('Invalid audio file type or unsupported URL for: ' + audioName);
-              $row.find('.wcap_audio_urls').addClass('error');
+              // For non-CDN URLs, check file extension
+              const fileExtension = WCAP.getFileExtension(audioUrl);
+              
+              if (fileExtension && WCAP.isValidAudioType(fileExtension)) {
+                $row.find('.wcap_audio_urls').removeClass('error');
+                hasValidAudio = true;
+              } else {
+                errors.push('Invalid audio file type or unsupported URL for: ' + audioName);
+                $row.find('.wcap_audio_urls').addClass('error');
+              }
             }
           }
-        }
-      });
+        });
+      }
       
       if (errors.length > 0) {
         e.preventDefault();
@@ -521,8 +676,6 @@
     validateAudioName: function() {
       const $input = $(this);
       const name = $.trim($input.val());
-      console.log($input);
-      console.log(name);
       
       if (name && name.length < 3) {
         $input.addClass('error').removeClass('success');
@@ -541,9 +694,41 @@
      * Validate existing files on page load
      */
     validateExistingFiles: function() {
-      $('.wcap_audio_urls').each(function() {
+      $('.wcap_audio_urls, .wcap-audio-url').each(function() {
         WCAP.validateSingleUrl.call(this);
       });
+    },
+
+    /**
+     * Initialize FAQ accordion
+     */
+    initFaqAccordion: function() {
+      const accordionElements = document.getElementsByClassName('wbcom-faq-accordion');
+      
+      for (let i = 0; i < accordionElements.length; i++) {
+        accordionElements[i].onclick = function() {
+          // Remove active class from all other accordions
+          for (let j = 0; j < accordionElements.length; j++) {
+            if (accordionElements[j] !== this) {
+              accordionElements[j].classList.remove('active');
+              const otherPanel = accordionElements[j].nextElementSibling;
+              if (otherPanel) {
+                otherPanel.style.maxHeight = null;
+              }
+            }
+          }
+          
+          // Toggle this accordion
+          this.classList.toggle('active');
+          const panel = this.nextElementSibling;
+          
+          if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+          }
+        };
+      }
     },
 
     /**
@@ -661,26 +846,6 @@
     },
 
     /**
-     * Initialize FAQ accordion
-     */
-    initFaqAccordion: function() {
-      const accordionElements = document.getElementsByClassName('wbcom-faq-accordion');
-      
-      for (let i = 0; i < accordionElements.length; i++) {
-        accordionElements[i].onclick = function() {
-          this.classList.toggle('active');
-          const panel = this.nextElementSibling;
-          
-          if (panel.style.maxHeight) {
-            panel.style.maxHeight = null;
-          } else {
-            panel.style.maxHeight = panel.scrollHeight + 'px';
-          }
-        };
-      }
-    },
-
-    /**
      * Show/hide loading indicator
      */
     showLoader: function() {
@@ -700,8 +865,9 @@
     const currentUrl = window.location.href;
     const isProductEditPage = $('body').hasClass('post-type-product');
     const isWCAPSettingsPage = currentUrl.includes('page=woo-audio-preview-settings');
+    
     // Only initialize on product edit pages and admin settings
-    if (isProductEditPage || isWCAPSettingsPage  || $('.woo-audio-preview-table').length > 0) {
+    if (isProductEditPage || isWCAPSettingsPage || $('.woo-audio-preview-table').length > 0 || $('.wcap-fixed-audio-fields').length > 0) {
       WCAP.init();
     }
   });
@@ -711,7 +877,7 @@
 
 })(jQuery);
 
-/* Enhanced CSS for CDN URL detection */
+/* Enhanced CSS for CDN URL detection and fixed fields */
 jQuery(document).ready(function($) {
   $('<style>')
     .text(`
@@ -771,12 +937,14 @@ jQuery(document).ready(function($) {
         margin-top: 3px;
       }
       
-      .wcap-audio-file input.error {
+      .wcap-audio-file input.error,
+      .wcap-audio-field-group input.error {
         border-color: #dc3232;
         box-shadow: 0 0 2px rgba(220, 50, 50, 0.8);
       }
       
-      .wcap-audio-file input.success {
+      .wcap-audio-file input.success,
+      .wcap-audio-field-group input.success {
         border-color: #4caf50;
         box-shadow: 0 0 2px rgba(76, 175, 80, 0.8);
       }
@@ -819,7 +987,8 @@ jQuery(document).ready(function($) {
         color: #4caf50;
       }
       
-      .wcap_audio_urls.cdn-detected {
+      .wcap_audio_urls.cdn-detected,
+      .wcap-audio-url.cdn-detected {
         border-color: #0073aa;
         box-shadow: 0 0 0 1px #0073aa;
       }
