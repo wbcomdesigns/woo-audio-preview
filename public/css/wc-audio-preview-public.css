@@ -11,7 +11,7 @@
 --------------------------------------------------------------*/
 .wcap-audio-preview-container {
     margin: 20px 0;
-    padding: 20px;
+    padding: 20px !important;
     background: rgba(0, 0, 0, 0.02);
     border-radius: 8px;
     border: 1px solid rgba(0, 0, 0, 0.08);
@@ -99,7 +99,8 @@
 --------------------------------------------------------------*/
 .wcap-play-icon,
 .wcap-pause-icon,
-.wcap-loading-spinner {
+.wcap-loading-spinner,
+.wcap-icon-wrap {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
@@ -189,6 +190,7 @@
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-left: auto;
 }
 
 /*--------------------------------------------------------------

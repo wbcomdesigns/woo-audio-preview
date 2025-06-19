@@ -226,19 +226,25 @@ class Wc_Audio_Preview_Public {
 			<button class="wcap-preview-button" type="button" aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M8 5v14l11-7z"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M8 5v14l11-7z"/>
+							</svg>
+						</span>
 					</span>
 					<span class="wcap-pause-icon" style="display: none;">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+							</svg>
+						</span>
 					</span>
 					<span class="wcap-loading-spinner" style="display: none;">
-						<svg class="wcap-spinner" width="24" height="24" viewBox="0 0 24 24">
-							<circle class="wcap-spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg class="wcap-spinner" width="24" height="24" viewBox="0 0 24 24">
+								<circle class="wcap-spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none"/>
+							</svg>
+						</span>
 					</span>
 					<div class="wcap-preview-info">
 						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
@@ -292,14 +298,18 @@ class Wc_Audio_Preview_Public {
 					aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M8 5v14l11-7z"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M8 5v14l11-7z"/>
+							</svg>
+						</span>
 					</span>
 					<span class="wcap-pause-icon" id="wcap-pause-<?php echo esc_attr( $key ); ?>" style="display: none;">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+							</svg>
+						</span>
 					</span>
 					<div class="wcap-preview-info">
 						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
@@ -386,14 +396,18 @@ class Wc_Audio_Preview_Public {
 					aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M8 5v14l11-7z"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M8 5v14l11-7z"/>
+							</svg>
+						</span>
 					</span>
 					<span class="wcap-pause-icon" id="wcap-pause-<?php echo esc_attr( $key ); ?>" style="display: none;">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
-						</svg>
+						<span class="wcap-icon-wrap">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+							</svg>
+						</span>
 					</span>
 					<div class="wcap-preview-info">
 						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>

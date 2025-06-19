@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-19T11:15:49+05:30\n"
+"POT-Creation-Date: 2025-06-19T13:16:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wc-audio-preview\n"
@@ -374,63 +374,71 @@ msgid "Yes, it requires WooCommerce to be installed and activated."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:70
-msgid "Can users download the preview file?"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-faq.php:74
-msgid "Yes, preview files are downloadable."
-msgstr ""
-
-#: admin/partials/woo-audio-preview-faq.php:82
 msgid "What audio formats are supported?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:86
+#: admin/partials/woo-audio-preview-faq.php:74
 msgid "The plugin supports the following audio formats:"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:89
-msgid "MP3 - Supported by all browsers"
+#: admin/partials/woo-audio-preview-faq.php:77
+msgid "MP3 - Universal compatibility (recommended)"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:90
-msgid "WAV - Supported by most modern browsers"
+#: admin/partials/woo-audio-preview-faq.php:78
+msgid "WAV - High quality, larger files"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:91
-msgid "OGG - Supported by Firefox, Chrome, Opera"
+#: admin/partials/woo-audio-preview-faq.php:79
+msgid "OGG - Open format, good compression"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:92
-msgid "M4A - Supported by Safari, Chrome, Edge"
+#: admin/partials/woo-audio-preview-faq.php:80
+msgid "M4A - Apple's audio format"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:95
+#: admin/partials/woo-audio-preview-faq.php:81
+msgid "AAC - Advanced audio coding"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:82
+msgid "FLAC - Lossless compression"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:83
+msgid "WMA - Windows Media Audio"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:84
+msgid "WEBM - Web-optimized format"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:87
 msgid "You can either upload files directly or use external URLs to audio files hosted elsewhere."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:103
+#: admin/partials/woo-audio-preview-faq.php:95
 msgid "Can I upload multiple preview files for one product?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:107
+#: admin/partials/woo-audio-preview-faq.php:99
 msgid "Absolutely! The plugin supports multiple audio preview files per product. This allows you to showcase different samples, tracks, or variations of your audio product, giving customers a comprehensive preview experience."
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:115
-msgid "What if I need more features?"
+#: admin/partials/woo-audio-preview-faq.php:107
+msgid "❓ Why isn’t the OGG audio format working on iPhones or iPads?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:111
+msgid "The OGG audio format is not natively supported by iOS devices, including iPhones and iPads. This limitation is due to Apple’s system-level media support, which does not include the OGG (Vorbis) codec. As a result, audio files in .ogg format may not play properly or at all on Safari or other browsers on iOS"
 msgstr ""
 
 #: admin/partials/woo-audio-preview-faq.php:119
-msgid "You can hire our team to assist you."
+msgid "How do I reorder audio files?"
 msgstr ""
 
-#: admin/partials/woo-audio-preview-faq.php:127
-msgid "What if I have a question?"
-msgstr ""
-
-#: admin/partials/woo-audio-preview-faq.php:132
-msgid "No problem. Please get in touch with us via our"
+#: admin/partials/woo-audio-preview-faq.php:123
+msgid "Use the drag handle (⋮⋮⋮) on the left side of each audio row to drag and drop files into your desired order."
 msgstr ""
 
 #: admin/partials/woo-audio-preview-general-pro.php:18
@@ -1182,34 +1190,34 @@ msgstr ""
 msgid "Themes & Extension"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:120
+#: public/class-wc-audio-preview-public.php:128
 msgid "Loading..."
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:121
+#: public/class-wc-audio-preview-public.php:129
 msgid "Error loading audio"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:122
+#: public/class-wc-audio-preview-public.php:130
 msgid "Play"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:123
+#: public/class-wc-audio-preview-public.php:131
 msgid "Pause"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:165
+#: public/class-wc-audio-preview-public.php:173
 msgid "Audio Previews"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:218
-#: public/class-wc-audio-preview-public.php:284
-#: public/class-wc-audio-preview-public.php:377
+#: public/class-wc-audio-preview-public.php:226
+#: public/class-wc-audio-preview-public.php:298
+#: public/class-wc-audio-preview-public.php:396
 #, php-format
 msgid "Play %s"
 msgstr ""
 
-#: public/class-wc-audio-preview-public.php:255
+#: public/class-wc-audio-preview-public.php:269
 msgid "Your browser does not support the audio element."
 msgstr ""
 
