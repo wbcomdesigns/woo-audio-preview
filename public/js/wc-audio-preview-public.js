@@ -12,6 +12,7 @@
         init: function() {
             this.bindEvents();
             this.initializeAudioElements();
+            // this.wcapStopAllPlayers();
         },
 
         bindEvents: function() {
@@ -92,6 +93,12 @@
         playAudio: function(audioId) {
             const player = this.players.get(audioId);
             if (!player) return;
+
+            // Stop other players (including SoundCloud/Google)
+            if (typeof wcapStopAllPlayers === 'function') {
+                const key = audioId.replace('wcap-audio-', '');
+                wcapStopAllPlayers(key);
+            }
 
             // Pause any currently playing audio
             if (this.currentAudio && this.currentAudio !== player.audio) {
@@ -219,7 +226,11 @@
             const minutes = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return minutes + ':' + (secs < 10 ? '0' : '') + secs;
-        }
+        },
+
+        
+        
+
     };
 
     // Initialize when document is ready
@@ -229,9 +240,66 @@
         }
     });
 
+
     // Handle dynamic content (AJAX)
     $(document).on('wcap:reinit', function() {
         WCAPPlayer.init();
     });
+    // handling soundcloud and google palyer....
+    function wcapStopAllPlayers(excludeKey = null) {
+        // Stop all HTML5 <audio> players
+        document.querySelectorAll('.wcap-audio-element').forEach(audio => {
+            if (!excludeKey || audio.id !== `wcap-audio-${excludeKey}`) {
+                audio.pause();
+                audio.currentTime = 0;
+                const button = document.querySelector(`.wcap-preview-button[data-audio-id="${audio.id}"]`);
+                if (button) {
+                    button.classList.remove('playing');
+                }
+            }
+        });
+
+        // Stop all Google Drive iframes
+        document.querySelectorAll('.wcap-gdrive-player').forEach(player => {
+            const key = player.id.replace('wcap-gdrive-', '');
+            if (!excludeKey || key !== excludeKey) {
+                const iframe = player.querySelector('iframe');
+                if (iframe) iframe.src = ''; // Unload
+                player.style.display = 'none';
+
+                const playIcon = document.getElementById(`wcap-play-${key}`);
+                const pauseIcon = document.getElementById(`wcap-pause-${key}`);
+                if (playIcon && pauseIcon) {
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                }
+            }
+        });
+
+        // Stop all SoundCloud players using the Widget API
+        document.querySelectorAll('.wcap-soundcloud-player iframe').forEach((iframe) => {
+            const playerId = iframe.parentElement.id.replace('wcap-soundcloud-', '');
+            if (!excludeKey || playerId !== excludeKey) {
+                const widget = SC.Widget(iframe);
+                widget.pause(); // This actually pauses the audio
+                iframe.parentElement.style.display = 'none';
+
+                const playIcon = document.getElementById(`wcap-play-${playerId}`);
+                const pauseIcon = document.getElementById(`wcap-pause-${playerId}`);
+                if (playIcon && pauseIcon) {
+                    // playIcon.classList.add("active");
+                    $(playIcon).removeClass("inactive");
+                    $(pauseIcon).addClass("inactive");
+                    // pauseIcon.style.display = 'none';
+                }
+            }
+        });
+    }
+
+
+    if( wcapStopAllPlayers!=null){
+    window.wcapStopAllPlayers = wcapStopAllPlayers;
+    }
+
 
 })(jQuery);

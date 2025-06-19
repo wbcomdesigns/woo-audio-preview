@@ -392,3 +392,11 @@
         display: none;
     }
 }
+
+.inactive {
+    display: none !important;
+}
+/* .custom-artwork-size{
+    width: 10% !important;
+    height: 10% !important;
+} */

@@ -106,12 +106,20 @@ class Wc_Audio_Preview_Public {
 
 		if ($js_file) {
 			wp_enqueue_script(
+				'soundcloud-widget-api', 
+				plugin_dir_url(__FILE__) . 'js/soundcloud.min.js', 
+				array(), 
+				null, 
+				true
+			);
+			wp_enqueue_script(
 				$this->plugin_name, 
 				plugin_dir_url(__FILE__) . $js_file, 
-				array('jquery'), 
+				array('jquery','soundcloud-widget-api'), 
 				$this->version, 
 				false
 			);
+			
 			
 			// Localize script for better UX
 			wp_localize_script( $this->plugin_name, 'wcap_public', array(
@@ -299,7 +307,7 @@ class Wc_Audio_Preview_Public {
 					</div>
 				</div>
 			</button>
-			<div class="wcap-gdrive-player" id="wcap-gdrive-<?php echo esc_attr( $key ); ?>" style="display: none;">
+			<div class="wcap-gdrive-player " id="wcap-gdrive-<?php echo esc_attr( $key ); ?>" style="display: none;">
 				<iframe 
 					src="" 
 					data-src="<?php echo esc_url($iframe_url); ?>"
@@ -314,6 +322,7 @@ class Wc_Audio_Preview_Public {
 		
 		<script>
 		function wcapToggleGDrivePlayer(key) {
+			wcapStopAllPlayers(key);
 			var player = document.getElementById('wcap-gdrive-' + key);
 			var button = player.previousElementSibling;
 			var iframe = player.querySelector('iframe');
@@ -395,8 +404,8 @@ class Wc_Audio_Preview_Public {
 			<div class="wcap-soundcloud-player" id="wcap-soundcloud-<?php echo esc_attr( $key ); ?>" style="display: none;">
 				<iframe 
 					src="<?php echo esc_url($embed_url); ?>" 
-					width="" 
-					height="" 
+					width="100%" 
+					height="100" 
 					frameborder="0"
 					allow="autoplay"
 					allowfullscreen>
@@ -406,6 +415,7 @@ class Wc_Audio_Preview_Public {
 
 		<script>
 			function wcapToggleSoundCloudPlayer(key) {
+				wcapStopAllPlayers(key);
 				const player = document.getElementById(`wcap-soundcloud-${key}`);
 				const playIcon = document.getElementById(`wcap-play-${key}`);
 				const pauseIcon = document.getElementById(`wcap-pause-${key}`);
