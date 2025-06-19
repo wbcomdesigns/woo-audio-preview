@@ -432,7 +432,6 @@
 
 .wbcom-faq-accordion.active {
     background-color: currentColor;
-    color: white;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     margin-bottom: 0;
@@ -469,6 +468,7 @@
 
 .wbcom-faq-accordion.active + .wbcom-faq-panel {
     border-color: currentColor;
+    border: none;
 }
 
 .wbcom-faq-panel p,
