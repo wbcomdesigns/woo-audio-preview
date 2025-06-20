@@ -163,126 +163,24 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 				$no_bug_url = wp_nonce_url( admin_url( '?' . $this->nobug_option . '=true' ), 'wc-audio-preview-feedback-nounce' );
 				$time       = $this->seconds_to_words( time() - get_site_option( $this->date_option ) );
 				?>
-
-<style>
-.notice.wc-audio-preview-notice {
-	border-left-color: #008ec2 !important;
-	padding: 20px;
-}
-
-.rtl .notice.wc-audio-preview-notice {
-	border-right-color: #008ec2 !important;
-}
-
-.notice.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner {
-	display: table;
-	width: 100%;
-}
-
-.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-icon,
-.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-content,
-.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-install-now {
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.notice.wc-audio-preview-notice .wc-audio-preview-notice-icon {
-	color: #509ed2;
-	font-size: 50px;
-	width: 60px;
-}
-
-.notice.wc-audio-preview-notice .wc-audio-preview-notice-icon img {
-	width: 64px;
-}
-
-.notice.wc-audio-preview-notice .wc-audio-preview-notice-content {
-	padding: 0 40px 0 20px;
-}
-
-.notice.wc-audio-preview-notice p {
-	padding: 0;
-	margin: 0;
-}
-
-.notice.wc-audio-preview-notice h3 {
-	margin: 0 0 5px;
-}
-
-.notice.wc-audio-preview-notice .wc-audio-preview-install-now {
-	text-align: center;
-}
-
-.notice.wc-audio-preview-notice .wc-audio-preview-install-now .wc-audio-preview-install-button {
-	padding: 6px 50px;
-	height: auto;
-	line-height: 20px;
-}
-
-.notice.wc-audio-preview-notice a.no-thanks {
-	display: block;
-	margin-top: 10px;
-	color: #72777c;
-	text-decoration: none;
-}
-
-.notice.wc-audio-preview-notice a.no-thanks:hover {
-	color: #444;
-}
-
-@media (max-width: 767px) {
-
-	.notice.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner {
-		display: block;
-	}
-
-	.notice.wc-audio-preview-notice {
-		padding: 20px !important;
-	}
-
-	.notice.wc-audio-preview-noticee .wc-audio-preview-notice-inner {
-		display: block;
-	}
-
-	.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-content {
-		display: block;
-		padding: 0;
-	}
-
-	.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-icon {
-		display: none;
-	}
-
-	.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-install-now {
-		margin-top: 20px;
-		display: block;
-		text-align: left;
-	}
-
-	.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .no-thanks {
-		display: inline-block;
-		margin-left: 15px;
-	}
-}
-</style>
-			<div class="notice updated wc-audio-preview-notice">
-				<div class="wc-audio-preview-notice-inner">
-					<div class="wc-audio-preview-notice-icon">
-						<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>" />
-					</div>
-					<div class="wc-audio-preview-notice-content">
-						<h3><?php echo esc_html__( 'Are you enjoying Audio Preview for WooCommerce?', 'wc-audio-preview' ); ?></h3>
-						<p>
-							<?php /* translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress*/ ?>
-							<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Would you kindly give it a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
-						</p>
-					</div>
-					<div class="wc-audio-preview-install-now">
-						<?php printf( '<a href="%1$s" class="button button-primary wc-audio-preview-install-button" target="_blank">%2$s</a>', esc_url( 'https://wordpress.org/support/plugin/woo-audio-preview/reviews/' ), esc_html__( 'Leave a Review', 'wc-audio-preview' ) ); ?>
-						<a href="<?php echo esc_url( $no_bug_url ); ?>" class="no-thanks"><?php echo esc_html__( 'No thanks / I already have', 'wc-audio-preview' ); ?></a>
+				<div class="notice updated wc-audio-preview-notice">
+					<div class="wc-audio-preview-notice-inner">
+						<div class="wc-audio-preview-notice-icon">
+							<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>" />
+						</div>
+						<div class="wc-audio-preview-notice-content">
+							<h3><?php echo esc_html__( 'Are you enjoying Audio Preview for WooCommerce?', 'wc-audio-preview' ); ?></h3>
+							<p>
+								<?php /* translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress*/ ?>
+								<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Would you kindly give it a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
+							</p>
+						</div>
+						<div class="wc-audio-preview-install-now">
+							<?php printf( '<a href="%1$s" class="button button-primary wc-audio-preview-install-button" target="_blank">%2$s</a>', esc_url( 'https://wordpress.org/support/plugin/woo-audio-preview/reviews/' ), esc_html__( 'Leave a Review', 'wc-audio-preview' ) ); ?>
+							<a href="<?php echo esc_url( $no_bug_url ); ?>" class="no-thanks"><?php echo esc_html__( 'No thanks / I already have', 'wc-audio-preview' ); ?></a>
+						</div>
 					</div>
 				</div>
-			</div>
 				<?php
 			}
 		}
