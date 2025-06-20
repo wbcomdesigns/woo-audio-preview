@@ -4,6 +4,17 @@
  */
 
 /*--------------------------------------------------------------
+# Navigation Icons
+--------------------------------------------------------------*/
+.nav-tab-wrapper ul li.woo-audio-preview-pro a.nav-tab:before {
+    content: "\f111";
+}
+
+.nav-tab-wrapper ul li.woo-audio-preview-faq a.nav-tab:before {
+    content: "\f125";
+}
+
+/*--------------------------------------------------------------
 # Meta Box Styles
 --------------------------------------------------------------*/
 .wcap-preview-tr {
