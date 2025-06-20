@@ -77,10 +77,13 @@
     transition: all 0.2s ease;
     text-align: left;
     color: inherit;
+    border: 0 !important;
 }
 
-.wcap-preview-button:hover {
-    background: rgba(0, 0, 0, 0.02);
+.wcap-preview-button:hover,
+.wcap-preview-button:focus {
+    color: inherit !important;
+    background: rgba(0, 0, 0, 0.02) !important;
 }
 
 .wcap-preview-button:focus {
@@ -313,6 +316,7 @@
 }
 
 .wcap-audio-preview-container button {
+    width: 100%;
     font-family: inherit;
     font-size: inherit;
     line-height: 1.4;
