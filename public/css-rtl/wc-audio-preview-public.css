@@ -264,7 +264,7 @@
 /*--------------------------------------------------------------
 # Single Audio Preview Style
 --------------------------------------------------------------*/
-.wcap-preview-list:has(.wcap-preview-item:only-child) {
+/* .wcap-preview-list:has(.wcap-preview-item:only-child) {
     gap: 0;
 }
 
@@ -306,7 +306,7 @@
 .wcap-preview-list:has(.wcap-preview-item:only-child) .wcap-preview-badge {
     background: rgba(255, 255, 255, 0.2);
     color: white;
-}
+} */
 
 /*--------------------------------------------------------------
 # Theme Compatibility
