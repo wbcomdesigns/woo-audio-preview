@@ -447,7 +447,7 @@ class Wc_Audio_Preview_Admin {
 				?>
 					<div class="wcap-audio-field-group">
 						<h4 class="wcap-field-title">
-							<?php echo sprintf( esc_html__( 'Audio Preview %d', 'wc-audio-preview' ), $field_number ); ?>
+							<?php echo esc_html( sprintf( __( 'Audio Preview %d', 'wc-audio-preview' ), $field_number ) ); ?>
 							<?php if ( $i === 0 ) : ?>
 								<span class="wcap-required"><?php esc_html_e( '(Primary)', 'wc-audio-preview' ); ?></span>
 							<?php else : ?>
