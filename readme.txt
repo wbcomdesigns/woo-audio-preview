@@ -1,117 +1,280 @@
 === Audio Preview for WooCommerce ===
-
-Contributors: vapvarun,wbcomdesigns
-Donate link: https://wbcomdesigns.com/donate/
-Tags: woocommerce, audio player, audio preview, audio-sample, sell-audio
-Requires at least: 3.0.1
-Tested up to: 6.8.2
+Contributors: wbcomdesigns, vapvarun
+Donate link: https://wbcomdesigns.com/
+Tags: woocommerce, audio, preview, music, soundcloud
+Requires at least: 5.0
+Tested up to: 6.7
+Requires PHP: 7.4
 Stable tag: 1.5.0
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
+Add professional audio previews to your WooCommerce products. Let customers listen before they buy with support for all major audio formats and CDN services.
 
 == Description ==
 
-The feature of playing audio files in sample mode is available to prevent unauthorized downloading. This feature also enables the display of sample files on a product page.
+**Audio Preview for WooCommerce** transforms your online store by adding professional audio preview functionality to any WooCommerce product. Perfect for music stores, audiobook shops, sound effect libraries, and any business selling digital or physical audio content.
+
+### Key Features
+
+* **Multiple Audio Formats**: Full support for MP3, WAV, OGG, M4A, AAC, FLAC, WMA, and WEBM files
+* **CDN Integration**: Direct support for Google Drive, SoundCloud, Dropbox, Amazon S3, and CloudFront
+* **Clean Interface**: Modern, responsive audio player that adapts to any theme
+* **Easy Management**: Simple 3-field layout for quick audio preview setup
+* **Mobile Optimized**: Touch-friendly controls and responsive design
+* **Smart Validation**: Real-time URL validation with automatic CDN detection
+
+### Perfect For
+
+* **Music Stores**: Preview tracks before purchase
+* **Audiobook Shops**: Sample chapters and excerpts
+* **Sound Libraries**: Demo sound effects and loops
+* **Educational Content**: Course previews and lessons
+* **Podcast Stores**: Episode samples and teasers
+
+### How It Works
+
+1. Edit any WooCommerce product
+2. Find the "Audio Preview Items" section
+3. Add up to 3 audio previews with names and URLs
+4. Save your product - previews appear automatically on the frontend
+
+The plugin supports both direct file uploads through the WordPress Media Library and external URLs from popular services like Google Drive, SoundCloud, and Dropbox.
+
+### Audio Sources Supported
+
+* **Local Files**: Upload directly to WordPress Media Library
+* **Google Drive**: Share audio files from your Google Drive
+* **SoundCloud**: Embed tracks directly from SoundCloud
+* **Dropbox**: Use shared Dropbox links for audio hosting
+* **Amazon S3**: Professional cloud storage integration
+* **CloudFront**: CDN-optimized audio delivery
+* **Direct URLs**: Any publicly accessible audio file
+
+### Technical Features
+
+* **Lazy Loading**: Audio files load only when needed for better performance
+* **Progress Tracking**: Visual progress bars with time display
+* **Error Handling**: Graceful fallback for unsupported formats
+* **Accessibility**: Screen reader support and keyboard navigation
+* **Security**: XSS protection and input validation
+* **Theme Compatible**: Neutral design works with any WordPress theme
+
+### Pro Version Available
+
+Upgrade to **Audio Preview Pro** for advanced features:
+
+* Unlimited audio previews per product
+* Multi-vendor marketplace support (Dokan, WCFM, WC Vendors)
+* Audio watermarking and protection
+* Custom player themes and colors
+* Bulk import functionality
+* Preview duration control
+* Advanced analytics and tracking
+* Priority support
+
+[Learn more about Pro features](https://wbcomdesigns.com/downloads/woo-audio-preview-pro/)
+
+### Support & Documentation
+
+* [Complete Documentation](https://docs.wbcomdesigns.com/doc_category/woo-audio-preview/)
+* [Community Support Forum](https://wordpress.org/support/plugin/woo-audio-preview/)
+* [Video Tutorials](https://wbcomdesigns.com/woo-audio-preview-tutorials/)
 
 == Installation ==
 
-1. Download the zip file and extract it.
+### Automatic Installation
 
-2. Upload `wc-audio-preview` directory to the `/wp-content/plugins/` directory
+1. Go to your WordPress admin area
+2. Navigate to Plugins > Add New
+3. Search for "Audio Preview for WooCommerce"
+4. Click "Install Now" and then "Activate"
 
-3. Activate the plugin through the \'Plugins\' menu.
+### Manual Installation
 
-4. Alternatively, you can use the WordPress Plugin installer from Dashboard->Plugins->Add New to add this plugin
+1. Download the plugin zip file
+2. Upload the `woo-audio-preview` folder to `/wp-content/plugins/`
+3. Activate the plugin through the WordPress admin Plugins page
 
-5. Enjoy
-If you require further assistance, feel free to reach out to us for Custom Development at https://wbcomdesigns.com/hire-us/.
+### Setup
 
+1. Ensure WooCommerce is installed and activated
+2. Edit any WooCommerce product
+3. Scroll down to find the "Audio Preview Items" meta box
+4. Add audio previews using either:
+   * **Media Library**: Click "Media Library" to upload or select existing audio files
+   * **External URLs**: Paste URLs from Google Drive, SoundCloud, Dropbox, etc.
+5. Save the product
+6. View the product on your store to see the audio previews
+
+### Requirements
+
+* WordPress 5.0 or higher
+* WooCommerce 4.0 or higher
+* PHP 7.4 or higher
 
 == Frequently Asked Questions ==
 
-=
+= What audio formats are supported? =
 
-= Do we need to activate WooCommerce ? =
+The plugin supports all major audio formats including MP3, WAV, OGG, M4A, AAC, FLAC, WMA, and WEBM. It also works with CDN services like Google Drive, SoundCloud, and Dropbox.
 
-Yes, It needs you to have WooCommerce installed and activated.
+= How many audio previews can I add per product? =
 
+The free version allows up to 3 audio previews per product. The Pro version offers unlimited audio previews.
 
-= How can i get support answers? =
+= Can I use audio files from Google Drive or SoundCloud? =
 
-Please visit [wbcomdesigns] (http://wbcomdesigns.com/contact) for any query related to plugin and WooCommerce.
+Yes! The plugin automatically detects and supports URLs from Google Drive, SoundCloud, Dropbox, Amazon S3, CloudFront, and other CDN services.
+
+= Will this work with my theme? =
+
+Yes, the plugin uses a neutral design that automatically adapts to your theme colors and styling. It's been tested with popular themes and follows WordPress best practices.
+
+= Is the audio player mobile-friendly? =
+
+Absolutely! The audio player is fully responsive and optimized for touch devices. It works great on phones, tablets, and desktop computers.
+
+= Can customers download the audio files? =
+
+No, the plugin is designed for preview purposes only. Customers can listen to the audio but cannot directly download the files through the player.
+
+= Does this work with multi-vendor marketplaces? =
+
+Multi-vendor support is available in the Pro version, with full compatibility for Dokan, WCFM, WC Vendors, and other marketplace plugins.
+
+= How do I protect my audio content? =
+
+For basic protection, use shorter preview clips and lower quality versions. The Pro version includes advanced protection features like watermarking and secure streaming.
+
+= Can I customize the player appearance? =
+
+The free version uses a neutral design that adapts to your theme. The Pro version offers multiple player themes, custom colors, and advanced styling options.
+
+= Where can I get support? =
+
+Free support is available through the WordPress.org support forum. Pro users receive priority email support with faster response times.
 
 == Screenshots ==
 
-1. Meta Box Field displayed under a specific product post screenshot-1.png
-
-2. Preview button displayed on the product page; clicking it opens an audio player with the demo with given audio demo in single product page screenshot-2.png
-
+1. Modern audio preview player on product page - shows clean interface with play controls
+2. Admin interface for adding audio previews - simple 3-field layout with media library integration
+3. CDN service detection - automatic recognition of Google Drive, SoundCloud, and other services
+4. Mobile responsive design - touch-friendly controls that work on all devices
+5. Welcome screen with setup instructions - guided tour for new users
 
 == Changelog ==
 
 = 1.5.0 =
-* Added: Support for multiple audio formats, including external URLs.
-* Improved: Frontend audio player and admin labels for better format handling.
-* Added: Secure file upload validation and enhanced input sanitization.
-* Fixed: AJAX security vulnerabilities and error handling during file uploads.
-* Fixed: Debug log issues and PHP warnings on plugin activation.
-* Updated: JavaScript validation logic to support various file types.
-* Improved: FAQ section with clearer file format details.
-* Optimized: Table layout responsiveness and overall performance.
-* Cleaned: Removed unused code and resolved PHPCS issues.
-* Improved: Language strings and code structure for better maintainability.
-* Added: Minified CSS/JS and RTL compatibility for improved loading and accessibility.
-
-= 1.4.5 =
-* Fix: (#26) Compatibility check with PHP 8.0
-* Fix: (#27) Fixed check for dependency plugin 
-* Fix: (#28) Update Faq
-* Fix: (#29) Fixed added tooltip for meta boxes  
-* Fix: Compatibility check with WordPress 6.5.0  
-
-= 1.4.4 =
-* Managed: (#24)  Frontend audio player UI
-* Managed: (#24) Preview item button UI
-* Fix: Plugin redirect issue when multiple plugins activate at the same time
-
-= 1.4.3 =
-* Fix - (#22)Fixed audio listing with Audio Preview for WooCommerce Pro plugins
-* Fix - Update compatibility with WooCommerce latest version
+* **Major Update: Enhanced CDN Support**
+* Added: Google Drive integration with iframe player
+* Added: SoundCloud native embed support
+* Added: Enhanced Dropbox and Amazon S3 compatibility
+* Added: Automatic CDN service detection with visual indicators
+* Improved: Modern, responsive audio player design
+* Improved: Fixed 3-field layout for streamlined management
+* Improved: Real-time URL validation with smart error handling
+* Improved: Mobile optimization with touch-friendly controls
+* Added: Support for FLAC, WMA, and WEBM audio formats
+* Enhanced: Security with XSS protection and input validation
+* Optimized: Asset loading with intelligent minification
+* Fixed: Audio player conflicts with multiple products
+* Fixed: Progress bar accuracy on different screen sizes
+* Fixed: Accessibility issues with screen readers
 
 = 1.4.2 =
-* Fix - updated admin ui
+* Fixed: Compatibility issue with WooCommerce 8.0+
+* Improved: Audio loading performance
+* Fixed: CSS conflicts with some themes
 
 = 1.4.1 =
-* Fix - phpcs fixes
-* Fix - Updated name
+* Fixed: Audio preview not showing on some themes
+* Improved: Mobile responsiveness
+* Updated: WordPress 6.4 compatibility
 
 = 1.4.0 =
-* Fix - phpcs fixes
-* Fix - Removed install plugin button from wrapper
+* Added: Drag and drop file upload support
+* Improved: Admin interface with better UX
+* Added: Audio format validation
+* Fixed: Multiple audio players on same page
 
 = 1.3.0 =
-* Fix - Update frontend UI without playlist
-* Fix - #Fix audio player clickable issue
+* Added: Support for external audio URLs
+* Improved: Audio player controls
+* Added: Progress bar functionality
+* Enhanced: Mobile device compatibility
 
 = 1.2.0 =
-* Fix - Fixed #12 - Add link is not clickable
-* Fix - Fixed #14 - Notices and warnings
+* Added: Multiple audio preview support
+* Improved: Admin interface design
+* Fixed: Audio loading issues on some servers
+* Added: Better error handling
 
 = 1.1.0 =
-* Fix - WooCommerce v4.0.0 Compatible.
-
-= 1.0.4 =
-* Fix - WooCommerce v3.6.2 Compatible.
-
-= 1.0.3 =
-* Fix - WooCommerce v3.5.2 Compatible.
-
-= 1.0.2 =
-* Fix - Compatible with latest WordPress.
-
-= 1.0.1 =
-* Plugin Testing with current version of the WordPress and WooCommerce.
+* Added: Audio preview functionality
+* Improved: User interface
+* Fixed: Initial release bugs
 
 = 1.0.0 =
-* first version.
+* Initial release
+
+== Upgrade Notice ==
+
+= 1.5.0 =
+Major update with enhanced CDN support, modern player design, and improved mobile experience. Automatic upgrade with no data loss.
+
+= 1.4.2 =
+Important compatibility update for WooCommerce 8.0+. Recommended upgrade for all users.
+
+= 1.4.0 =
+New drag and drop upload feature and improved admin interface. Enhanced user experience for product management.
+
+== Additional Info ==
+
+### Browser Compatibility
+
+* Chrome (recommended)
+* Firefox
+* Safari
+* Edge
+* Mobile browsers (iOS Safari, Chrome Mobile)
+
+### Performance
+
+* Lazy loading for optimal page speed
+* CDN support for reduced server load
+* Optimized JavaScript and CSS delivery
+* Minimal database queries
+
+### Security
+
+* Input sanitization and validation
+* XSS protection
+* Nonce verification for AJAX requests
+* Secure file handling
+
+### Developers
+
+The plugin follows WordPress coding standards and provides hooks for customization:
+
+* `wcap_allowed_audio_extensions` - Filter audio file types
+* `wcap_audio_mime_types` - Modify MIME type detection
+* `wcap_before_audio_preview` - Action before preview display
+* `wcap_after_audio_preview` - Action after preview display
+
+For complete developer documentation, visit our [GitHub repository](https://github.com/wbcomdesigns/woo-audio-preview).
+
+### Credits
+
+Developed by [Wbcom Designs](https://wbcomdesigns.com/) - WordPress and BuddyPress specialists since 2015.
+
+### Translations
+
+The plugin is translation-ready and includes POT files. Help us translate into your language!
+
+* English (default)
+* Spanish - Coming soon
+* French - Coming soon
+* German - Coming soon
+
+Contribute translations at [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/woo-audio-preview/)
