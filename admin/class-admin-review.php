@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Plugin review class.
  * Prompts users to give a review of the plugin on WordPress.org after a period of usage.
@@ -8,6 +8,11 @@
  *
  * @package Wc_Audio_Preview
  */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 
@@ -302,17 +307,19 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 	}
 endif;
 
-/*
-* Instantiate the Woo_Audio_Feedback class.
-*/
-function wcap_audio_feedback_cb(){
+/**
+ * Instantiate the Woo_Audio_Feedback class.
+ *
+ * @return void
+ */
+function wcap_audio_feedback_cb() { // phpcs:ignore Universal.Files.SeparateFunctionsFromOO.Mixed
 	new Woo_Audio_Feedback(
 		array(
 			'slug'       => 'woo_audio_feedback',
-			'name'       => esc_html( 'Audio Preview for WooCommerce', 'wc-audio-preview' ),
+			'name'       => esc_html__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ),
 			'time_limit' => WEEK_IN_SECONDS,
 		)
 	);
 }
 
-add_action('init','wcap_audio_feedback_cb');
+add_action( 'init', 'wcap_audio_feedback_cb' );

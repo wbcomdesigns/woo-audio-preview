@@ -9,6 +9,11 @@
  * @subpackage Wc_Audio_Preview/public
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -70,16 +75,16 @@ class Wc_Audio_Preview_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		$css_file = $this->get_asset_filename('css', 'wc-audio-preview-public');
-		if ($css_file) {
+		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public' );
+		if ( $css_file ) {
 			wp_enqueue_style(
-				$this->plugin_name, 
-				plugin_dir_url(__FILE__) . $css_file, 
-				array(), 
-				$this->version, 
+				$this->plugin_name,
+				plugin_dir_url( __FILE__ ) . $css_file,
+				array(),
+				$this->version,
 				'all'
 			);
-   		}
+		}
 	}
 
 	/**
@@ -101,35 +106,38 @@ class Wc_Audio_Preview_Public {
 		 * class.
 		 */
 
-		// Build the JS filename with intelligent fallback
-    	$js_file = $this->get_asset_filename('js', 'wc-audio-preview-public');
+		// Build the JS filename with intelligent fallback.
+		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public' );
 
-		if ($js_file) {
+		if ( $js_file ) {
 			wp_enqueue_script(
-				'soundcloud-widget-api', 
-				plugin_dir_url(__FILE__) . 'js/soundcloud.min.js', 
-				array(), 
-				null, 
+				'soundcloud-widget-api',
+				plugin_dir_url( __FILE__ ) . 'js/soundcloud.min.js',
+				array(),
+				WCAP_TEXT_VERSION,
 				true
 			);
 			wp_enqueue_script(
-				$this->plugin_name, 
-				plugin_dir_url(__FILE__) . $js_file, 
-				array('jquery','soundcloud-widget-api'), 
-				$this->version, 
+				$this->plugin_name,
+				plugin_dir_url( __FILE__ ) . $js_file,
+				array( 'jquery', 'soundcloud-widget-api' ),
+				$this->version,
 				false
 			);
-			
-			
-			// Localize script for better UX
-			wp_localize_script( $this->plugin_name, 'wcap_public', array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'wcap-public-nonce' ),
-				'loading_text' => __( 'Loading...', 'wc-audio-preview' ),
-				'error_text' => __( 'Error loading audio', 'wc-audio-preview' ),
-				'play_text' => __( 'Play', 'wc-audio-preview' ),
-				'pause_text' => __( 'Pause', 'wc-audio-preview' ),
-			));
+
+			// Localize script for better UX.
+			wp_localize_script(
+				$this->plugin_name,
+				'wcap_public',
+				array(
+					'ajax_url'     => admin_url( 'admin-ajax.php' ),
+					'nonce'        => wp_create_nonce( 'wcap-public-nonce' ),
+					'loading_text' => __( 'Loading...', 'wc-audio-preview' ),
+					'error_text'   => __( 'Error loading audio', 'wc-audio-preview' ),
+					'play_text'    => __( 'Play', 'wc-audio-preview' ),
+					'pause_text'   => __( 'Pause', 'wc-audio-preview' ),
+				)
+			);
 		}
 	}
 
@@ -140,30 +148,30 @@ class Wc_Audio_Preview_Public {
 		global $post;
 
 		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
-		if ( ! empty( $wcap_audio ) && isset($wcap_audio['wcap_audio_urls']) && !empty($wcap_audio['wcap_audio_urls']) ) {
-			
-			// Filter out empty entries
+		if ( ! empty( $wcap_audio ) && isset( $wcap_audio['wcap_audio_urls'] ) && ! empty( $wcap_audio['wcap_audio_urls'] ) ) {
+
+			// Filter out empty entries.
 			$valid_audios = array();
 			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-				if ( ! empty( $value ) && ! empty( $wcap_audio['wcap_audio_urls'][$key] ) ) {
+				if ( ! empty( $value ) && ! empty( $wcap_audio['wcap_audio_urls'][ $key ] ) ) {
 					$valid_audios[] = array(
-						'key' => $key,
+						'key'  => $key,
 						'name' => $value,
-						'url' => $wcap_audio['wcap_audio_urls'][$key]
+						'url'  => $wcap_audio['wcap_audio_urls'][ $key ],
 					);
 				}
 			}
-			
+
 			if ( empty( $valid_audios ) ) {
 				return;
 			}
-			
-			// Check if we have multiple audio files
-			$has_multiple = count($valid_audios) > 1;
+
+			// Check if we have multiple audio files.
+			$has_multiple = count( $valid_audios ) > 1;
 			?>
-			
+
 			<div class="wcap-audio-preview-container">
-				<?php if ($has_multiple): ?>
+				<?php if ( $has_multiple ) : ?>
 					<h3 class="wcap-preview-title">
 						<svg class="wcap-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M9 18V5l12-2v13"></path>
@@ -173,31 +181,29 @@ class Wc_Audio_Preview_Public {
 						<?php esc_html_e( 'Audio Previews', 'wc-audio-preview' ); ?>
 					</h3>
 				<?php endif; ?>
-				
+
 				<div class="wcap-preview-list">
 					<?php
 					foreach ( $valid_audios as $audio_data ) {
-						$key = $audio_data['key'];
-						$value = $audio_data['name'];
+						$key       = $audio_data['key'];
+						$value     = $audio_data['name'];
 						$audio_url = $audio_data['url'];
-						
-						// Determine if it's a CDN URL
-						$is_cdn = $this->wcap_is_cdn_url($audio_url);
-						// echo 'cdsn_service: '.$is_cdn['service'] ;
-						
-						// Check if we need iframe player
-						$needs_iframe = $this->wcap_needs_iframe_player($audio_url);
-						
-						if ($needs_iframe && $is_cdn && $is_cdn['service'] === 'google_drive') {
-							// Use iframe for Google Drive
-							$this->render_google_drive_player($key, $value, $audio_url);
-						} elseif($needs_iframe && $is_cdn && $is_cdn['service'] === 'soundcloud'){
-							// Use iframe for Sound Cloud
-								$this->render_sound_cloud_player($key, $value, $audio_url);
-						} 
-						else {
-							// Use regular audio player
-							$this->render_audio_player($key, $value, $audio_url, $is_cdn);
+
+						// Determine if it's a CDN URL.
+						$is_cdn = $this->wcap_is_cdn_url( $audio_url );
+
+						// Check if we need iframe player.
+						$needs_iframe = $this->wcap_needs_iframe_player( $audio_url );
+
+						if ( $needs_iframe && $is_cdn && 'google_drive' === $is_cdn['service'] ) {
+							// Use iframe for Google Drive.
+							$this->render_google_drive_player( $key, $value, $audio_url );
+						} elseif ( $needs_iframe && $is_cdn && 'soundcloud' === $is_cdn['service'] ) {
+							// Use iframe for Sound Cloud.
+								$this->render_sound_cloud_player( $key, $value, $audio_url );
+						} else {
+							// Use regular audio player.
+							$this->render_audio_player( $key, $value, $audio_url, $is_cdn );
 						}
 					}
 					?>
@@ -209,21 +215,21 @@ class Wc_Audio_Preview_Public {
 	}
 
 	/**
-	 * Render regular audio player
+	 * Render regular audio player.
 	 *
-	 * @param int    $key       Audio key
-	 * @param string $name      Audio name
-	 * @param string $audio_url Audio URL
-	 * @param array  $is_cdn    CDN info
+	 * @param int    $key       Audio key.
+	 * @param string $name      Audio name.
+	 * @param string $audio_url Audio URL.
+	 * @param array  $is_cdn    CDN info.
 	 */
-	private function render_audio_player($key, $name, $audio_url, $is_cdn) {
-		// Convert CDN URLs to playable format
-		$playable_url = $this->wcap_convert_cdn_url_for_playback($audio_url);
-		$mime_type = $this->wcap_get_audio_mime_type($playable_url);
+	private function render_audio_player( $key, $name, $audio_url, $is_cdn ) {
+		// Convert CDN URLs to playable format.
+		$playable_url = $this->wcap_convert_cdn_url_for_playback( $audio_url );
+		$mime_type    = $this->wcap_get_audio_mime_type( $playable_url );
 		?>
-		
+
 		<div class="wcap-preview-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
-			<button class="wcap-preview-button" type="button" aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+			<button class="wcap-preview-button" type="button" aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon">
 						<span class="wcap-icon-wrap">
@@ -248,7 +254,7 @@ class Wc_Audio_Preview_Public {
 					</span>
 					<div class="wcap-preview-info">
 						<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
-						<?php if ($is_cdn): ?>
+						<?php if ( $is_cdn ) : ?>
 							<span class="wcap-preview-badge"><?php echo esc_html( $is_cdn['service_name'] ); ?></span>
 						<?php endif; ?>
 					</div>
@@ -260,42 +266,50 @@ class Wc_Audio_Preview_Public {
 					<span class="wcap-time">0:00 / 0:00</span>
 				</div>
 			</button>
-			
-			<audio class="wcap-audio-element" 
-				   id="wcap-audio-<?php echo esc_attr( $key ); ?>" 
-				   preload="none"
-				   data-name="<?php echo esc_attr( $name ); ?>">
-				<source src="<?php echo esc_url($playable_url); ?>" type="<?php echo esc_attr($mime_type); ?>" />
+
+			<audio class="wcap-audio-element"
+					id="wcap-audio-<?php echo esc_attr( $key ); ?>"
+					preload="none"
+					data-name="<?php echo esc_attr( $name ); ?>">
+				<source src="<?php echo esc_url( $playable_url ); ?>" type="<?php echo esc_attr( $mime_type ); ?>" />
 				<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
 			</audio>
 		</div>
-		
+
 		<?php
 	}
 
 	/**
-	 * Render Google Drive player with iframe
+	 * Render Google Drive player with iframe.
 	 *
-	 * @param int    $key       Audio key
-	 * @param string $name      Audio name
-	 * @param string $audio_url Audio URL
+	 * @param int    $key       Audio key.
+	 * @param string $name      Audio name.
+	 * @param string $audio_url Audio URL.
 	 */
-	private function render_google_drive_player($key, $name, $audio_url) {
-		// Extract Google Drive file ID
-		$file_id = $this->extract_google_drive_id($audio_url);
-		if (!$file_id) {
-			// Fallback to regular player if can't extract ID
-			$this->render_audio_player($key, $name, $audio_url, array('service' => 'google_drive', 'service_name' => 'Google Drive'));
+	private function render_google_drive_player( $key, $name, $audio_url ) {
+		// Extract Google Drive file ID.
+		$file_id = $this->extract_google_drive_id( $audio_url );
+		if ( ! $file_id ) {
+			// Fallback to regular player if can't extract ID.
+			$this->render_audio_player(
+				$key,
+				$name,
+				$audio_url,
+				array(
+					'service'      => 'google_drive',
+					'service_name' => 'Google Drive',
+				)
+			);
 			return;
 		}
-		
+
 		$iframe_url = 'https://drive.google.com/file/d/' . $file_id . '/preview';
 		?>
-		
+
 		<div class="wcap-preview-item wcap-gdrive-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
-			<button class="wcap-preview-button wcap-gdrive-button" type="button" 
+			<button class="wcap-preview-button wcap-gdrive-button" type="button"
 					onclick="wcapToggleGDrivePlayer('<?php echo esc_js( $key ); ?>')"
-					aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
 						<span class="wcap-icon-wrap">
@@ -318,18 +332,18 @@ class Wc_Audio_Preview_Public {
 				</div>
 			</button>
 			<div class="wcap-gdrive-player " id="wcap-gdrive-<?php echo esc_attr( $key ); ?>" style="display: none;">
-				<iframe 
-					src="" 
-					data-src="<?php echo esc_url($iframe_url); ?>"
-					width="100%" 
-					height="80" 
+				<iframe
+					src=""
+					data-src="<?php echo esc_url( $iframe_url ); ?>"
+					width="100%"
+					height="80"
 					frameborder="0"
 					allow="autoplay"
 					allowfullscreen>
 				</iframe>
 			</div>
 		</div>
-		
+
 		<script>
 		function wcapToggleGDrivePlayer(key) {
 			wcapStopAllPlayers(key);
@@ -338,7 +352,7 @@ class Wc_Audio_Preview_Public {
 			var iframe = player.querySelector('iframe');
 			var playIcon = document.getElementById('wcap-play-' + key);
 			var pauseIcon = document.getElementById('wcap-pause-' + key);
-			
+
 			// Close all other players
 			document.querySelectorAll('.wcap-gdrive-player').forEach(function(p) {
 				if (p.id !== 'wcap-gdrive-' + key && p.style.display !== 'none') {
@@ -346,18 +360,18 @@ class Wc_Audio_Preview_Public {
 					var otherKey = p.id.replace('wcap-gdrive-', '');
 					var otherPlayIcon = document.getElementById('wcap-play-' + otherKey);
 					var otherPauseIcon = document.getElementById('wcap-pause-' + otherKey);
-					
+
 					p.style.display = 'none';
 					p.previousElementSibling.classList.remove('playing');
 					otherIframe.src = '';
-					
+
 					if (otherPlayIcon && otherPauseIcon) {
 						otherPlayIcon.style.display = 'block';
 						otherPauseIcon.style.display = 'none';
 					}
 				}
 			});
-			
+
 			// Toggle this player
 			if (player.style.display === 'none') {
 				player.style.display = 'block';
@@ -374,26 +388,26 @@ class Wc_Audio_Preview_Public {
 			}
 		}
 		</script>
-		
+
 		<?php
 	}
 
 	/**
-	 * Render Sound Cloud player with iframe
+	 * Render Sound Cloud player with iframe.
 	 *
-	 * @param int    $key       Audio key
-	 * @param string $name      Audio name
-	 * @param string $audio_url Audio URL
+	 * @param int    $key       Audio key.
+	 * @param string $name      Audio name.
+	 * @param string $audio_url Audio URL.
 	 */
-	private function render_sound_cloud_player($key, $name, $audio_url){
+	private function render_sound_cloud_player( $key, $name, $audio_url ) {
 
 		$embed_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $audio_url );
 
 		?>
 		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
-			<button class="wcap-preview-button wcap-soundcloud-button" type="button" 
+			<button class="wcap-preview-button wcap-soundcloud-button" type="button"
 					onclick="wcapToggleSoundCloudPlayer('<?php echo esc_js( $key ); ?>')"
-					aria-label="<?php echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
 						<span class="wcap-icon-wrap">
@@ -416,10 +430,10 @@ class Wc_Audio_Preview_Public {
 				</div>
 			</button>
 			<div class="wcap-soundcloud-player" id="wcap-soundcloud-<?php echo esc_attr( $key ); ?>" style="display: none;">
-				<iframe 
-					src="<?php echo esc_url($embed_url); ?>" 
-					width="100%" 
-					height="100" 
+				<iframe
+					src="<?php echo esc_url( $embed_url ); ?>"
+					width="100%"
+					height="100"
 					frameborder="0"
 					allow="autoplay"
 					allowfullscreen>
@@ -452,295 +466,296 @@ class Wc_Audio_Preview_Public {
 
 
 		<?php
-
 	}
 
 	/**
-	 * Extract Google Drive file ID from URL
+	 * Extract Google Drive file ID from URL.
 	 *
-	 * @param string $url Google Drive URL
-	 * @return string|false File ID or false
+	 * @param string $url Google Drive URL.
+	 * @return string|false File ID or false.
 	 */
-	private function extract_google_drive_id($url) {
+	private function extract_google_drive_id( $url ) {
 		$patterns = array(
 			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
 			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
-			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i'
+			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i',
 		);
-		
-		foreach ($patterns as $pattern) {
-			if (preg_match($pattern, $url, $matches)) {
+
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $url, $matches ) ) {
 				return $matches[1];
 			}
 		}
-		
+
 		return false;
 	}
 
 	/**
-	 * Check if URL needs iframe player
+	 * Check if URL needs iframe player.
 	 *
-	 * @param string $url Audio URL
+	 * @param string $url Audio URL.
 	 * @return bool
 	 */
-	private function wcap_needs_iframe_player($url) {
-		// Currently only Google Drive needs iframe
-		// You can extend this for other services that need special handling
-		return strpos($url, 'drive.google.com') !== false || strpos($url, 'soundcloud.com') !== false;
+	private function wcap_needs_iframe_player( $url ) {
+		// Currently only Google Drive and SoundCloud need iframe.
+		return false !== strpos( $url, 'drive.google.com' ) || false !== strpos( $url, 'soundcloud.com' );
 	}
 
 	/**
-	 * Convert CDN URLs to playable format
+	 * Convert CDN URLs to playable format.
 	 *
-	 * @param string $url The original URL
-	 * @return string The playable URL
+	 * @param string $url The original URL.
+	 * @return string The playable URL.
 	 */
-	private function wcap_convert_cdn_url_for_playback($url) {
-		if (empty($url)) {
+	private function wcap_convert_cdn_url_for_playback( $url ) {
+		if ( empty( $url ) ) {
 			return $url;
 		}
-		
-		// Google Drive conversion (for non-iframe fallback)
+
+		// Google Drive conversion (for non-iframe fallback).
 		$google_drive_patterns = array(
 			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
 			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
-			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i'
+			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i',
 		);
-		
-		foreach ($google_drive_patterns as $pattern) {
-			if (preg_match($pattern, $url, $matches)) {
+
+		foreach ( $google_drive_patterns as $pattern ) {
+			if ( preg_match( $pattern, $url, $matches ) ) {
 				$file_id = $matches[1];
-				// Try direct download URL (may not work for all files)
+				// Try direct download URL (may not work for all files).
 				return 'https://drive.google.com/uc?export=download&id=' . $file_id;
 			}
 		}
-		
-		// Dropbox conversion
-		if (strpos($url, 'dropbox.com') !== false) {
-			// Convert sharing link to direct download link
-			$url = str_replace('?dl=0', '?raw=1', $url);
-			$url = str_replace('www.dropbox.com', 'dl.dropboxusercontent.com', $url);
+
+		// Dropbox conversion.
+		if ( false !== strpos( $url, 'dropbox.com' ) ) {
+			// Convert sharing link to direct download link.
+			$url = str_replace( '?dl=0', '?raw=1', $url );
+			$url = str_replace( 'www.dropbox.com', 'dl.dropboxusercontent.com', $url );
 		}
-		
-		// OneDrive conversion
-		if (strpos($url, '1drv.ms') !== false || strpos($url, 'onedrive.live.com') !== false) {
-			// OneDrive direct download format
-			$url = str_replace('embed', 'download', $url);
+
+		// OneDrive conversion.
+		if ( false !== strpos( $url, '1drv.ms' ) || false !== strpos( $url, 'onedrive.live.com' ) ) {
+			// OneDrive direct download format.
+			$url = str_replace( 'embed', 'download', $url );
 		}
-		
-		// Box.com conversion
-		if (strpos($url, 'box.com') !== false) {
-			$url = str_replace('/s/', '/shared/static/', $url);
+
+		// Box.com conversion.
+		if ( false !== strpos( $url, 'box.com' ) ) {
+			$url = str_replace( '/s/', '/shared/static/', $url );
 		}
-		
+
 		return $url;
 	}
 
 	/**
-	 * Check if URL is from a CDN service
+	 * Check if URL is from a CDN service.
 	 *
-	 * @param string $url The URL to check
-	 * @return array|false Service info or false
+	 * @param string $url The URL to check.
+	 * @return array|false Service info or false.
 	 */
-	private function wcap_is_cdn_url($url) {
-		if (empty($url)) {
+	private function wcap_is_cdn_url( $url ) {
+		if ( empty( $url ) ) {
 			return false;
 		}
-		
+
 		$services = array(
 			'google_drive' => array(
-				'name' => 'Google Drive',
+				'name'     => 'Google Drive',
 				'patterns' => array(
-					'/drive\.google\.com/i'
-				)
+					'/drive\.google\.com/i',
+				),
 			),
-			'dropbox' => array(
-				'name' => 'Dropbox',
+			'dropbox'      => array(
+				'name'     => 'Dropbox',
 				'patterns' => array(
 					'/dropbox\.com/i',
-					'/dl\.dropboxusercontent\.com/i'
-				)
+					'/dl\.dropboxusercontent\.com/i',
+				),
 			),
-			'onedrive' => array(
-				'name' => 'OneDrive',
+			'onedrive'     => array(
+				'name'     => 'OneDrive',
 				'patterns' => array(
 					'/1drv\.ms/i',
-					'/onedrive\.live\.com/i'
-				)
+					'/onedrive\.live\.com/i',
+				),
 			),
-			'box' => array(
-				'name' => 'Box',
+			'box'          => array(
+				'name'     => 'Box',
 				'patterns' => array(
-					'/box\.com/i'
-				)
+					'/box\.com/i',
+				),
 			),
-			'soundcloud' => array(
-				'name' => 'SoundCloud',
+			'soundcloud'   => array(
+				'name'     => 'SoundCloud',
 				'patterns' => array(
-					'/soundcloud\.com/i'
-				)
+					'/soundcloud\.com/i',
+				),
 			),
-			's3' => array(
-				'name' => 'Amazon S3',
+			's3'           => array(
+				'name'     => 'Amazon S3',
 				'patterns' => array(
 					'/s3\.amazonaws\.com/i',
 					'/\.s3\./i',
-					'/\.s3-/i'
-				)
+					'/\.s3-/i',
+				),
 			),
-			'cloudfront' => array(
-				'name' => 'CloudFront',
+			'cloudfront'   => array(
+				'name'     => 'CloudFront',
 				'patterns' => array(
-					'/cloudfront\.net/i'
-				)
+					'/cloudfront\.net/i',
+				),
 			),
-			'mediafire' => array(
-				'name' => 'MediaFire',
+			'mediafire'    => array(
+				'name'     => 'MediaFire',
 				'patterns' => array(
-					'/mediafire\.com/i'
-				)
-			)
+					'/mediafire\.com/i',
+				),
+			),
 		);
-		
-		foreach ($services as $service_key => $service) {
-			foreach ($service['patterns'] as $pattern) {
-				if (preg_match($pattern, $url)) {
+
+		foreach ( $services as $service_key => $service ) {
+			foreach ( $service['patterns'] as $pattern ) {
+				if ( preg_match( $pattern, $url ) ) {
 					return array(
-						'service' => $service_key,
-						'service_name' => $service['name']
+						'service'      => $service_key,
+						'service_name' => $service['name'],
 					);
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
 	/**
-	 * Get MIME type for audio file
+	 * Get MIME type for audio file.
 	 *
-	 * @param string $url The audio URL
-	 * @return string The MIME type
+	 * @param string $url The audio URL.
+	 * @return string The MIME type.
 	 */
-	private function wcap_get_audio_mime_type($url) {
-		// For CDN URLs where we can't determine extension
-		if (strpos($url, 'drive.google.com') !== false || 
-			strpos($url, 'dropbox.com') !== false ||
-			strpos($url, 'soundcloud.com') !== false ||
-			strpos($url, '1drv.ms') !== false ||
-			strpos($url, 'box.com') !== false ||
-			strpos($url, 'mediafire.com') !== false) {
-			return 'audio/mpeg'; // Default to MP3 as most compatible
+	private function wcap_get_audio_mime_type( $url ) {
+		// For CDN URLs where we can't determine extension.
+		if ( false !== strpos( $url, 'drive.google.com' ) ||
+			false !== strpos( $url, 'dropbox.com' ) ||
+			false !== strpos( $url, 'soundcloud.com' ) ||
+			false !== strpos( $url, '1drv.ms' ) ||
+			false !== strpos( $url, 'box.com' ) ||
+			false !== strpos( $url, 'mediafire.com' ) ) {
+			return 'audio/mpeg'; // Default to MP3 as most compatible.
 		}
-		
-		// Clean URL from query parameters
-		$clean_url = strtok($url, '?');
-		$extension = strtolower(pathinfo($clean_url, PATHINFO_EXTENSION));
-		
+
+		// Clean URL from query parameters.
+		$clean_url = strtok( $url, '?' );
+		$extension = strtolower( pathinfo( $clean_url, PATHINFO_EXTENSION ) );
+
 		$mime_types = array(
-			'mp3' => 'audio/mpeg',
-			'wav' => 'audio/wav',
-			'ogg' => 'audio/ogg',
-			'm4a' => 'audio/mp4',
-			'mp4' => 'audio/mp4',
-			'aac' => 'audio/aac',
+			'mp3'  => 'audio/mpeg',
+			'wav'  => 'audio/wav',
+			'ogg'  => 'audio/ogg',
+			'm4a'  => 'audio/mp4',
+			'mp4'  => 'audio/mp4',
+			'aac'  => 'audio/aac',
 			'flac' => 'audio/flac',
-			'wma' => 'audio/x-ms-wma',
+			'wma'  => 'audio/x-ms-wma',
 			'webm' => 'audio/webm',
 			'opus' => 'audio/opus',
-			'oga' => 'audio/ogg'
+			'oga'  => 'audio/ogg',
 		);
-		
-		$mime_types = apply_filters('wcap_audio_mime_types', $mime_types);
-		return isset($mime_types[$extension]) ? $mime_types[$extension] : 'audio/mpeg';
+
+		$mime_types = apply_filters( 'wcap_audio_mime_types', $mime_types );
+		return isset( $mime_types[ $extension ] ) ? $mime_types[ $extension ] : 'audio/mpeg';
 	}
 
 	/**
-	 * Get asset filename with intelligent fallback
+	 * Get asset filename with intelligent fallback.
 	 *
 	 * @since    1.6.0
-	 * @param    string $type     Asset type ('css' or 'js')
-	 * @param    string $filename Base filename without extension
-	 * @return   string|false     Full filename with path or false if not found
+	 * @param    string $type     Asset type ('css' or 'js').
+	 * @param    string $filename Base filename without extension.
+	 * @return   string|false     Full filename with path or false if not found.
 	 */
-	private function get_asset_filename($type, $filename) {
-		// Determine if we should use minified files
-		$use_minified = !(defined('SCRIPT_DEBUG') && SCRIPT_DEBUG);
-		
-		// Determine if RTL is needed (only for CSS)
-		$is_rtl = ($type === 'css') ? is_rtl() : false;
-		
-		// Build the base directory path
-		$base_dir = plugin_dir_path(__FILE__) . $type . '/';
-		$actual_type = $type;
+	private function get_asset_filename( $type, $filename ) {
+		// Determine if we should use minified files.
+		$use_minified = ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
+
+		// Determine if RTL is needed (only for CSS).
+		$is_rtl = ( 'css' === $type ) ? is_rtl() : false;
+
+		// Build the base directory path.
+		$base_dir        = plugin_dir_path( __FILE__ ) . $type . '/';
+		$actual_type     = $type;
 		$actual_base_dir = $base_dir;
-		
-		// Array of file variants to try in order of preference
+
+		// Array of file variants to try in order of preference.
 		$variants = array();
-		
-		if ($type === 'css') {
-			if ($is_rtl && $use_minified) {
-				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified
-				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified
-			} elseif ($is_rtl && !$use_minified) {
-				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified
-			} elseif (!$is_rtl && $use_minified) {
-				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified
-				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified
+
+		if ( 'css' === $type ) {
+			if ( $is_rtl && $use_minified ) {
+				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified.
+				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified.
+			} elseif ( $is_rtl && ! $use_minified ) {
+				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified.
+			} elseif ( ! $is_rtl && $use_minified ) {
+				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified.
+				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified.
 			} else {
-				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified
+				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified.
 			}
-		} else { // JavaScript
-			if ($use_minified) {
-				$variants[] = $filename . '.min.js';           // 1st preference: minified
-				$variants[] = $filename . '.js';               // 2nd preference: non-minified
-			} else {
-				$variants[] = $filename . '.js';               // 1st preference: non-minified
-			}
+		} elseif ( $use_minified ) {
+				$variants[] = $filename . '.min.js';           // 1st preference: minified.
+				$variants[] = $filename . '.js';               // 2nd preference: non-minified.
+		} else {
+			$variants[] = $filename . '.js';               // 1st preference: non-minified.
 		}
 
-		if ($type === 'css' &&  $is_rtl ) {
-			$actual_type = 'css-rtl';
-			$actual_base_dir = plugin_dir_path(__FILE__) . 'css-rtl/';
+		if ( 'css' === $type && $is_rtl ) {
+			$actual_type     = 'css-rtl';
+			$actual_base_dir = plugin_dir_path( __FILE__ ) . 'css-rtl/';
 		}
-		
-		// Check each variant in order
-		foreach ($variants as $variant) {
-			if (file_exists($actual_base_dir . $variant)) {
-				// Log which file is being used in debug mode
-				if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
-					error_log(sprintf(
-						'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
-						$actual_type,
-						$variant,
-						$is_rtl ? 'yes' : 'no',
-						!$use_minified ? 'yes' : 'no'
-					));
+
+		// Check each variant in order.
+		foreach ( $variants as $variant ) {
+			if ( file_exists( $actual_base_dir . $variant ) ) {
+				// Log which file is being used in debug mode.
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+					error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+						sprintf(
+							'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
+							$actual_type,
+							$variant,
+							$is_rtl ? 'yes' : 'no',
+							! $use_minified ? 'yes' : 'no'
+						)
+					);
 				}
-				
+
 				return $actual_type . '/' . $variant;
 			}
 		}
-		
-		// No valid file found - log error
-		if (defined('WP_DEBUG') && WP_DEBUG) {
-			error_log(sprintf(
-				'WCAP Asset Error: No %s file found for %s (tried: %s)',
-				$actual_type,
-				$filename,
-				implode(', ', $variants)
-			));
+
+		// No valid file found - log error.
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				sprintf(
+					'WCAP Asset Error: No %s file found for %s (tried: %s)',
+					$actual_type,
+					$filename,
+					implode( ', ', $variants )
+				)
+			);
 		}
-		
+
 		return false;
 	}
-
 }
 
-// Add inline styles for Google Drive player
-add_action('wp_head', function() {
-	if (is_product()) {
-		?>
+// Add inline styles for Google Drive player.
+add_action(
+	'wp_head',
+	function () {
+		if ( is_product() ) {
+			?>
 		<style>
 		/* Google Drive Player Styles */
 		.wcap-gdrive-player {
@@ -749,47 +764,48 @@ add_action('wp_head', function() {
 			border-radius: 0 0 6px 6px;
 			margin-top: -1px;
 		}
-		
+
 		.wcap-gdrive-player iframe {
 			border-radius: 4px;
 			background: white;
 			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		}
-		
+
 		.wcap-gdrive-item.playing .wcap-preview-button {
 			border-radius: 6px 6px 0 0;
 			background: rgba(0, 0, 0, 0.04);
 		}
-		
+
 		.wcap-gdrive-button {
 			user-select: none;
 			-webkit-user-select: none;
 			-moz-user-select: none;
 			-ms-user-select: none;
 		}
-		
+
 		/* Fix for Google Drive badge overlap */
 		.wcap-gdrive-item .wcap-button-content {
 			position: relative;
 			width: 100%;
 		}
-		
+
 		.wcap-gdrive-item .wcap-play-icon,
 		.wcap-gdrive-item .wcap-pause-icon {
 			position: relative;
 			z-index: 2;
 		}
-		
+
 		.wcap-gdrive-item .wcap-preview-info {
 			margin-left: 0;
 			z-index: 1;
 		}
-		
+
 		/* Ensure proper spacing */
 		.wcap-gdrive-item .wcap-preview-badge {
 			margin-left: auto;
 		}
 		</style>
-		<?php
+			<?php
+		}
 	}
-});
+);

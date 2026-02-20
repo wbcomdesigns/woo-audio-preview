@@ -1,3 +1,15 @@
+<?php
+/**
+ * Wbcom license page template.
+ *
+ * @package Wc_Audio_Preview
+ */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
 <div class="wrap">
 	<div class="wbcom-bb-plugins-offer-wrapper">
 		<div id="wb_admin_logo">
@@ -7,7 +19,12 @@
 		<div class="wbcom_admin_header-wrapper">
 			<div id="wb_admin_plugin_name">
 				<?php esc_html_e( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>
-				<span><?php printf( __( 'Version %s', 'wc-audio-preview' ), WCAP_TEXT_VERSION );//phpcs:ignore ?></span>
+				<span>
+			<?php
+			/* translators: %s: Plugin version number. */
+			printf( esc_html__( 'Version %s', 'wc-audio-preview' ), esc_html( WCAP_TEXT_VERSION ) );
+			?>
+			</span>
 			</div>
 			<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
 		</div>

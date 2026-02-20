@@ -9,6 +9,11 @@
  * @subpackage Wc_Audio_Preview/includes
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register all actions and filters for the plugin.
  *
@@ -49,7 +54,6 @@ class Wc_Audio_Preview_Loader {
 
 		$this->actions = array();
 		$this->filters = array();
-
 	}
 
 	/**
@@ -105,7 +109,6 @@ class Wc_Audio_Preview_Loader {
 		);
 
 		return $hooks;
-
 	}
 
 	/**
@@ -122,7 +125,5 @@ class Wc_Audio_Preview_Loader {
 		foreach ( $this->actions as $hook ) {
 			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
-
 	}
-
 }

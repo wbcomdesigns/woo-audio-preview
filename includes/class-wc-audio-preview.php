@@ -12,6 +12,11 @@
  * @subpackage Wc_Audio_Preview/includes
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The core plugin class.
  *
@@ -82,7 +87,7 @@ class Wc_Audio_Preview {
 	 * Include the following files that make up the plugin:
 	 *
 	 * - Wc_Audio_Preview_Loader. Orchestrates the hooks of the plugin.
-	 * - Wc_Audio_Preview_i18n. Defines internationalization functionality.
+	 * - Wc_Audio_Preview_I18n. Defines internationalization functionality.
 	 * - Wc_Audio_Preview_Admin. Defines all hooks for the admin area.
 	 * - Wc_Audio_Preview_Public. Defines all hooks for the public side of the site.
 	 *
@@ -98,31 +103,31 @@ class Wc_Audio_Preview {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-audio-preview-loader.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wc-audio-preview-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-audio-preview-i18n.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wc-audio-preview-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wc-audio-preview-admin.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wc-audio-preview-admin.php';
 
 		/**
 		 * The class responsible for admin review.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-admin-review.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-review.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wc-audio-preview-public.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-wc-audio-preview-public.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/wbcom/wbcom-admin-settings.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/wbcom/wbcom-admin-settings.php';
 
 		$this->loader = new Wc_Audio_Preview_Loader();
 	}
@@ -130,7 +135,7 @@ class Wc_Audio_Preview {
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Wc_Audio_Preview_i18n class in order to set the domain and to register the hook
+	 * Uses the Wc_Audio_Preview_I18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -138,7 +143,7 @@ class Wc_Audio_Preview {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Wc_Audio_Preview_i18n();
+		$plugin_i18n = new Wc_Audio_Preview_I18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 	}
@@ -163,7 +168,7 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'wp_ajax_nopriv_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'wcap_init_plugin_settings' );
 		$wcap_free_activated_plugins = get_option( 'active_plugins' );
-		if ( ! in_array( 'woo-audio-preview-pro/woo-audio-preview-pro.php', $wcap_free_activated_plugins ) ) {
+		if ( ! in_array( 'woo-audio-preview-pro/woo-audio-preview-pro.php', $wcap_free_activated_plugins, true ) ) {
 			$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
 		}
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );
@@ -225,5 +230,4 @@ class Wc_Audio_Preview {
 	public function get_version() {
 		return $this->version;
 	}
-
 }

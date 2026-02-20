@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Class to add top header pages of wbcom plugin and additional features.
  *
@@ -45,7 +45,6 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 				echo esc_html( $display_extention );
 				die;
 			}
-
 		}
 
 		/**
@@ -174,10 +173,10 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 		 */
 		public function wbcom_enqueue_admin_scripts() {
 			if ( ! wp_style_is( 'font-awesome', 'enqueued' ) ) {
-				wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' );
+				wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
 			}
 			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$js_extension = '.js';
+				$js_extension = '.js';
 			} else {
 				$js_extension = '.min.js';
 			}
@@ -185,7 +184,7 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 
 				wp_register_script(
 					'wbcom_admin_setting_js',
-					WCAP_PLUGIN_URI . 'admin/wbcom/assets/js/wbcom-admin-setting'.$js_extension,
+					WCAP_PLUGIN_URI . 'admin/wbcom/assets/js/wbcom-admin-setting' . $js_extension,
 					array( 'jquery' ),
 					time(),
 					false
@@ -211,11 +210,11 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 			} else {
 				$css_extension = '.min.css';
 			}
-			if(is_rtl()){
-			$css_extension = '.css';
+			if ( is_rtl() ) {
+				$css_extension = '.css';
 			}
 			if ( ! wp_style_is( 'wbcom-admin-setting-css', 'enqueued' ) ) {
-				wp_enqueue_style( 'wbcom-admin-setting-css', WCAP_PLUGIN_URI . 'admin/wbcom/assets/css'.$rtl_css.'/wbcom-admin-setting'.$css_extension );
+				wp_enqueue_style( 'wbcom-admin-setting-css', WCAP_PLUGIN_URI . 'admin/wbcom/assets/css' . $rtl_css . '/wbcom-admin-setting' . $css_extension, array(), WCAP_TEXT_VERSION );
 			}
 		}
 
@@ -289,8 +288,11 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 		 * @access public
 		 */
 		public function wbcom_admin_setting_header_html() {
-			$page          = filter_input( INPUT_GET, 'page' ) ? filter_input( INPUT_GET, 'page' ) : 'wbcom-themes-page';
-			$plugin_active = $theme_active = $support_active = $settings_active = '';
+			$page            = filter_input( INPUT_GET, 'page' ) ? filter_input( INPUT_GET, 'page' ) : 'wbcom-themes-page';
+			$plugin_active   = '';
+			$theme_active    = '';
+			$support_active  = '';
+			$settings_active = '';
 			switch ( $page ) {
 				case 'wbcom-plugins-page':
 					$plugin_active = 'is_active';
@@ -332,7 +334,6 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 			</div>
 			<?php
 		}
-
 	}
 
 	/**
@@ -340,7 +341,7 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 	 *
 	 * @return void
 	 */
-	function instantiate_wbcom_plugin_manager() {
+	function instantiate_wbcom_plugin_manager() { // phpcs:ignore Universal.Files.SeparateFunctionsFromOO.Mixed
 		new Wbcom_Admin_Settings();
 	}
 

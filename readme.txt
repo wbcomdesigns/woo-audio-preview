@@ -3,13 +3,13 @@ Contributors: wbcomdesigns, vapvarun
 Donate link: https://wbcomdesigns.com/
 Tags: woocommerce, audio, preview, music, soundcloud
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Add professional audio previews to your WooCommerce products. Let customers listen before they buy with support for all major audio formats and CDN services.
+Add audio previews to WooCommerce products. Let customers listen before they buy with major audio formats and CDN support.
 
 == Description ==
 
@@ -164,6 +164,11 @@ Free support is available through the WordPress.org support forum. Pro users rec
 5. Welcome screen with setup instructions - guided tour for new users
 
 == Changelog ==
+
+= 1.5.1 =
+* Fixed: WPCS compliance
+* Fixed: Plugin Check improvements
+* Tested up to: WordPress 6.9
 
 = 1.5.0 =
 * **Major Update: Enhanced CDN Support**

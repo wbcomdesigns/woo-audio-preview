@@ -12,8 +12,8 @@
  * @wordpress-plugin
  * Plugin Name:       Audio Preview for WooCommerce
  * Plugin URI:        https://wbcomdesigns.com
- * Description:       Audio Preview for WooCommerce lets you showcase audio tracks in a secure sample mode, allowing users to listen to a short preview on the product page while preventing unauthorized downloads of the original audio.
- * Version:           1.5.0
+ * Description:       Add audio previews to WooCommerce products. Let customers listen before they buy with major audio formats and CDN support.
+ * Version:           1.5.1
  * Author:            Wbcom Designs <admin@wbcomdesigns.com>
  * Author URI:        http://wbcomdesigns.com
  * License:           GPL-2.0+
@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 if ( ! defined( 'WCAP_TEXT_VERSION' ) ) {
-	define( 'WCAP_TEXT_VERSION', '1.5.0' );
+	define( 'WCAP_TEXT_VERSION', '1.5.1' );
 }
 
 if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
@@ -76,15 +76,15 @@ add_action( 'plugins_loaded', 'wcap_plugin_init' );
  * this plugin requires WooCommerce to be installed and active
  */
 function wcap_check_require_plugins() {
-	if (!class_exists('WooCommerce')) {
-        add_action('admin_notices', 'wcap_plugin_admin_notice');
-        deactivate_plugins(plugin_basename(__FILE__));
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
+		deactivate_plugins( plugin_basename( __FILE__ ) );
         if (isset($_GET['activate'])) { //phpcs:ignore
-            unset($_GET['activate']);
-        }
-        return false;
-    }
-    return true;
+			unset( $_GET['activate'] );
+		}
+		return false;
+	}
+	return true;
 }
 add_action( 'admin_init', 'wcap_check_require_plugins' );
 /**
@@ -113,14 +113,14 @@ add_action( 'activated_plugin', 'wcap_activation_redirect_settings' );
  */
 function wcap_activation_redirect_settings( $plugin ) {
 	$plugins_all = get_option( 'active_plugins' );
-	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php', $plugins_all ) ) {
-		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) {//phpcs:ignore
+	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php', $plugins_all, true ) ) {
+		if ( isset( $_REQUEST['action'] ) && 'activate' === $_REQUEST['action'] && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] === $plugin ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
 			exit;
 		}
 	}
-	if ( $plugin == $_REQUEST['plugin'] && class_exists( 'Buddypress' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action']  == 'activate-plugin' && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] == $plugin) { //phpcs:ignore		
+	if ( isset( $_REQUEST['plugin'] ) && $plugin === $_REQUEST['plugin'] && class_exists( 'Buddypress' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_REQUEST['action'] ) && 'activate-plugin' === $_REQUEST['action'] && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] === $plugin ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			set_transient( '_woo_audio_preview_is_new_install', true, 30 );
 		}
 	}

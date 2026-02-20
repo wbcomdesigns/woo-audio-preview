@@ -12,6 +12,11 @@
  * @subpackage Wc_Audio_Preview/includes
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Define the internationalization functionality.
  *
@@ -23,7 +28,7 @@
  * @subpackage Wc_Audio_Preview/includes
  * @author     Wbcom Designs <admin@wbcomdesigns.com>
  */
-class Wc_Audio_Preview_i18n {
+class Wc_Audio_Preview_I18n {
 
 
 	/**
@@ -32,15 +37,7 @@ class Wc_Audio_Preview_i18n {
 	 * @since    1.0.0
 	 */
 	public function load_plugin_textdomain() {
-
-		load_plugin_textdomain(
-			'wc-audio-preview',
-			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
-		);
-
+		// Since WordPress 4.6, translations are automatically loaded for plugins hosted on WordPress.org.
+		// No need to manually call load_plugin_textdomain().
 	}
-
-
-
 }

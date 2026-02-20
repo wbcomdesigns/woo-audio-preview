@@ -9,6 +9,11 @@
  * @subpackage Wc_Audio_Preview/admin
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Enhanced admin-specific functionality of the plugin.
  *
@@ -38,7 +43,7 @@ class Wc_Audio_Preview_Admin {
 	 * @var      string    $version    The current version of this plugin.
 	 */
 	private $version;
-	
+
 	/**
 	 * Plugin_settings_tabs
 	 *
@@ -76,7 +81,7 @@ class Wc_Audio_Preview_Admin {
 		'audio/aac',
 		'audio/flac',
 		'audio/x-ms-wma',
-		'audio/webm'
+		'audio/webm',
 	);
 
 	/**
@@ -87,33 +92,33 @@ class Wc_Audio_Preview_Admin {
 	 * @var      array    $cdn_patterns    Patterns for CDN URLs.
 	 */
 	private $cdn_patterns = array(
-		'soundcloud' => array(
+		'soundcloud'   => array(
 			'/soundcloud\.com\/[a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+/i',
-			'/api\.soundcloud\.com\/tracks\/[0-9]+/i'
+			'/api\.soundcloud\.com\/tracks\/[0-9]+/i',
 		),
-		'spotify' => array(
+		'spotify'      => array(
 			'/open\.spotify\.com\/track\/[a-zA-Z0-9]+/i',
-			'/spotify:track:[a-zA-Z0-9]+/i'
+			'/spotify:track:[a-zA-Z0-9]+/i',
 		),
-		'amazon_s3' => array(
+		'amazon_s3'    => array(
 			'/s3\.amazonaws\.com\/[^\/]+\/.+\.(mp3|wav|ogg|m4a)/i',
-			'/[a-zA-Z0-9-]+\.s3\.[a-zA-Z0-9-]+\.amazonaws\.com\/.+\.(mp3|wav|ogg|m4a)/i'
+			'/[a-zA-Z0-9-]+\.s3\.[a-zA-Z0-9-]+\.amazonaws\.com\/.+\.(mp3|wav|ogg|m4a)/i',
 		),
-		'cloudfront' => array(
-			'/[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i'
+		'cloudfront'   => array(
+			'/[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i',
 		),
 		'google_drive' => array(
-			// Standard sharing link pattern (with or without /view and query params)
+			// Standard sharing link pattern (with or without /view and query params).
 			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
-			// Direct download pattern
+			// Direct download pattern.
 			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
-			// Open link pattern
-			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i'
+			// Open link pattern.
+			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i',
 		),
-		'dropbox' => array(
+		'dropbox'      => array(
 			'/dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i',
-			'/dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i'
-		)
+			'/dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i',
+		),
 	);
 
 	/**
@@ -149,20 +154,20 @@ class Wc_Audio_Preview_Admin {
 		 */
 		$screen = get_current_screen();
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {//phpcs:ignore
-		
-			 $css_file = $this->get_asset_filename('css', 'wc-audio-preview-admin');
-			if ($css_file) {
+
+			$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-admin' );
+			if ( $css_file ) {
 				wp_enqueue_style(
-					$this->plugin_name, 
-					plugin_dir_url(__FILE__) . $css_file, 
-					array(), 
-					$this->version, 
+					$this->plugin_name,
+					plugin_dir_url( __FILE__ ) . $css_file,
+					array(),
+					$this->version,
 					'all'
 				);
-				
-				// Add enhanced styles for better UI
-				wp_add_inline_style($this->plugin_name, $this->get_enhanced_styles());
-       		}
+
+				// Add enhanced styles for better UI.
+				wp_add_inline_style( $this->plugin_name, $this->get_enhanced_styles() );
+			}
 		}
 	}
 
@@ -185,37 +190,37 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
-		
+
 		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
-			
-			// Enqueue media uploader
+
+			// Enqueue media uploader.
 			wp_enqueue_media();
-			$js_file = $this->get_asset_filename('js', 'wc-audio-preview-admin');
-			if ($js_file) {
+			$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-admin' );
+			if ( $js_file ) {
 				wp_enqueue_script(
-					$this->plugin_name, 
-					plugin_dir_url(__FILE__) . $js_file, 
-					array('jquery', 'wp-i18n', 'media-upload'), 
-					$this->version, 
+					$this->plugin_name,
+					plugin_dir_url( __FILE__ ) . $js_file,
+					array( 'jquery', 'wp-i18n', 'media-upload' ),
+					$this->version,
 					false
 				);
-				
-				// Enhanced localize script with CDN support
+
+				// Enhanced localize script with CDN support.
 				wp_localize_script(
-				$this->plugin_name,
-				'wcap_ajax_object',
+					$this->plugin_name,
+					'wcap_ajax_object',
 					array(
-						'ajax_url' => admin_url( 'admin-ajax.php' ),
-						'nonce'    => wp_create_nonce( 'ajax-nonce' ),
-						'allowedExtensions' => apply_filters('wcap_allowed_audio_extensions', $this->allowed_file_types),
-						'cdn_patterns' => $this->get_cdn_patterns_for_js(),
-						'error_messages' => array(
+						'ajax_url'           => admin_url( 'admin-ajax.php' ),
+						'nonce'              => wp_create_nonce( 'ajax-nonce' ),
+						'allowedExtensions'  => apply_filters( 'wcap_allowed_audio_extensions', $this->allowed_file_types ),
+						'cdn_patterns'       => $this->get_cdn_patterns_for_js(),
+						'error_messages'     => array(
 							'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'wc-audio-preview' ),
-							'file_required' => __( 'Please select a file or enter a file URL.', 'wc-audio-preview' ),
-							'name_required' => __( 'Audio name is required.', 'wc-audio-preview' ),
-							'url_invalid' => __( 'Please enter a valid URL.', 'wc-audio-preview' ),
-							'file_too_large' => __( 'File size is too large. Maximum allowed size is 50MB.', 'wc-audio-preview' ),
-							'cdn_detected' => __( 'CDN/streaming service link detected! This will work great for preview.', 'wc-audio-preview' ),
+							'file_required'     => __( 'Please select a file or enter a file URL.', 'wc-audio-preview' ),
+							'name_required'     => __( 'Audio name is required.', 'wc-audio-preview' ),
+							'url_invalid'       => __( 'Please enter a valid URL.', 'wc-audio-preview' ),
+							'file_too_large'    => __( 'File size is too large. Maximum allowed size is 50MB.', 'wc-audio-preview' ),
+							'cdn_detected'      => __( 'CDN/streaming service link detected! This will work great for preview.', 'wc-audio-preview' ),
 						),
 						'supported_services' => $this->get_supported_services_info(),
 					)
@@ -231,7 +236,7 @@ class Wc_Audio_Preview_Admin {
 	 * @return   array    Patterns for JS.
 	 */
 	private function get_cdn_patterns_for_js() {
-		// Return empty array since we're using hardcoded patterns in JS
+		// Return empty array since we're using hardcoded patterns in JS.
 		return array();
 	}
 
@@ -243,12 +248,12 @@ class Wc_Audio_Preview_Admin {
 	 */
 	private function get_supported_services_info() {
 		return array(
-			'soundcloud' => 'SoundCloud',
-			'spotify' => 'Spotify',
-			'amazon_s3' => 'Amazon S3',
-			'cloudfront' => 'CloudFront',
+			'soundcloud'   => 'SoundCloud',
+			'spotify'      => 'Spotify',
+			'amazon_s3'    => 'Amazon S3',
+			'cloudfront'   => 'CloudFront',
 			'google_drive' => 'Google Drive',
-			'dropbox' => 'Dropbox'
+			'dropbox'      => 'Dropbox',
 		);
 	}
 
@@ -258,14 +263,14 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_hide_all_admin_notices_from_setting_page() {
-		
+
 		if (isset($_GET['page']) && in_array($_GET['page'], array('wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings'), true)) { //phpcs:ignore
-        
-			// Remove non-critical notices only
-			remove_action('admin_notices', 'update_nag', 3);
+
+			// Remove non-critical notices only.
+			remove_action( 'admin_notices', 'update_nag', 3 );
 			remove_all_actions( 'admin_notices' );
 			remove_all_actions( 'all_admin_notices' );
-			
+
 		}
 	}
 
@@ -290,7 +295,12 @@ class Wc_Audio_Preview_Admin {
 				<div class="wbcom_admin_header-wrapper">
 					<div id="wb_admin_plugin_name">
 						<?php esc_html_e( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>
-						<span><?php printf( __( 'Version %s', 'wc-audio-preview' ), WCAP_TEXT_VERSION );//phpcs:ignore ?></span>
+						<span>
+					<?php
+					/* translators: %s: Plugin version number. */
+					printf( esc_html__( 'Version %s', 'wc-audio-preview' ), esc_html( WCAP_TEXT_VERSION ) );
+					?>
+					</span>
 					</div>
 					<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
 				</div>
@@ -317,16 +327,27 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_init_plugin_settings() {
 		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'wc-audio-preview' );
-		register_setting( 'woo_audio_preview_admin_welcome_options', 'woo_audio_preview_admin_welcome_options' );
+		register_setting(
+			'woo_audio_preview_admin_welcome_options',
+			'woo_audio_preview_admin_welcome_options',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
 		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'wcap_admin_welcome_content' ), 'woo-audio-preview-welcome' );
 
 		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'wc-audio-preview' );
 		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'wcap_general_pro' ), 'woo-audio-preview-pro' );
 
 		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'wc-audio-preview' );
-		register_setting( 'woo_audio_preview_general_options', 'woo_audio_preview_general_options' );
+		register_setting(
+			'woo_audio_preview_general_options',
+			'woo_audio_preview_general_options',
+			array(
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
 		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'wcap_general_options_content' ), 'woo-audio-preview-faq' );
-
 	}
 
 	/**
@@ -334,7 +355,7 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_plugin_settings_tabs() {
 		$current_tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
-		// xprofile setup tab.
+		// Plugin settings tabs.
 		echo '<div class="wbcom-tabs-section"><div class="nav-tab-wrapper"><div class="wb-responsive-menu"><span>' . esc_html( 'Menu' ) . '</span><input class="wb-toggle-btn" type="checkbox" id="wb-toggle-btn"><label class="wb-toggle-icon" for="wb-toggle-btn"><span class="wb-icon-bars"></span></label></div><ul>';
 		foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
 			$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
@@ -349,7 +370,7 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_admin_welcome_content() {
-		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-welcome-page.php';
+		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-welcome-page.php';
 	}
 
 	/**
@@ -358,7 +379,7 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_general_options_content() {
-		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-faq.php';
+		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-faq.php';
 	}
 
 	/**
@@ -367,7 +388,7 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_general_pro() {
-		include plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/woo-audio-preview-general-pro.php';
+		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-general-pro.php';
 	}
 
 	/**
@@ -395,11 +416,12 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Register enhanced meta box
+	 * Register enhanced meta box.
 	 */
 	public function wcap_register_meta_boxes() {
 		global $post;
 		$label_text = sprintf(
+			/* translators: %s: Supported audio format information. */
 			__( 'Audio Preview Items %s', 'wc-audio-preview' ),
 			'<span class="wcap-required-span">' . __( '(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)', 'wc-audio-preview' ) . '</span>'
 		);
@@ -410,7 +432,6 @@ class Wc_Audio_Preview_Admin {
 			array( $this, 'wcap_display_callback' ),
 			'product'
 		);
-
 	}
 
 	/**
@@ -438,17 +459,20 @@ class Wc_Audio_Preview_Admin {
 			</div>
 			
 			<div class="wcap-fixed-audio-fields">
-				<?php 
-				// Always show exactly 3 fields
-				for ( $i = 0; $i < 3; $i++ ) : 
-					$audio_name = isset( $wcap_audio['wcap_audio_names'][$i] ) ? $wcap_audio['wcap_audio_names'][$i] : '';
-					$audio_url = isset( $wcap_audio['wcap_audio_urls'][$i] ) ? $wcap_audio['wcap_audio_urls'][$i] : '';
+				<?php
+				// Always show exactly 3 fields.
+				for ( $i = 0; $i < 3; $i++ ) :
+					$audio_name   = isset( $wcap_audio['wcap_audio_names'][ $i ] ) ? $wcap_audio['wcap_audio_names'][ $i ] : '';
+					$audio_url    = isset( $wcap_audio['wcap_audio_urls'][ $i ] ) ? $wcap_audio['wcap_audio_urls'][ $i ] : '';
 					$field_number = $i + 1;
-				?>
+					?>
 					<div class="wcap-audio-field-group">
 						<h4 class="wcap-field-title">
-							<?php echo esc_html( sprintf( __( 'Audio Preview %d', 'wc-audio-preview' ), $field_number ) ); ?>
-							<?php if ( $i === 0 ) : ?>
+							<?php
+							/* translators: %d: Audio preview field number. */
+							echo esc_html( sprintf( __( 'Audio Preview %d', 'wc-audio-preview' ), $field_number ) );
+							?>
+							<?php if ( 0 === $i ) : ?>
 								<span class="wcap-required"><?php esc_html_e( '(Primary)', 'wc-audio-preview' ); ?></span>
 							<?php else : ?>
 								<span class="wcap-optional"><?php esc_html_e( '(Optional)', 'wc-audio-preview' ); ?></span>
@@ -464,7 +488,12 @@ class Wc_Audio_Preview_Admin {
 								class="wcap-audio-name widefat" 
 								name="wcap_audio[wcap_audio_names][]" 
 								value="<?php echo esc_attr( $audio_name ); ?>" 
-								placeholder="<?php echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'wc-audio-preview' ), $field_number ) ); ?>" />
+								placeholder="
+								<?php
+								/* translators: %d: Track number. */
+								echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'wc-audio-preview' ), $field_number ) );
+								?>
+							" />
 						</div>
 						
 						<div class="wcap-field-row">
@@ -492,15 +521,17 @@ class Wc_Audio_Preview_Admin {
 								<?php endif; ?>
 							</div>
 							
-							<?php 
-							// Show CDN indicator if URL is from a CDN
+							<?php
+							// Show CDN indicator if URL is from a CDN.
 							if ( ! empty( $audio_url ) ) {
 								$cdn_info = $this->is_cdn_url( $audio_url );
-								if ( $cdn_info ) : ?>
+								if ( $cdn_info ) :
+									?>
 									<div class="wcap-service-indicator">
 										🔗 <?php echo esc_html( ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) ) ); ?> link detected
 									</div>
-								<?php endif;
+									<?php
+								endif;
 							}
 							?>
 						</div>
@@ -511,11 +542,12 @@ class Wc_Audio_Preview_Admin {
 			<div class="wcap-pro-notice">
 				<p>
 					<strong><?php esc_html_e( '💎 Need more than 3 audio previews?', 'wc-audio-preview' ); ?></strong><br>
-					<?php 
-					printf( 
+					<?php
+					printf(
+						/* translators: %s: Pro version link. */
 						esc_html__( 'Upgrade to %s for unlimited audio previews and dynamic add/remove functionality.', 'wc-audio-preview' ),
 						'<a href="https://wbcomdesigns.com/downloads/woo-audio-preview-pro/" target="_blank">' . esc_html__( 'Pro Version', 'wc-audio-preview' ) . '</a>'
-					); 
+					);
 					?>
 				</p>
 			</div>
@@ -524,7 +556,7 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Enhanced save meta box for fixed 3 fields
+	 * Enhanced save meta box for fixed 3 fields.
 	 *
 	 * @param int $post_id Post ID.
 	 */
@@ -555,9 +587,9 @@ class Wc_Audio_Preview_Admin {
 
 		if ( isset( $_POST['post_type'] ) && 'product' === $_POST['post_type'] ) {
 			$processed_audio = array(
-				'wcap_audio_names' => array(),
-				'wcap_audio_urls' => array(),
-				'wcap_audio_source' => array()
+				'wcap_audio_names'  => array(),
+				'wcap_audio_urls'   => array(),
+				'wcap_audio_source' => array(),
 			);
 
 			$has_valid_audio = false;
@@ -566,29 +598,29 @@ class Wc_Audio_Preview_Admin {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized below.
 				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] );
 
-				// Process exactly 3 fields
+				// Process exactly 3 fields.
 				for ( $i = 0; $i < 3; $i++ ) {
-					$audio_name = isset( $wcap_audio_raw['wcap_audio_names'][$i] ) ? 
-						sanitize_text_field( $wcap_audio_raw['wcap_audio_names'][$i] ) : '';
-					$audio_url = isset( $wcap_audio_raw['wcap_audio_urls'][$i] ) ? 
-						esc_url_raw( $wcap_audio_raw['wcap_audio_urls'][$i] ) : '';
+					$audio_name = isset( $wcap_audio_raw['wcap_audio_names'][ $i ] ) ?
+						sanitize_text_field( $wcap_audio_raw['wcap_audio_names'][ $i ] ) : '';
+					$audio_url  = isset( $wcap_audio_raw['wcap_audio_urls'][ $i ] ) ?
+						esc_url_raw( $wcap_audio_raw['wcap_audio_urls'][ $i ] ) : '';
 
-					// Only process if both name and URL are provided
+					// Only process if both name and URL are provided.
 					if ( ! empty( $audio_name ) && ! empty( $audio_url ) ) {
-						// Validate URL
+						// Validate URL.
 						$validation = $this->validate_audio_url( $audio_url );
-						
+
 						if ( $validation['success'] ) {
-							$processed_audio['wcap_audio_names'][] = $audio_name;
-							$processed_audio['wcap_audio_urls'][] = $audio_url;
+							$processed_audio['wcap_audio_names'][]  = $audio_name;
+							$processed_audio['wcap_audio_urls'][]   = $audio_url;
 							$processed_audio['wcap_audio_source'][] = $validation['source'];
-							$has_valid_audio = true;
+							$has_valid_audio                        = true;
 						}
 					}
 				}
 			}
 
-			// Save or delete meta
+			// Save or delete meta.
 			if ( $has_valid_audio ) {
 				update_post_meta( $post_id, 'wcap_audio', $processed_audio );
 			} else {
@@ -597,7 +629,7 @@ class Wc_Audio_Preview_Admin {
 		}
 	}
 	/**
-	 * Check if URL is from a CDN or streaming service
+	 * Check if URL is from a CDN or streaming service.
 	 *
 	 * @since    1.5.0
 	 * @param    string $url The URL to check.
@@ -612,17 +644,17 @@ class Wc_Audio_Preview_Admin {
 			foreach ( $patterns as $pattern ) {
 				if ( preg_match( $pattern, $url, $matches ) ) {
 					$result = array(
-						'service' => $service,
-						'id' => isset( $matches[1] ) ? $matches[1] : '',
-						'is_cdn' => true,
-						'original_url' => $url
+						'service'      => $service,
+						'id'           => isset( $matches[1] ) ? $matches[1] : '',
+						'is_cdn'       => true,
+						'original_url' => $url,
 					);
-					
-					// Convert Google Drive URLs to playable format
-					if ( $service === 'google_drive' && ! empty( $matches[1] ) ) {
+
+					// Convert Google Drive URLs to playable format.
+					if ( 'google_drive' === $service && ! empty( $matches[1] ) ) {
 						$result['playable_url'] = $this->convert_google_drive_url( $url, $matches[1] );
 					}
-					
+
 					return $result;
 				}
 			}
@@ -631,7 +663,7 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Convert Google Drive sharing URL to direct download URL
+	 * Convert Google Drive sharing URL to direct download URL.
 	 *
 	 * @since    1.5.0
 	 * @param    string $url      Google Drive URL.
@@ -639,13 +671,13 @@ class Wc_Audio_Preview_Admin {
 	 * @return   string           Direct download URL.
 	 */
 	private function convert_google_drive_url( $url, $file_id ) {
-		// Convert to direct download format
-		// Note: This requires the file to be publicly accessible
+		// Convert to direct download format.
+		// Note: This requires the file to be publicly accessible.
 		return 'https://drive.google.com/uc?export=download&id=' . $file_id;
 	}
 
 	/**
-	 * Validate audio URL
+	 * Validate audio URL.
 	 *
 	 * @since    1.5.0
 	 * @param    string $url Audio URL to validate.
@@ -655,8 +687,8 @@ class Wc_Audio_Preview_Admin {
 		$result = array(
 			'success' => false,
 			'message' => '',
-			'source' => 'direct',
-			'service' => ''
+			'source'  => 'direct',
+			'service' => '',
 		);
 
 		if ( empty( $url ) ) {
@@ -669,33 +701,35 @@ class Wc_Audio_Preview_Admin {
 			return $result;
 		}
 
-		// Check if it's a CDN URL first (before checking file extensions)
+		// Check if it's a CDN URL first (before checking file extensions).
 		$cdn_info = $this->is_cdn_url( $url );
 		if ( $cdn_info ) {
 			$result['success'] = true;
-			$result['source'] = 'cdn';
+			$result['source']  = 'cdn';
 			$result['service'] = $cdn_info['service'];
-			$result['message'] = sprintf( 
+			$result['message'] = sprintf(
+				/* translators: %s: CDN service name. */
 				__( 'CDN %s link detected and validated.', 'wc-audio-preview' ),
 				ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) )
 			);
 			return $result;
 		}
 
-		// For non-CDN URLs, check file extension
+		// For non-CDN URLs, check file extension.
 		$file_extension = '';
-		
-		// Extract extension, handling query parameters
-		if ( strpos( $url, '?' ) !== false ) {
-			$url_parts = explode( '?', $url );
+
+		// Extract extension, handling query parameters.
+		if ( false !== strpos( $url, '?' ) ) {
+			$url_parts      = explode( '?', $url );
 			$file_extension = strtolower( pathinfo( $url_parts[0], PATHINFO_EXTENSION ) );
 		} else {
 			$file_extension = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
 		}
-		
-		// If no extension found or invalid extension for direct URLs
+
+		// If no extension found or invalid extension for direct URLs.
 		if ( empty( $file_extension ) || ! in_array( $file_extension, $this->allowed_file_types, true ) ) {
-			$result['message'] = sprintf( 
+			$result['message'] = sprintf(
+				/* translators: %s: Comma-separated list of supported audio formats. */
 				__( 'Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services.', 'wc-audio-preview' ),
 				implode( ', ', array_map( 'strtoupper', $this->allowed_file_types ) )
 			);
@@ -703,25 +737,28 @@ class Wc_Audio_Preview_Admin {
 		}
 
 		$result['success'] = true;
-		$result['source'] = 'direct';
+		$result['source']  = 'direct';
 		return $result;
 	}
 
 	/**
-	 * Display admin notice
+	 * Display admin notice.
 	 *
 	 * @since    1.5.0
 	 * @param    string $message Message to display.
 	 * @param    string $type    Notice type.
 	 */
 	private function add_admin_notice( $message, $type = 'error' ) {
-		add_action( 'admin_notices', function() use ( $message, $type ) {
-			printf(
-				'<div class="notice notice-%s wcap-admin-notice is-dismissible"><p>%s</p></div>',
-				esc_attr( $type ),
-				esc_html( $message )
-			);
-		});
+		add_action(
+			'admin_notices',
+			function () use ( $message, $type ) {
+				printf(
+					'<div class="notice notice-%s wcap-admin-notice is-dismissible"><p>%s</p></div>',
+					esc_attr( $type ),
+					esc_html( $message )
+				);
+			}
+		);
 	}
 
 	/**
@@ -730,24 +767,24 @@ class Wc_Audio_Preview_Admin {
 	 * @return void
 	 */
 	public function wcap_delete_audio_ajax() {
-		if (!check_ajax_referer('ajax-nonce', 'nonce', false)) {
-			wp_send_json_error('Invalid security token');
+		if ( ! check_ajax_referer( 'ajax-nonce', 'nonce', false ) ) {
+			wp_send_json_error( 'Invalid security token' );
 			exit;
 		}
-		if (!current_user_can('edit_posts')) {
-			wp_send_json_error('Insufficient permissions');
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( 'Insufficient permissions' );
 			exit;
 		}
-		
-		$post_id       = isset( $_POST['p_id'] ) ? absint( wp_unslash( $_POST['p_id'] ) ) : '';
-		$fileurl       = isset( $_POST['file_url'] ) ? esc_url_raw( wp_unslash( $_POST['file_url'] ) ) : '';
-		if (!$post_id || !$fileurl) {
-			wp_send_json_error('Missing required parameters');
+
+		$post_id = isset( $_POST['p_id'] ) ? absint( wp_unslash( $_POST['p_id'] ) ) : '';
+		$fileurl = isset( $_POST['file_url'] ) ? esc_url_raw( wp_unslash( $_POST['file_url'] ) ) : '';
+		if ( ! $post_id || ! $fileurl ) {
+			wp_send_json_error( 'Missing required parameters' );
 			exit;
-    	}
-		 // Verify user can edit this specific post
-		if (!current_user_can('edit_post', $post_id)) {
-			wp_send_json_error('Cannot edit this product');
+		}
+		// Verify user can edit this specific post.
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_send_json_error( 'Cannot edit this product' );
 			exit;
 		}
 
@@ -755,31 +792,32 @@ class Wc_Audio_Preview_Admin {
 		$upload_dir    = wp_upload_dir();
 		$upload_path   = $upload_dir['basedir'];
 		$uploaded_file = $upload_path . '/wcap_files/' . $filename;
-		if (file_exists($uploaded_file) && is_writable($uploaded_file)) { //phpcs:ignore
-			$result = wp_delete_file($uploaded_file);
-			if ($result !== false) {
-				update_post_meta($post_id, 'wcap_preview_attachment', '');
-				wp_send_json_success('File deleted successfully');
+		if ( file_exists( $uploaded_file ) && is_writable( $uploaded_file ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
+			$result = wp_delete_file( $uploaded_file );
+			if ( false !== $result ) {
+				update_post_meta( $post_id, 'wcap_preview_attachment', '' );
+				wp_send_json_success( 'File deleted successfully' );
 			} else {
-				$this->wcap_log_error('Failed to delete file: ' . $uploaded_file);
-				wp_send_json_error('Could not delete file');
+				$this->wcap_log_error( 'Failed to delete file: ' . $uploaded_file );
+				wp_send_json_error( 'Could not delete file' );
 			}
 		} else {
-			// File doesn't exist or isn't writable, just update the meta
-			update_post_meta($post_id, 'wcap_preview_attachment', '');
-			wp_send_json_success('Metadata updated');
+			// File doesn't exist or isn't writable, just update the meta.
+			update_post_meta( $post_id, 'wcap_preview_attachment', '' );
+			wp_send_json_success( 'Metadata updated' );
 		}
 		exit;
 	}
 
 	/**
-	 * Set Upload Directory
+	 * Set Upload Directory.
 	 *
 	 * Sets the upload dir to edd. This function is called from
-	 * wcap_change_audio_upload_dir()
+	 * wcap_change_audio_upload_dir().
 	 *
 	 * @since 1.0
-	 * @return array Upload directory information
+	 * @param array $upload Upload directory information.
+	 * @return array Upload directory information.
 	 */
 	public function wcap_set_upload_dir( $upload ) {
 		$upload['subdir'] = '/wcap_files';
@@ -789,49 +827,48 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Display admin errors
-	 *
+	 * Display admin errors.
 	 */
-	function wcap_display_admin_errors() {
+	public function wcap_display_admin_errors() {
 		$screen = get_current_screen();
-		
-		// Only show on our plugin pages
-		if ($screen && (strpos($screen->id, 'woo-audio-preview') !== false || $screen->id === 'product')) {
-			$errors = get_option('wcap_admin_errors', array());
-			
-			if (!empty($errors)) {
+
+		// Only show on our plugin pages.
+		if ( $screen && ( false !== strpos( $screen->id, 'woo-audio-preview' ) || 'product' === $screen->id ) ) {
+			$errors = get_option( 'wcap_admin_errors', array() );
+
+			if ( ! empty( $errors ) ) {
 				echo '<div class="notice notice-error is-dismissible">';
-				foreach ($errors as $error) {
-					echo '<p>' . esc_html($error) . '</p>';
+				foreach ( $errors as $error ) {
+					echo '<p>' . esc_html( $error ) . '</p>';
 				}
 				echo '</div>';
-				
-				// Clear errors after displaying
-				update_option('wcap_admin_errors', array());
+
+				// Clear errors after displaying.
+				update_option( 'wcap_admin_errors', array() );
 			}
 		}
 	}
 
 	/**
-	 * Log plugin errors for debugging
+	 * Log plugin errors for debugging.
 	 *
-	 * @param string $message Error message to log
-	 * @param string $level   Log level (error, warning, info)
-	*/
-	function wcap_log_error($message, $level = 'error') {
-		if (defined('WP_DEBUG') && WP_DEBUG === true) {
-			// For debug mode, output to debug.log
-			if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
-				error_log('[Audio Preview for WooCommerce] ' . $level . ': ' . $message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	 * @param string $message Error message to log.
+	 * @param string $level   Log level (error, warning, info).
+	 */
+	public function wcap_log_error( $message, $level = 'error' ) {
+		if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
+			// For debug mode, output to debug.log.
+			if ( defined( 'WP_DEBUG_LOG' ) && true === WP_DEBUG_LOG ) {
+				error_log( '[Audio Preview for WooCommerce] ' . $level . ': ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
-			
-			// For admin UI, maybe store errors to be displayed
-			if (is_admin() && $level === 'error') {
-				$errors = get_option('wcap_admin_errors', array());
+
+			// For admin UI, maybe store errors to be displayed.
+			if ( is_admin() && 'error' === $level ) {
+				$errors   = get_option( 'wcap_admin_errors', array() );
 				$errors[] = $message;
-				// Keep only last 10 errors
-				$errors = array_slice($errors, -10);
-				update_option('wcap_admin_errors', $errors);
+				// Keep only last 10 errors.
+				$errors = array_slice( $errors, -10 );
+				update_option( 'wcap_admin_errors', $errors );
 			}
 		}
 	}
@@ -932,84 +969,84 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Get asset filename with intelligent fallback
+	 * Get asset filename with intelligent fallback.
 	 *
 	 * @since    1.6.0
-	 * @param    string $type     Asset type ('css' or 'js')
-	 * @param    string $filename Base filename without extension
-	 * @return   string|false     Full filename with path or false if not found
+	 * @param    string $type     Asset type ('css' or 'js').
+	 * @param    string $filename Base filename without extension.
+	 * @return   string|false     Full filename with path or false if not found.
 	 */
-	private function get_asset_filename($type, $filename) {
-		// Determine if we should use minified files
-		$use_minified = !(defined('SCRIPT_DEBUG') && SCRIPT_DEBUG);
-		
-		// Determine if RTL is needed (only for CSS)
-		$is_rtl = ($type === 'css') ? is_rtl() : false;
-		
-		// Build the base directory path
-		$base_dir = plugin_dir_path(__FILE__) . $type . '/';
-		$actual_type = $type;
+	private function get_asset_filename( $type, $filename ) {
+		// Determine if we should use minified files.
+		$use_minified = ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
+
+		// Determine if RTL is needed (only for CSS).
+		$is_rtl = ( 'css' === $type ) ? is_rtl() : false;
+
+		// Build the base directory path.
+		$base_dir        = plugin_dir_path( __FILE__ ) . $type . '/';
+		$actual_type     = $type;
 		$actual_base_dir = $base_dir;
-		
-		
-		// Array of file variants to try in order of preference
+
+		// Array of file variants to try in order of preference.
 		$variants = array();
-		
-		if ($type === 'css') {
-			if ($is_rtl && $use_minified) {
-				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified
-				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified
-			} elseif ($is_rtl && !$use_minified) {
-				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified
-			} elseif (!$is_rtl && $use_minified) {
-				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified
-				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified
+
+		if ( 'css' === $type ) {
+			if ( $is_rtl && $use_minified ) {
+				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified.
+				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified.
+			} elseif ( $is_rtl && ! $use_minified ) {
+				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified.
+			} elseif ( ! $is_rtl && $use_minified ) {
+				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified.
+				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified.
 			} else {
-				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified
+				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified.
 			}
-		} else { // JavaScript
-			if ($use_minified) {
-				$variants[] = $filename . '.min.js';           // 1st preference: minified
-				$variants[] = $filename . '.js';               // 2nd preference: non-minified
-			} else {
-				$variants[] = $filename . '.js';               // 1st preference: non-minified
-			}
+		} elseif ( $use_minified ) {
+				$variants[] = $filename . '.min.js';           // 1st preference: minified.
+				$variants[] = $filename . '.js';               // 2nd preference: non-minified.
+		} else {
+			$variants[] = $filename . '.js';               // 1st preference: non-minified.
 		}
-		if ($type === 'css' &&  $is_rtl ) {
-			$actual_type = 'css-rtl';
-			$actual_base_dir = plugin_dir_path(__FILE__) . 'css-rtl/';
+		if ( 'css' === $type && $is_rtl ) {
+			$actual_type     = 'css-rtl';
+			$actual_base_dir = plugin_dir_path( __FILE__ ) . 'css-rtl/';
 		}
-		
-		// Check each variant in order
-		foreach ($variants as $variant) {
-			if (file_exists($actual_base_dir . $variant)) {
-				
-				// Log which file is being used in debug mode
-				if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
-					error_log(sprintf(
-						'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
-						$actual_type,
-						$variant,
-						$is_rtl ? 'yes' : 'no',
-						!$use_minified ? 'yes' : 'no'
-					));
+
+		// Check each variant in order.
+		foreach ( $variants as $variant ) {
+			if ( file_exists( $actual_base_dir . $variant ) ) {
+
+				// Log which file is being used in debug mode.
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+					error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+						sprintf(
+							'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
+							$actual_type,
+							$variant,
+							$is_rtl ? 'yes' : 'no',
+							! $use_minified ? 'yes' : 'no'
+						)
+					);
 				}
-				
+
 				return $actual_type . '/' . $variant;
 			}
 		}
-		
-		// No valid file found - log error
-		if (defined('WP_DEBUG') && WP_DEBUG) {
-			error_log(sprintf(
-				'WCAP Asset Error: No %s file found for %s (tried: %s)',
-				$actual_type,
-				$filename,
-				implode(', ', $variants)
-			));
+
+		// No valid file found - log error.
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				sprintf(
+					'WCAP Asset Error: No %s file found for %s (tried: %s)',
+					$actual_type,
+					$filename,
+					implode( ', ', $variants )
+				)
+			);
 		}
-		
+
 		return false;
 	}
-
 }

@@ -1,6 +1,6 @@
 {
   "name": "woo-audio-preview",
-  "version": "1.0.0",
+  "version": "1.5.1",
   "url": "https://github.com/wbcomdesigns/woo-audio-preview/",
   "license": "GPL-2.0+",
   "description": "Audio Preview for WooCommerce lets you showcase audio tracks in a secure sample mode, allowing users to listen to a short preview on the product page while preventing unauthorized downloads of the original audio.",
