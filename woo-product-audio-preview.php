@@ -42,6 +42,28 @@ if ( ! defined( 'WCAP_PLUGIN_URI' ) ) {
 if ( ! defined( 'WCAP_PLUGIN_DIR' ) ) {
 	define( 'WCAP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
+if ( ! defined( 'WCAP_PLUGIN_FILE' ) ) {
+	define( 'WCAP_PLUGIN_FILE', __FILE__ );
+}
+
+// EDD Software Licensing SDK.
+add_action(
+	'edd_sl_sdk_registry',
+	function ( $registry ) {
+		$registry->register(
+			array(
+				'id'      => 'woo-audio-preview',
+				'url'     => 'https://wbcomdesigns.com',
+				'item_id' => 6, // TODO: Replace with actual EDD download ID from wbcomdesigns.com.
+				'version' => WCAP_TEXT_VERSION,
+				'file'    => WCAP_PLUGIN_FILE,
+			)
+		);
+	}
+);
+if ( file_exists( __DIR__ . '/vendor/edd-sl-sdk/edd-sl-sdk.php' ) ) {
+	require_once __DIR__ . '/vendor/edd-sl-sdk/edd-sl-sdk.php';
+}
 
 /**
  * The core plugin class that is used to define internationalization,
