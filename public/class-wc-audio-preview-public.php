@@ -170,6 +170,19 @@ class Wc_Audio_Preview_Public {
 			$has_multiple = count( $valid_audios ) > 1;
 			?>
 
+			<?php
+			/**
+			 * Fires before the audio preview container is rendered.
+			 *
+			 * @since 1.5.1
+			 *
+			 * @param int   $product_id  The product ID.
+			 * @param array $wcap_audio  The audio preview data.
+			 * @param array $valid_audios Validated audio entries.
+			 */
+			do_action( 'wcap_before_audio_preview', $post->ID, $wcap_audio, $valid_audios );
+			?>
+
 			<div class="wcap-audio-preview-container">
 				<?php if ( $has_multiple ) : ?>
 					<h3 class="wcap-preview-title">
@@ -209,6 +222,19 @@ class Wc_Audio_Preview_Public {
 					?>
 				</div>
 			</div>
+
+			<?php
+			/**
+			 * Fires after the audio preview container is rendered.
+			 *
+			 * @since 1.5.1
+			 *
+			 * @param int   $product_id  The product ID.
+			 * @param array $wcap_audio  The audio preview data.
+			 * @param array $valid_audios Validated audio entries.
+			 */
+			do_action( 'wcap_after_audio_preview', $post->ID, $wcap_audio, $valid_audios );
+			?>
 			<?php
 		}
 		return true;

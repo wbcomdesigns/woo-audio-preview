@@ -2,7 +2,7 @@
 Contributors: wbcomdesigns, vapvarun
 Tags: audio, woocommerce, preview, music, audio player
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 6.9.1
 Requires PHP: 7.4
 Stable tag: 1.5.1
 License: GPLv2 or later
@@ -176,7 +176,12 @@ Free support is available through the WordPress.org support forum at wordpress.o
 = 1.5.1 =
 * Fixed: WordPress Coding Standards (WPCS) compliance issues
 * Fixed: Plugin Check tool flagged issues resolved
-* Tested: Confirmed compatibility with WordPress 6.9
+* Fixed: Input sanitization and output escaping across admin and frontend
+* Fixed: Removed debug error_log() statements from production code
+* New: Added `wcap_before_audio_preview` and `wcap_after_audio_preview` action hooks for developer extensibility
+* Improved: Proper data cleanup on plugin uninstall (options and post meta)
+* Improved: Option autoload set to false for non-critical data
+* Tested: Confirmed compatibility with WordPress 6.9.1
 
 = 1.5.0 =
 * New: Google Drive integration with iframe-based audio player
@@ -232,7 +237,7 @@ Free support is available through the WordPress.org support forum at wordpress.o
 == Upgrade Notice ==
 
 = 1.5.1 =
-Maintenance release with WPCS compliance fixes. Safe to upgrade with no data changes.
+Security and quality release with input sanitization, developer hooks, and proper uninstall cleanup. Safe to upgrade with no data changes.
 
 = 1.5.0 =
 Major update adding CDN support for Google Drive, SoundCloud, Dropbox, and more, along with a redesigned audio player and improved mobile experience. No data loss — existing audio configurations are preserved. Safe to upgrade.
