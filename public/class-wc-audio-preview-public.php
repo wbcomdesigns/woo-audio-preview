@@ -717,33 +717,8 @@ class Wc_Audio_Preview_Public {
 		// Check each variant in order.
 		foreach ( $variants as $variant ) {
 			if ( file_exists( $actual_base_dir . $variant ) ) {
-				// Log which file is being used in debug mode.
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-					error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-						sprintf(
-							'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
-							$actual_type,
-							$variant,
-							$is_rtl ? 'yes' : 'no',
-							! $use_minified ? 'yes' : 'no'
-						)
-					);
-				}
-
 				return $actual_type . '/' . $variant;
 			}
-		}
-
-		// No valid file found - log error.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				sprintf(
-					'WCAP Asset Error: No %s file found for %s (tried: %s)',
-					$actual_type,
-					$filename,
-					implode( ', ', $variants )
-				)
-			);
 		}
 
 		return false;

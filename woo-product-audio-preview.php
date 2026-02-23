@@ -101,8 +101,8 @@ function wcap_check_require_plugins() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'wcap_plugin_admin_notice' );
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-        if (isset($_GET['activate'])) { //phpcs:ignore
-			unset( $_GET['activate'] );
+		if ( isset( $_GET['activate'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			unset( $_GET['activate'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		return false;
 	}
@@ -136,13 +136,13 @@ add_action( 'activated_plugin', 'wcap_activation_redirect_settings' );
 function wcap_activation_redirect_settings( $plugin ) {
 	$plugins_all = get_option( 'active_plugins' );
 	if ( plugin_basename( __FILE__ ) === $plugin && in_array( 'woocommerce/woocommerce.php', $plugins_all, true ) ) {
-		if ( isset( $_REQUEST['action'] ) && 'activate' === $_REQUEST['action'] && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] === $plugin ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_REQUEST['action'] ) && 'activate' === sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) && isset( $_REQUEST['plugin'] ) && sanitize_text_field( wp_unslash( $_REQUEST['plugin'] ) ) === $plugin ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_safe_redirect( admin_url( 'admin.php?page=woo-audio-preview-settings' ) );
 			exit;
 		}
 	}
-	if ( isset( $_REQUEST['plugin'] ) && $plugin === $_REQUEST['plugin'] && class_exists( 'Buddypress' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_REQUEST['action'] ) && 'activate-plugin' === $_REQUEST['action'] && isset( $_REQUEST['plugin'] ) && $_REQUEST['plugin'] === $plugin ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( isset( $_REQUEST['plugin'] ) && $plugin === sanitize_text_field( wp_unslash( $_REQUEST['plugin'] ) ) && class_exists( 'Buddypress' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_REQUEST['action'] ) && 'activate-plugin' === sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) && isset( $_REQUEST['plugin'] ) && sanitize_text_field( wp_unslash( $_REQUEST['plugin'] ) ) === $plugin ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			set_transient( '_woo_audio_preview_is_new_install', true, 30 );
 		}
 	}

@@ -153,7 +153,7 @@ class Wc_Audio_Preview_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
-		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) {//phpcs:ignore
+		if ( ( $screen->id === 'product' && ( $screen->action === 'add' || $screen->action === '' ) ) || ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'woo-audio-preview-settings' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-admin' );
 			if ( $css_file ) {
@@ -191,7 +191,7 @@ class Wc_Audio_Preview_Admin {
 		 */
 		$screen = get_current_screen();
 
-		if (($screen->id === 'product' && ($screen->action === 'add' || $screen->action === '')) || (isset($_GET['page']) && $_GET['page'] === 'woo-audio-preview-settings')) { //phpcs:ignore
+		if ( ( $screen->id === 'product' && ( $screen->action === 'add' || $screen->action === '' ) ) || ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'woo-audio-preview-settings' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			// Enqueue media uploader.
 			wp_enqueue_media();
@@ -264,7 +264,7 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_hide_all_admin_notices_from_setting_page() {
 
-		if (isset($_GET['page']) && in_array($_GET['page'], array('wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings'), true)) { //phpcs:ignore
+		if ( isset( $_GET['page'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['page'] ) ), array( 'wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings' ), true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			// Remove non-critical notices only.
 			remove_action( 'admin_notices', 'update_nag', 3 );
@@ -585,7 +585,7 @@ class Wc_Audio_Preview_Admin {
 			return;
 		}
 
-		if ( isset( $_POST['post_type'] ) && 'product' === $_POST['post_type'] ) {
+		if ( isset( $_POST['post_type'] ) && 'product' === sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) ) {
 			$processed_audio = array(
 				'wcap_audio_names'  => array(),
 				'wcap_audio_urls'   => array(),
@@ -594,9 +594,8 @@ class Wc_Audio_Preview_Admin {
 
 			$has_valid_audio = false;
 
-			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized below.
-				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] );
+			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized individually below.
+				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 				// Process exactly 3 fields.
 				for ( $i = 0; $i < 3; $i++ ) {
@@ -857,18 +856,13 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_log_error( $message, $level = 'error' ) {
 		if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
-			// For debug mode, output to debug.log.
-			if ( defined( 'WP_DEBUG_LOG' ) && true === WP_DEBUG_LOG ) {
-				error_log( '[Audio Preview for WooCommerce] ' . $level . ': ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			}
-
-			// For admin UI, maybe store errors to be displayed.
+			// For admin UI, store errors to be displayed.
 			if ( is_admin() && 'error' === $level ) {
 				$errors   = get_option( 'wcap_admin_errors', array() );
 				$errors[] = $message;
 				// Keep only last 10 errors.
 				$errors = array_slice( $errors, -10 );
-				update_option( 'wcap_admin_errors', $errors );
+				update_option( 'wcap_admin_errors', $errors, false );
 			}
 		}
 	}
@@ -1017,34 +1011,8 @@ class Wc_Audio_Preview_Admin {
 		// Check each variant in order.
 		foreach ( $variants as $variant ) {
 			if ( file_exists( $actual_base_dir . $variant ) ) {
-
-				// Log which file is being used in debug mode.
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-					error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-						sprintf(
-							'WCAP Asset: Loading %s file: %s (RTL: %s, Debug: %s)',
-							$actual_type,
-							$variant,
-							$is_rtl ? 'yes' : 'no',
-							! $use_minified ? 'yes' : 'no'
-						)
-					);
-				}
-
 				return $actual_type . '/' . $variant;
 			}
-		}
-
-		// No valid file found - log error.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				sprintf(
-					'WCAP Asset Error: No %s file found for %s (tried: %s)',
-					$actual_type,
-					$filename,
-					implode( ', ', $variants )
-				)
-			);
 		}
 
 		return false;
