@@ -3,7 +3,7 @@
 ## Plugin Identity
 - **Plugin Name:** Audio Preview for WooCommerce
 - **Slug:** woo-audio-preview
-- **Text Domain:** wc-audio-preview
+- **Text Domain:** woo-audio-preview
 - **Version:** 1.5.1
 - **Author:** Wbcom Designs
 - **License:** GPL-2.0+
@@ -57,7 +57,7 @@ WordPress Plugin Boilerplate (loader pattern). Actions/filters are registered vi
 | Constant | Value |
 |----------|-------|
 | `WCAP_TEXT_VERSION` | `'1.5.1'` |
-| `WCAP_TEXT_DOMAIN` | `'wc-audio-preview'` |
+| `WCAP_TEXT_DOMAIN` | `'woo-audio-preview'` |
 | `WCAP_PLUGIN_URI` | `plugin_dir_url(__FILE__)` |
 | `WCAP_PLUGIN_DIR` | `plugin_dir_path(__FILE__)` |
 
