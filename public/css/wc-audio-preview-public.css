@@ -11,7 +11,7 @@
 --------------------------------------------------------------*/
 .wcap-audio-preview-container {
     margin: 20px 0;
-    padding: 20px !important;
+    padding: 20px;
     background: rgba(0, 0, 0, 0.02);
     border-radius: 8px;
     border: 1px solid rgba(0, 0, 0, 0.08);
@@ -402,7 +402,63 @@
 .inactive {
     display: none !important;
 }
-/* .custom-artwork-size{
-    width: 10% !important;
-    height: 10% !important;
-} */
+
+/*--------------------------------------------------------------
+# Google Drive Player
+--------------------------------------------------------------*/
+.wcap-gdrive-player {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 0 0 6px 6px;
+    margin-top: -1px;
+}
+
+.wcap-gdrive-player iframe {
+    border-radius: 4px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.wcap-gdrive-item.playing .wcap-preview-button {
+    border-radius: 6px 6px 0 0;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.wcap-gdrive-button {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.wcap-gdrive-item .wcap-button-content {
+    position: relative;
+    width: 100%;
+}
+
+.wcap-gdrive-item .wcap-play-icon,
+.wcap-gdrive-item .wcap-pause-icon {
+    position: relative;
+    z-index: 2;
+}
+
+.wcap-gdrive-item .wcap-preview-info {
+    margin-left: 0;
+    z-index: 1;
+}
+
+.wcap-gdrive-item .wcap-preview-badge {
+    margin-left: auto;
+}
+
+/*--------------------------------------------------------------
+# SoundCloud Player
+--------------------------------------------------------------*/
+.wcap-soundcloud-player {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 0 0 6px 6px;
+    margin-top: -1px;
+}
+
+.wcap-soundcloud-player iframe {
+    border-radius: 4px;
+}

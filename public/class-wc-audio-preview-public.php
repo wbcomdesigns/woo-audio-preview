@@ -122,7 +122,7 @@ class Wc_Audio_Preview_Public {
 				plugin_dir_url( __FILE__ ) . $js_file,
 				array( 'jquery', 'soundcloud-widget-api' ),
 				$this->version,
-				false
+				true
 			);
 
 			// Localize script for better UX.
@@ -145,9 +145,18 @@ class Wc_Audio_Preview_Public {
 	 * To display audio preview fields with modern UI.
 	 */
 	public function wcap_add_preview_field() {
-		global $post;
+		global $product;
 
-		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
+		// WooCommerce-safe product retrieval — works with page builders and custom loops.
+		if ( ! $product instanceof WC_Product ) {
+			$product = wc_get_product( get_the_ID() );
+		}
+		if ( ! $product ) {
+			return;
+		}
+
+		$product_id = $product->get_id();
+		$wcap_audio = get_post_meta( $product_id, 'wcap_audio', true );
 		if ( ! empty( $wcap_audio ) && isset( $wcap_audio['wcap_audio_urls'] ) && ! empty( $wcap_audio['wcap_audio_urls'] ) ) {
 
 			// Filter out empty entries.
@@ -180,7 +189,7 @@ class Wc_Audio_Preview_Public {
 			 * @param array $wcap_audio  The audio preview data.
 			 * @param array $valid_audios Validated audio entries.
 			 */
-			do_action( 'wcap_before_audio_preview', $post->ID, $wcap_audio, $valid_audios );
+			do_action( 'wcap_before_audio_preview', $product_id, $wcap_audio, $valid_audios );
 			?>
 
 			<div class="wcap-audio-preview-container">
@@ -233,7 +242,7 @@ class Wc_Audio_Preview_Public {
 			 * @param array $wcap_audio  The audio preview data.
 			 * @param array $valid_audios Validated audio entries.
 			 */
-			do_action( 'wcap_after_audio_preview', $post->ID, $wcap_audio, $valid_audios );
+			do_action( 'wcap_after_audio_preview', $product_id, $wcap_audio, $valid_audios );
 			?>
 			<?php
 		}
@@ -332,9 +341,8 @@ class Wc_Audio_Preview_Public {
 		$iframe_url = 'https://drive.google.com/file/d/' . $file_id . '/preview';
 		?>
 
-		<div class="wcap-preview-item wcap-gdrive-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
+		<div class="wcap-preview-item wcap-gdrive-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-gdrive-key="<?php echo esc_attr( $key ); ?>">
 			<button class="wcap-preview-button wcap-gdrive-button" type="button"
-					onclick="wcapToggleGDrivePlayer('<?php echo esc_js( $key ); ?>')"
 					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
@@ -357,7 +365,7 @@ class Wc_Audio_Preview_Public {
 					</div>
 				</div>
 			</button>
-			<div class="wcap-gdrive-player " id="wcap-gdrive-<?php echo esc_attr( $key ); ?>" style="display: none;">
+			<div class="wcap-gdrive-player" id="wcap-gdrive-<?php echo esc_attr( $key ); ?>" style="display: none;">
 				<iframe
 					src=""
 					data-src="<?php echo esc_url( $iframe_url ); ?>"
@@ -369,51 +377,6 @@ class Wc_Audio_Preview_Public {
 				</iframe>
 			</div>
 		</div>
-
-		<script>
-		function wcapToggleGDrivePlayer(key) {
-			wcapStopAllPlayers(key);
-			var player = document.getElementById('wcap-gdrive-' + key);
-			var button = player.previousElementSibling;
-			var iframe = player.querySelector('iframe');
-			var playIcon = document.getElementById('wcap-play-' + key);
-			var pauseIcon = document.getElementById('wcap-pause-' + key);
-
-			// Close all other players
-			document.querySelectorAll('.wcap-gdrive-player').forEach(function(p) {
-				if (p.id !== 'wcap-gdrive-' + key && p.style.display !== 'none') {
-					var otherIframe = p.querySelector('iframe');
-					var otherKey = p.id.replace('wcap-gdrive-', '');
-					var otherPlayIcon = document.getElementById('wcap-play-' + otherKey);
-					var otherPauseIcon = document.getElementById('wcap-pause-' + otherKey);
-
-					p.style.display = 'none';
-					p.previousElementSibling.classList.remove('playing');
-					otherIframe.src = '';
-
-					if (otherPlayIcon && otherPauseIcon) {
-						otherPlayIcon.style.display = 'block';
-						otherPauseIcon.style.display = 'none';
-					}
-				}
-			});
-
-			// Toggle this player
-			if (player.style.display === 'none') {
-				player.style.display = 'block';
-				button.classList.add('playing');
-				iframe.src = iframe.getAttribute('data-src');
-				playIcon.style.display = 'none';
-				pauseIcon.style.display = 'block';
-			} else {
-				player.style.display = 'none';
-				button.classList.remove('playing');
-				iframe.src = '';
-				playIcon.style.display = 'block';
-				pauseIcon.style.display = 'none';
-			}
-		}
-		</script>
 
 		<?php
 	}
@@ -430,9 +393,8 @@ class Wc_Audio_Preview_Public {
 		$embed_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $audio_url );
 
 		?>
-		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
+		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-soundcloud-key="<?php echo esc_attr( $key ); ?>">
 			<button class="wcap-preview-button wcap-soundcloud-button" type="button"
-					onclick="wcapToggleSoundCloudPlayer('<?php echo esc_js( $key ); ?>')"
 					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
@@ -466,30 +428,6 @@ class Wc_Audio_Preview_Public {
 				</iframe>
 			</div>
 		</div>
-
-		<script>
-			function wcapToggleSoundCloudPlayer(key) {
-				wcapStopAllPlayers(key);
-				const player = document.getElementById(`wcap-soundcloud-${key}`);
-				const playIcon = document.getElementById(`wcap-play-${key}`);
-				const pauseIcon = document.getElementById(`wcap-pause-${key}`);
-
-				const isHidden = player.style.display === "none";
-
-				// Hide all players and reset all icons
-				document.querySelectorAll(".wcap-soundcloud-player").forEach(el => el.style.display = "none");
-				document.querySelectorAll(".wcap-play-icon").forEach(el => el.style.display = "inline-block");
-				document.querySelectorAll(".wcap-pause-icon").forEach(el => el.style.display = "none");
-
-				// If it was hidden, show this one and toggle icons
-				if (isHidden) {
-					player.style.display = "block";
-					playIcon.style.display = "none";
-					pauseIcon.style.display = "inline-block";
-				}
-			}
-		</script>
-
 
 		<?php
 	}
@@ -751,62 +689,4 @@ class Wc_Audio_Preview_Public {
 	}
 }
 
-// Add inline styles for Google Drive player.
-add_action(
-	'wp_head',
-	function () {
-		if ( is_product() ) {
-			?>
-		<style>
-		/* Google Drive Player Styles */
-		.wcap-gdrive-player {
-			padding: 10px;
-			background: rgba(0, 0, 0, 0.02);
-			border-radius: 0 0 6px 6px;
-			margin-top: -1px;
-		}
-
-		.wcap-gdrive-player iframe {
-			border-radius: 4px;
-			background: white;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
-
-		.wcap-gdrive-item.playing .wcap-preview-button {
-			border-radius: 6px 6px 0 0;
-			background: rgba(0, 0, 0, 0.04);
-		}
-
-		.wcap-gdrive-button {
-			user-select: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-		}
-
-		/* Fix for Google Drive badge overlap */
-		.wcap-gdrive-item .wcap-button-content {
-			position: relative;
-			width: 100%;
-		}
-
-		.wcap-gdrive-item .wcap-play-icon,
-		.wcap-gdrive-item .wcap-pause-icon {
-			position: relative;
-			z-index: 2;
-		}
-
-		.wcap-gdrive-item .wcap-preview-info {
-			margin-left: 0;
-			z-index: 1;
-		}
-
-		/* Ensure proper spacing */
-		.wcap-gdrive-item .wcap-preview-badge {
-			margin-left: auto;
-		}
-		</style>
-			<?php
-		}
-	}
-);
+// Google Drive and SoundCloud styles are now in the main CSS file.
