@@ -69,7 +69,7 @@ if ( file_exists( __DIR__ . '/vendor/edd-sl-sdk/edd-sl-sdk.php' ) ) {
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-woo-audio-preview.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-wc-audio-preview.php';
 
 /**
  * Begins execution of the plugin.

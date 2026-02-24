@@ -103,18 +103,18 @@ class Wc_Audio_Preview {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( __DIR__ ) . 'includes/class-woo-audio-preview-loader.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wc-audio-preview-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( __DIR__ ) . 'includes/class-woo-audio-preview-i18n.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wc-audio-preview-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( __DIR__ ) . 'admin/class-woo-audio-preview-admin.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wc-audio-preview-admin.php';
 
 		/**
 		 * The class responsible for admin review.
@@ -125,7 +125,7 @@ class Wc_Audio_Preview {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( __DIR__ ) . 'public/class-woo-audio-preview-public.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-wc-audio-preview-public.php';
 
 		require_once plugin_dir_path( __DIR__ ) . 'admin/wbcom/wbcom-admin-settings.php';
 

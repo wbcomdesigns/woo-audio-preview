@@ -75,7 +75,7 @@ class Wc_Audio_Preview_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		$css_file = $this->get_asset_filename( 'css', 'woo-audio-preview-public' );
+		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public' );
 		if ( $css_file ) {
 			wp_enqueue_style(
 				$this->plugin_name,
@@ -107,7 +107,7 @@ class Wc_Audio_Preview_Public {
 		 */
 
 		// Build the JS filename with intelligent fallback.
-		$js_file = $this->get_asset_filename( 'js', 'woo-audio-preview-public' );
+		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public' );
 
 		if ( $js_file ) {
 			wp_enqueue_script(
