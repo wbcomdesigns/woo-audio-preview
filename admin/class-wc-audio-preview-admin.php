@@ -155,7 +155,7 @@ class Wc_Audio_Preview_Admin {
 		$screen = get_current_screen();
 		if ( ( $screen->id === 'product' && ( $screen->action === 'add' || $screen->action === '' ) ) || ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'woo-audio-preview-settings' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-			$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-admin' );
+			$css_file = $this->get_asset_filename( 'css', 'woo-audio-preview-admin' );
 			if ( $css_file ) {
 				wp_enqueue_style(
 					$this->plugin_name,
@@ -195,7 +195,7 @@ class Wc_Audio_Preview_Admin {
 
 			// Enqueue media uploader.
 			wp_enqueue_media();
-			$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-admin' );
+			$js_file = $this->get_asset_filename( 'js', 'woo-audio-preview-admin' );
 			if ( $js_file ) {
 				wp_enqueue_script(
 					$this->plugin_name,
@@ -215,12 +215,12 @@ class Wc_Audio_Preview_Admin {
 						'allowedExtensions'  => apply_filters( 'wcap_allowed_audio_extensions', $this->allowed_file_types ),
 						'cdn_patterns'       => $this->get_cdn_patterns_for_js(),
 						'error_messages'     => array(
-							'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'wc-audio-preview' ),
-							'file_required'     => __( 'Please select a file or enter a file URL.', 'wc-audio-preview' ),
-							'name_required'     => __( 'Audio name is required.', 'wc-audio-preview' ),
-							'url_invalid'       => __( 'Please enter a valid URL.', 'wc-audio-preview' ),
-							'file_too_large'    => __( 'File size is too large. Maximum allowed size is 50MB.', 'wc-audio-preview' ),
-							'cdn_detected'      => __( 'CDN/streaming service link detected! This will work great for preview.', 'wc-audio-preview' ),
+							'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'woo-audio-preview' ),
+							'file_required'     => __( 'Please select a file or enter a file URL.', 'woo-audio-preview' ),
+							'name_required'     => __( 'Audio name is required.', 'woo-audio-preview' ),
+							'url_invalid'       => __( 'Please enter a valid URL.', 'woo-audio-preview' ),
+							'file_too_large'    => __( 'File size is too large. Maximum allowed size is 50MB.', 'woo-audio-preview' ),
+							'cdn_detected'      => __( 'CDN/streaming service link detected! This will work great for preview.', 'woo-audio-preview' ),
 						),
 						'supported_services' => $this->get_supported_services_info(),
 					)
@@ -294,11 +294,11 @@ class Wc_Audio_Preview_Admin {
 			<div class="bupr-header">
 				<div class="wbcom_admin_header-wrapper">
 					<div id="wb_admin_plugin_name">
-						<?php esc_html_e( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'Audio Preview for WooCommerce', 'woo-audio-preview' ); ?>
 						<span>
 					<?php
 					/* translators: %s: Plugin version number. */
-					printf( esc_html__( 'Version %s', 'wc-audio-preview' ), esc_html( WCAP_TEXT_VERSION ) );
+					printf( esc_html__( 'Version %s', 'woo-audio-preview' ), esc_html( WCAP_TEXT_VERSION ) );
 					?>
 					</span>
 					</div>
@@ -326,7 +326,7 @@ class Wc_Audio_Preview_Admin {
 	 * @author   Wbcom Designs
 	 */
 	public function wcap_init_plugin_settings() {
-		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'wc-audio-preview' );
+		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'woo-audio-preview' );
 		register_setting(
 			'woo_audio_preview_admin_welcome_options',
 			'woo_audio_preview_admin_welcome_options',
@@ -336,10 +336,10 @@ class Wc_Audio_Preview_Admin {
 		);
 		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'wcap_admin_welcome_content' ), 'woo-audio-preview-welcome' );
 
-		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'wc-audio-preview' );
+		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'woo-audio-preview' );
 		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'wcap_general_pro' ), 'woo-audio-preview-pro' );
 
-		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'wc-audio-preview' );
+		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'woo-audio-preview' );
 		register_setting(
 			'woo_audio_preview_general_options',
 			'woo_audio_preview_general_options',
@@ -400,11 +400,11 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_views_add_admin_settings() {
 		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
-			add_menu_page( esc_html__( 'WB Plugins', 'wc-audio-preview' ), esc_html__( 'WB Plugins', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_admin_options_page' ), 'dashicons-lightbulb', 59 );
-			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'wc-audio-preview' ), esc_html__( 'Welcome', 'wc-audio-preview' ), 'manage_options', 'wbcomplugins' );
+			add_menu_page( esc_html__( 'WB Plugins', 'woo-audio-preview' ), esc_html__( 'WB Plugins', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_admin_options_page' ), 'dashicons-lightbulb', 59 );
+			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'woo-audio-preview' ), esc_html__( 'Welcome', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins' );
 
 		}
-		add_submenu_page( 'wbcomplugins', esc_html__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ), esc_html__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'wcap_admin_options_page' ) );
+		add_submenu_page( 'wbcomplugins', esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ), esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'wcap_admin_options_page' ) );
 	}
 
 
@@ -422,8 +422,8 @@ class Wc_Audio_Preview_Admin {
 		global $post;
 		$label_text = sprintf(
 			/* translators: %s: Supported audio format information. */
-			__( 'Audio Preview Items %s', 'wc-audio-preview' ),
-			'<span class="wcap-required-span">' . __( '(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)', 'wc-audio-preview' ) . '</span>'
+			__( 'Audio Preview Items %s', 'woo-audio-preview' ),
+			'<span class="wcap-required-span">' . __( '(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)', 'woo-audio-preview' ) . '</span>'
 		);
 
 		add_meta_box(
@@ -450,11 +450,11 @@ class Wc_Audio_Preview_Admin {
 			
 			<!-- Enhanced help section -->
 			<div class="wcap-help-section">
-				<h4><?php esc_html_e( '🎵 Add Up to 3 Audio Previews', 'wc-audio-preview' ); ?></h4>
-				<p><?php esc_html_e( 'You can add up to 3 audio preview files for this product. Leave fields empty if you need fewer previews.', 'wc-audio-preview' ); ?></p>
+				<h4><?php esc_html_e( '🎵 Add Up to 3 Audio Previews', 'woo-audio-preview' ); ?></h4>
+				<p><?php esc_html_e( 'You can add up to 3 audio preview files for this product. Leave fields empty if you need fewer previews.', 'woo-audio-preview' ); ?></p>
 				<div class="wcap-supported-formats">
-					<strong><?php esc_html_e( 'Supported:', 'wc-audio-preview' ); ?></strong>
-					<?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files • Direct URLs • CDN links (Google Drive, Dropbox, SoundCloud, etc.)', 'wc-audio-preview' ); ?>
+					<strong><?php esc_html_e( 'Supported:', 'woo-audio-preview' ); ?></strong>
+					<?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files • Direct URLs • CDN links (Google Drive, Dropbox, SoundCloud, etc.)', 'woo-audio-preview' ); ?>
 				</div>
 			</div>
 			
@@ -470,18 +470,18 @@ class Wc_Audio_Preview_Admin {
 						<h4 class="wcap-field-title">
 							<?php
 							/* translators: %d: Audio preview field number. */
-							echo esc_html( sprintf( __( 'Audio Preview %d', 'wc-audio-preview' ), $field_number ) );
+							echo esc_html( sprintf( __( 'Audio Preview %d', 'woo-audio-preview' ), $field_number ) );
 							?>
 							<?php if ( 0 === $i ) : ?>
-								<span class="wcap-required"><?php esc_html_e( '(Primary)', 'wc-audio-preview' ); ?></span>
+								<span class="wcap-required"><?php esc_html_e( '(Primary)', 'woo-audio-preview' ); ?></span>
 							<?php else : ?>
-								<span class="wcap-optional"><?php esc_html_e( '(Optional)', 'wc-audio-preview' ); ?></span>
+								<span class="wcap-optional"><?php esc_html_e( '(Optional)', 'woo-audio-preview' ); ?></span>
 							<?php endif; ?>
 						</h4>
 						
 						<div class="wcap-field-row">
 							<label for="wcap_audio_name_<?php echo esc_attr( $i ); ?>">
-								<?php esc_html_e( 'Audio Name:', 'wc-audio-preview' ); ?>
+								<?php esc_html_e( 'Audio Name:', 'woo-audio-preview' ); ?>
 							</label>
 							<input type="text" 
 								id="wcap_audio_name_<?php echo esc_attr( $i ); ?>"
@@ -491,14 +491,14 @@ class Wc_Audio_Preview_Admin {
 								placeholder="
 								<?php
 								/* translators: %d: Track number. */
-								echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'wc-audio-preview' ), $field_number ) );
+								echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'woo-audio-preview' ), $field_number ) );
 								?>
 							" />
 						</div>
 						
 						<div class="wcap-field-row">
 							<label for="wcap_audio_url_<?php echo esc_attr( $i ); ?>">
-								<?php esc_html_e( 'Audio URL:', 'wc-audio-preview' ); ?>
+								<?php esc_html_e( 'Audio URL:', 'woo-audio-preview' ); ?>
 							</label>
 							<div class="wcap-url-input-group">
 								<input type="url" 
@@ -506,17 +506,17 @@ class Wc_Audio_Preview_Admin {
 									class="wcap-audio-url widefat" 
 									name="wcap_audio[wcap_audio_urls][]" 
 									value="<?php echo esc_url( $audio_url ); ?>" 
-									placeholder="<?php esc_attr_e( 'https://example.com/audio.mp3 or CDN link', 'wc-audio-preview' ); ?>" />
+									placeholder="<?php esc_attr_e( 'https://example.com/audio.mp3 or CDN link', 'woo-audio-preview' ); ?>" />
 								<button type="button" 
 										class="button wcap-media-button" 
 										data-field-index="<?php echo esc_attr( $i ); ?>">
-									<?php esc_html_e( 'Media Library', 'wc-audio-preview' ); ?>
+									<?php esc_html_e( 'Media Library', 'woo-audio-preview' ); ?>
 								</button>
 								<?php if ( ! empty( $audio_url ) ) : ?>
 									<button type="button" 
 											class="button wcap-clear-button" 
 											data-field-index="<?php echo esc_attr( $i ); ?>">
-										<?php esc_html_e( 'Clear', 'wc-audio-preview' ); ?>
+										<?php esc_html_e( 'Clear', 'woo-audio-preview' ); ?>
 									</button>
 								<?php endif; ?>
 							</div>
@@ -541,12 +541,12 @@ class Wc_Audio_Preview_Admin {
 			
 			<div class="wcap-pro-notice">
 				<p>
-					<strong><?php esc_html_e( '💎 Need more than 3 audio previews?', 'wc-audio-preview' ); ?></strong><br>
+					<strong><?php esc_html_e( '💎 Need more than 3 audio previews?', 'woo-audio-preview' ); ?></strong><br>
 					<?php
 					printf(
 						/* translators: %s: Pro version link. */
-						esc_html__( 'Upgrade to %s for unlimited audio previews and dynamic add/remove functionality.', 'wc-audio-preview' ),
-						'<a href="https://wbcomdesigns.com/downloads/woo-audio-preview-pro/" target="_blank">' . esc_html__( 'Pro Version', 'wc-audio-preview' ) . '</a>'
+						esc_html__( 'Upgrade to %s for unlimited audio previews and dynamic add/remove functionality.', 'woo-audio-preview' ),
+						'<a href="https://wbcomdesigns.com/downloads/woo-audio-preview-pro/" target="_blank">' . esc_html__( 'Pro Version', 'woo-audio-preview' ) . '</a>'
 					);
 					?>
 				</p>
@@ -691,12 +691,12 @@ class Wc_Audio_Preview_Admin {
 		);
 
 		if ( empty( $url ) ) {
-			$result['message'] = __( 'Audio URL cannot be empty.', 'wc-audio-preview' );
+			$result['message'] = __( 'Audio URL cannot be empty.', 'woo-audio-preview' );
 			return $result;
 		}
 
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			$result['message'] = __( 'Please enter a valid URL.', 'wc-audio-preview' );
+			$result['message'] = __( 'Please enter a valid URL.', 'woo-audio-preview' );
 			return $result;
 		}
 
@@ -708,7 +708,7 @@ class Wc_Audio_Preview_Admin {
 			$result['service'] = $cdn_info['service'];
 			$result['message'] = sprintf(
 				/* translators: %s: CDN service name. */
-				__( 'CDN %s link detected and validated.', 'wc-audio-preview' ),
+				__( 'CDN %s link detected and validated.', 'woo-audio-preview' ),
 				ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) )
 			);
 			return $result;
@@ -729,7 +729,7 @@ class Wc_Audio_Preview_Admin {
 		if ( empty( $file_extension ) || ! in_array( $file_extension, $this->allowed_file_types, true ) ) {
 			$result['message'] = sprintf(
 				/* translators: %s: Comma-separated list of supported audio formats. */
-				__( 'Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services.', 'wc-audio-preview' ),
+				__( 'Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services.', 'woo-audio-preview' ),
 				implode( ', ', array_map( 'strtoupper', $this->allowed_file_types ) )
 			);
 			return $result;

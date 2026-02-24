@@ -75,7 +75,7 @@ class Wc_Audio_Preview_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public' );
+		$css_file = $this->get_asset_filename( 'css', 'woo-audio-preview-public' );
 		if ( $css_file ) {
 			wp_enqueue_style(
 				$this->plugin_name,
@@ -107,7 +107,7 @@ class Wc_Audio_Preview_Public {
 		 */
 
 		// Build the JS filename with intelligent fallback.
-		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public' );
+		$js_file = $this->get_asset_filename( 'js', 'woo-audio-preview-public' );
 
 		if ( $js_file ) {
 			wp_enqueue_script(
@@ -132,10 +132,10 @@ class Wc_Audio_Preview_Public {
 				array(
 					'ajax_url'     => admin_url( 'admin-ajax.php' ),
 					'nonce'        => wp_create_nonce( 'wcap-public-nonce' ),
-					'loading_text' => __( 'Loading...', 'wc-audio-preview' ),
-					'error_text'   => __( 'Error loading audio', 'wc-audio-preview' ),
-					'play_text'    => __( 'Play', 'wc-audio-preview' ),
-					'pause_text'   => __( 'Pause', 'wc-audio-preview' ),
+					'loading_text' => __( 'Loading...', 'woo-audio-preview' ),
+					'error_text'   => __( 'Error loading audio', 'woo-audio-preview' ),
+					'play_text'    => __( 'Play', 'woo-audio-preview' ),
+					'pause_text'   => __( 'Pause', 'woo-audio-preview' ),
 				)
 			);
 		}
@@ -200,7 +200,7 @@ class Wc_Audio_Preview_Public {
 							<circle cx="6" cy="18" r="3"></circle>
 							<circle cx="18" cy="16" r="3"></circle>
 						</svg>
-						<?php esc_html_e( 'Audio Previews', 'wc-audio-preview' ); ?>
+						<?php esc_html_e( 'Audio Previews', 'woo-audio-preview' ); ?>
 					</h3>
 				<?php endif; ?>
 
@@ -264,7 +264,7 @@ class Wc_Audio_Preview_Public {
 		?>
 
 		<div class="wcap-preview-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>">
-			<button class="wcap-preview-button" type="button" aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+			<button class="wcap-preview-button" type="button" aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'woo-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon">
 						<span class="wcap-icon-wrap">
@@ -307,7 +307,7 @@ class Wc_Audio_Preview_Public {
 					preload="none"
 					data-name="<?php echo esc_attr( $name ); ?>">
 				<source src="<?php echo esc_url( $playable_url ); ?>" type="<?php echo esc_attr( $mime_type ); ?>" />
-				<?php esc_html_e( 'Your browser does not support the audio element.', 'wc-audio-preview' ); ?>
+				<?php esc_html_e( 'Your browser does not support the audio element.', 'woo-audio-preview' ); ?>
 			</audio>
 		</div>
 
@@ -343,7 +343,7 @@ class Wc_Audio_Preview_Public {
 
 		<div class="wcap-preview-item wcap-gdrive-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-gdrive-key="<?php echo esc_attr( $key ); ?>">
 			<button class="wcap-preview-button wcap-gdrive-button" type="button"
-					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'woo-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
 						<span class="wcap-icon-wrap">
@@ -395,7 +395,7 @@ class Wc_Audio_Preview_Public {
 		?>
 		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-soundcloud-key="<?php echo esc_attr( $key ); ?>">
 			<button class="wcap-preview-button wcap-soundcloud-button" type="button"
-					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'wc-audio-preview' ), $name ) ); ?>">
+					aria-label="<?php /* translators: %s: Audio track name. */ echo esc_attr( sprintf( __( 'Play %s', 'woo-audio-preview' ), $name ) ); ?>">
 				<div class="wcap-button-content">
 					<span class="wcap-play-icon" id="wcap-play-<?php echo esc_attr( $key ); ?>">
 						<span class="wcap-icon-wrap">

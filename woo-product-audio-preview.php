@@ -18,7 +18,7 @@
  * Author URI:        http://wbcomdesigns.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       wc-audio-preview
+ * Text Domain:       woo-audio-preview
  * Requires Plugins:  woocommerce
  * Domain Path:       /languages
  */
@@ -33,7 +33,7 @@ if ( ! defined( 'WCAP_TEXT_VERSION' ) ) {
 }
 
 if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
-	define( 'WCAP_TEXT_DOMAIN', 'wc-audio-preview' );
+	define( 'WCAP_TEXT_DOMAIN', 'woo-audio-preview' );
 }
 
 if ( ! defined( 'WCAP_PLUGIN_URI' ) ) {
@@ -69,7 +69,7 @@ if ( file_exists( __DIR__ . '/vendor/edd-sl-sdk/edd-sl-sdk.php' ) ) {
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wc-audio-preview.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-woo-audio-preview.php';
 
 /**
  * Begins execution of the plugin.
@@ -113,8 +113,8 @@ add_action( 'admin_init', 'wcap_check_require_plugins' );
  * Required Plugin Admin Notice.
  */
 function wcap_plugin_admin_notice() {
-	$wcap_plugin = esc_html__( 'Audio Preview for WooCommerce', 'wc-audio-preview' );
-	$wc_plugin   = esc_html__( 'WooCommerce', 'wc-audio-preview' );
+	$wcap_plugin = esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' );
+	$wc_plugin   = esc_html__( 'WooCommerce', 'woo-audio-preview' );
 
 	echo '<div class="error"><p>'
 	. sprintf( '%1$s cannot function without %2$s . Please install and activate WooCommerce', '<strong>' . esc_html( $wcap_plugin ) . '</strong>', '<strong>' . esc_html( $wc_plugin ) . '</strong>' )

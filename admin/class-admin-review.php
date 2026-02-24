@@ -90,54 +90,54 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 			$years = intval( intval( $seconds ) / YEAR_IN_SECONDS ) % 100;
 			if ( $years > 1 ) {
 				/* translators: Number of years */
-				return sprintf( __( '%s years', 'wc-audio-preview' ), $years );
+				return sprintf( __( '%s years', 'woo-audio-preview' ), $years );
 			} elseif ( $years > 0 ) {
-				return __( 'a year', 'wc-audio-preview' );
+				return __( 'a year', 'woo-audio-preview' );
 			}
 
 			// Get the weeks.
 			$weeks = intval( intval( $seconds ) / WEEK_IN_SECONDS ) % 52;
 			if ( $weeks > 1 ) {
 				/* translators: Number of weeks */
-				return sprintf( __( '%s weeks', 'wc-audio-preview' ), $weeks );
+				return sprintf( __( '%s weeks', 'woo-audio-preview' ), $weeks );
 			} elseif ( $weeks > 0 ) {
-				return __( 'a week', 'wc-audio-preview' );
+				return __( 'a week', 'woo-audio-preview' );
 			}
 
 			// Get the days.
 			$days = ( intval( $seconds ) / DAY_IN_SECONDS ) % 7;
 			if ( $days > 1 ) {
 				/* translators: Number of days */
-				return sprintf( __( '%s days', 'wc-audio-preview' ), $days );
+				return sprintf( __( '%s days', 'woo-audio-preview' ), $days );
 			} elseif ( $days > 0 ) {
-				return __( 'a day', 'wc-audio-preview' );
+				return __( 'a day', 'woo-audio-preview' );
 			}
 
 			// Get the hours.
 			$hours = ( intval( $seconds ) / HOUR_IN_SECONDS ) % 24;
 			if ( $hours > 1 ) {
 				/* translators: Number of hours */
-				return sprintf( __( '%s hours', 'wc-audio-preview' ), $hours );
+				return sprintf( __( '%s hours', 'woo-audio-preview' ), $hours );
 			} elseif ( $hours > 0 ) {
-				return __( 'an hour', 'wc-audio-preview' );
+				return __( 'an hour', 'woo-audio-preview' );
 			}
 
 			// Get the minutes.
 			$minutes = ( intval( $seconds ) / MINUTE_IN_SECONDS ) % 60;
 			if ( $minutes > 1 ) {
 				/* translators: Number of minutes */
-				return sprintf( __( '%s minutes', 'wc-audio-preview' ), $minutes );
+				return sprintf( __( '%s minutes', 'woo-audio-preview' ), $minutes );
 			} elseif ( $minutes > 0 ) {
-				return __( 'a minute', 'wc-audio-preview' );
+				return __( 'a minute', 'woo-audio-preview' );
 			}
 
 			// Get the seconds.
 			$seconds = intval( $seconds ) % 60;
 			if ( $seconds > 1 ) {
 				/* translators: Number of seconds */
-				return sprintf( __( '%s seconds', 'wc-audio-preview' ), $seconds );
+				return sprintf( __( '%s seconds', 'woo-audio-preview' ), $seconds );
 			} elseif ( $seconds > 0 ) {
-				return __( 'a second', 'wc-audio-preview' );
+				return __( 'a second', 'woo-audio-preview' );
 			}
 		}
 
@@ -165,126 +165,126 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 			$screen = get_current_screen();
 
 			if ( isset( $screen->base ) && 'plugins' === $screen->base ) {
-				$no_bug_url = wp_nonce_url( admin_url( '?' . $this->nobug_option . '=true' ), 'wc-audio-preview-feedback-nounce' );
+				$no_bug_url = wp_nonce_url( admin_url( '?' . $this->nobug_option . '=true' ), 'woo-audio-preview-feedback-nounce' );
 				$time       = $this->seconds_to_words( time() - get_site_option( $this->date_option ) );
 				?>
 
 				<style>
-				.notice.wc-audio-preview-notice {
+				.notice.woo-audio-preview-notice {
 					border-left-color: #008ec2 !important;
 					padding: 20px;
 				}
 
-				.rtl .notice.wc-audio-preview-notice {
+				.rtl .notice.woo-audio-preview-notice {
 					border-right-color: #008ec2 !important;
 				}
 
-				.notice.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner {
+				.notice.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner {
 					display: table;
 					width: 100%;
 				}
 
-				.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-icon,
-				.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-content,
-				.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-install-now {
+				.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-icon,
+				.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-content,
+				.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-install-now {
 					display: table-cell;
 					vertical-align: middle;
 				}
 
-				.notice.wc-audio-preview-notice .wc-audio-preview-notice-icon {
+				.notice.woo-audio-preview-notice .woo-audio-preview-notice-icon {
 					color: #509ed2;
 					font-size: 50px;
 					width: 60px;
 				}
 
-				.notice.wc-audio-preview-notice .wc-audio-preview-notice-icon img {
+				.notice.woo-audio-preview-notice .woo-audio-preview-notice-icon img {
 					width: 64px;
 				}
 
-				.notice.wc-audio-preview-notice .wc-audio-preview-notice-content {
+				.notice.woo-audio-preview-notice .woo-audio-preview-notice-content {
 					padding: 0 40px 0 20px;
 				}
 
-				.notice.wc-audio-preview-notice p {
+				.notice.woo-audio-preview-notice p {
 					padding: 0;
 					margin: 0;
 				}
 
-				.notice.wc-audio-preview-notice h3 {
+				.notice.woo-audio-preview-notice h3 {
 					margin: 0 0 5px;
 				}
 
-				.notice.wc-audio-preview-notice .wc-audio-preview-install-now {
+				.notice.woo-audio-preview-notice .woo-audio-preview-install-now {
 					text-align: center;
 				}
 
-				.notice.wc-audio-preview-notice .wc-audio-preview-install-now .wc-audio-preview-install-button {
+				.notice.woo-audio-preview-notice .woo-audio-preview-install-now .woo-audio-preview-install-button {
 					padding: 6px 50px;
 					height: auto;
 					line-height: 20px;
 				}
 
-				.notice.wc-audio-preview-notice a.no-thanks {
+				.notice.woo-audio-preview-notice a.no-thanks {
 					display: block;
 					margin-top: 10px;
 					color: #72777c;
 					text-decoration: none;
 				}
 
-				.notice.wc-audio-preview-notice a.no-thanks:hover {
+				.notice.woo-audio-preview-notice a.no-thanks:hover {
 					color: #444;
 				}
 
 				@media (max-width: 767px) {
 
-					.notice.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner {
+					.notice.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner {
 						display: block;
 					}
 
-					.notice.wc-audio-preview-notice {
+					.notice.woo-audio-preview-notice {
 						padding: 20px !important;
 					}
 
-					.notice.wc-audio-preview-noticee .wc-audio-preview-notice-inner {
+					.notice.woo-audio-preview-noticee .woo-audio-preview-notice-inner {
 						display: block;
 					}
 
-					.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-content {
+					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-content {
 						display: block;
 						padding: 0;
 					}
 
-					.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-notice-icon {
+					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-icon {
 						display: none;
 					}
 
-					.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .wc-audio-preview-install-now {
+					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-install-now {
 						margin-top: 20px;
 						display: block;
 						text-align: left;
 					}
 
-					.notice.wc-audio-preview-notice .wc-audio-preview-notice-inner .no-thanks {
+					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .no-thanks {
 						display: inline-block;
 						margin-left: 15px;
 					}
 				}
 				</style>
-				<div class="notice updated wc-audio-preview-notice">
-					<div class="wc-audio-preview-notice-inner">
-						<div class="wc-audio-preview-notice-icon">
-							<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ); ?>" />
+				<div class="notice updated woo-audio-preview-notice">
+					<div class="woo-audio-preview-notice-inner">
+						<div class="woo-audio-preview-notice-icon">
+							<img src="<?php echo esc_url( WCAP_PLUGIN_URI . '/admin/images/wbcom.png' ); ?>" alt="<?php echo esc_attr__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ); ?>" />
 						</div>
-						<div class="wc-audio-preview-notice-content">
-							<h3><?php echo esc_html__( 'Are you enjoying Audio Preview for WooCommerce?', 'wc-audio-preview' ); ?></h3>
+						<div class="woo-audio-preview-notice-content">
+							<h3><?php echo esc_html__( 'Are you enjoying Audio Preview for WooCommerce?', 'woo-audio-preview' ); ?></h3>
 							<p>
 								<?php /* translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress*/ ?>
-								<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Would you kindly give it a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'wc-audio-preview' ), esc_html( $this->name ) ); ?>
+								<?php printf( esc_html__( 'We hope you\'re enjoying %1$s! Would you kindly give it a 5-star rating on WordPress? Your feedback helps us improve and reach more users.', 'woo-audio-preview' ), esc_html( $this->name ) ); ?>
 							</p>
 						</div>
-						<div class="wc-audio-preview-install-now">
-							<?php printf( '<a href="%1$s" class="button button-primary wc-audio-preview-install-button" target="_blank">%2$s</a>', esc_url( 'https://wordpress.org/support/plugin/woo-audio-preview/reviews/' ), esc_html__( 'Leave a Review', 'wc-audio-preview' ) ); ?>
-							<a href="<?php echo esc_url( $no_bug_url ); ?>" class="no-thanks"><?php echo esc_html__( 'No thanks / I already have', 'wc-audio-preview' ); ?></a>
+						<div class="woo-audio-preview-install-now">
+							<?php printf( '<a href="%1$s" class="button button-primary woo-audio-preview-install-button" target="_blank">%2$s</a>', esc_url( 'https://wordpress.org/support/plugin/woo-audio-preview/reviews/' ), esc_html__( 'Leave a Review', 'woo-audio-preview' ) ); ?>
+							<a href="<?php echo esc_url( $no_bug_url ); ?>" class="no-thanks"><?php echo esc_html__( 'No thanks / I already have', 'woo-audio-preview' ); ?></a>
 						</div>
 					</div>
 				</div>
@@ -298,7 +298,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 		public function set_no_bug() {
 
 			// Bail out if not on correct page.
-			if ( ! isset( $_GET['_wpnonce'] ) || ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wc-audio-preview-feedback-nounce' ) || ! is_admin() || ! isset( $_GET[ $this->nobug_option ] ) || ! current_user_can( 'manage_options' ) ) ) {
+			if ( ! isset( $_GET['_wpnonce'] ) || ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'woo-audio-preview-feedback-nounce' ) || ! is_admin() || ! isset( $_GET[ $this->nobug_option ] ) || ! current_user_can( 'manage_options' ) ) ) {
 				return;
 			}
 
@@ -316,7 +316,7 @@ function wcap_audio_feedback_cb() { // phpcs:ignore Universal.Files.SeparateFunc
 	new Woo_Audio_Feedback(
 		array(
 			'slug'       => 'woo_audio_feedback',
-			'name'       => esc_html__( 'Audio Preview for WooCommerce', 'wc-audio-preview' ),
+			'name'       => esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ),
 			'time_limit' => WEEK_IN_SECONDS,
 		)
 	);
