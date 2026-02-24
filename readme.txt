@@ -178,10 +178,15 @@ Free support is available through the WordPress.org support forum at wordpress.o
 * Fixed: Plugin Check tool flagged issues resolved
 * Fixed: Input sanitization and output escaping across admin and frontend
 * Fixed: Removed debug error_log() statements from production code
+* Fixed: Replaced `global $post` with WooCommerce-safe product retrieval for page builder compatibility (Elementor, Divi, Beaver Builder)
+* Fixed: Inline JavaScript for Google Drive and SoundCloud players moved to main JS file to prevent function redefinition per track
+* Fixed: Removed `!important` from container padding to avoid theme conflicts
 * New: Added `wcap_before_audio_preview` and `wcap_after_audio_preview` action hooks for developer extensibility
 * Improved: Proper data cleanup on plugin uninstall (options and post meta)
 * Improved: Option autoload set to false for non-critical data
-* Tested: Confirmed compatibility with WordPress 6.9.1
+* Improved: Google Drive and SoundCloud player styles moved from inline to main stylesheet
+* Improved: Main JavaScript loaded in footer for better page performance
+* Tested: Confirmed compatibility with WordPress 6.9.1 and popular themes (Storefront, Astra, OceanWP, Kadence, GeneratePress)
 
 = 1.5.0 =
 * New: Google Drive integration with iframe-based audio player
@@ -237,7 +242,7 @@ Free support is available through the WordPress.org support forum at wordpress.o
 == Upgrade Notice ==
 
 = 1.5.1 =
-Security and quality release with input sanitization, developer hooks, and proper uninstall cleanup. Safe to upgrade with no data changes.
+Security, quality, and theme compatibility release. Fixes page builder conflicts (Elementor, Divi), moves inline scripts to bundled JS, adds developer hooks, and improves uninstall cleanup. Safe to upgrade with no data changes.
 
 = 1.5.0 =
 Major update adding CDN support for Google Drive, SoundCloud, Dropbox, and more, along with a redesigned audio player and improved mobile experience. No data loss — existing audio configurations are preserved. Safe to upgrade.
