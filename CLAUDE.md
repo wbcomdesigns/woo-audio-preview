@@ -46,6 +46,64 @@ Derived from a code audit on 2026-08-08 that verified every open Basecamp card a
 ### Do not build in free
 Waveform, watermark, playlist, play counts and download protection are Pro differentiators.
 
+### What this plugin should have and does not (9 of 16)
+
+**Store owner expects:**
+
+- [ ] **Gutenberg block** - Block themes often never fire the classic WooCommerce hooks this plugin renders through, so the owner sees nothing and has no way to place it by hand.
+- [ ] **Shortcode fallback** - Without one there is no escape hatch when the automatic placement does not fire.
+- [ ] **Theme-overridable templates** - The owner cannot restyle output without editing plugin files, which an update overwrites.
+- [ ] **Admin screen for stored data** - Anything the plugin stores, the owner must be able to see, moderate and export from wp-admin. Otherwise support means phpMyAdmin.
+- [ ] **Conditional asset loading** - Assets load on every page of the site, including pages that never show this plugin.
+
+**Developer extending it expects:**
+
+- [ ] **REST API** - No mobile app, headless storefront or external integration can reach this data.
+- [ ] **Documented hooks/filters** - Developers extending the plugin have to read the source to find the extension points.
+- [ ] **Test suite** - Nothing catches a regression before a customer does.
+- [ ] **WPCS config** - Coding-standard drift is invisible until a WordPress.org review rejects it.
+### Frontend, UX & code health
+
+- [ ] **Loads on every page of the site.** The only guard is `is_admin()`, so a shopper reading a blog post downloads 71kb CSS + 57kb JS for a player they never see. Gate on `is_product()` / `has_shortcode()`.
+- [ ] **No block and no shortcode** - placement is via `woocommerce_before_add_to_cart_form` only, so on a block theme the player silently does not appear and the owner has no fallback. Highest-value addition for this tier.
+- [ ] **4 function bodies identical to Pro** - loader boilerplate only; acceptable, leave unless reworking the loader.
+- [ ] **Dead-code leads: 2** - `add_admin_notice()` (11 LOC), `wcap_set_upload_dir()` (5 LOC).
+
+### The standard every plugin in this suite is measured against
+We are not auditing against each plugin's own history - we are auditing against what a WooCommerce plugin **should** provide a store owner and a developer extending it. Scored across all 11 plugins on 2026-08-08.
+
+| Expectation | Who needs it | Suite score |
+|---|---|---|
+| Gutenberg block | owner | **0 / 11** |
+| Admin screen for stored data | owner | **0 / 11** |
+| REST API | developer | **0 / 11** |
+| Test suite | developer | **0 / 11** |
+| WPCS config | developer | 2 / 11 |
+| Documented hooks/filters | developer | 3 / 11 |
+| Theme-overridable templates | owner | 4 / 11 |
+| Shortcode fallback | owner | 5 / 11 |
+| RTL stylesheet | owner | 8 / 11 |
+| CSS custom properties | owner | 8 / 11 |
+| Conditional asset loading | owner | 9 / 11 |
+| Clean uninstall | owner | 9 / 11 |
+| First-run guidance | owner | 9 / 11 |
+| Translation file | owner | 10 / 11 |
+| CI config | developer | 10 / 11 |
+| Settings screen | owner | 11 / 11 |
+
+**The four zeros are the real backlog.** Every plugin has a settings screen; not one has a block, an admin screen for the data it stores, a REST route, or a test. Those four gaps explain more customer complaints than the entire open bug list does.
+
+### Portfolio floor - one mechanical pass per plugin
+- [ ] **Focus rings** - `outline: none` with no `:focus-visible` replacement, **98 occurrences suite-wide**. Keyboard users cannot see where they are.
+- [ ] **RTL** - raw `margin-left` / `margin-right`, **96 occurrences suite-wide**. Use `margin-inline-start/end`.
+- [ ] **Icons** - **62** Dashicons references; migrate to Lucide with a map for stored values.
+- [ ] **No native dialogs** - **12** `alert()`/`confirm()` calls put a raw browser dialog in front of a shopper mid-purchase.
+
+### Ground rules
+- **Dead-code lists are leads, not delete lists.** `init_form_fields()`, `get_content_html()` and `get_content_plain()` are `WC_Email` overrides invoked through the parent class - they look unreferenced to a static scan and **must not be removed**. The same applies to callbacks reached only by `add_action` string name and CSS classes built in JS.
+- **Deduplicate at the seam.** Where free and Pro share an identical function body, the fix is one owner plus an extension point, never the same edit twice.
+- **One concern per PR**, so a regression bisects fast.
+
 ### Ground rules for this list
 - A card is a lead, not a spec. Several open cards were found to be already fixed or factually wrong about this tree - re-verify before building.
 - Fix at the seam, not on the screen that reported it. Where a fix has a shared cause, the entry below says so.
