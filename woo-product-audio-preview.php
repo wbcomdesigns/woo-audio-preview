@@ -13,7 +13,7 @@
  * Plugin Name:       Audio Preview for WooCommerce
  * Plugin URI:        https://wbcomdesigns.com
  * Description:       Add audio previews to WooCommerce products. Let customers listen before they buy with major audio formats and CDN support.
- * Version:           1.5.1
+ * Version:           1.5.2
  * Author:            Wbcom Designs <admin@wbcomdesigns.com>
  * Author URI:        http://wbcomdesigns.com
  * License:           GPL-2.0+
@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 if ( ! defined( 'WCAP_TEXT_VERSION' ) ) {
-	define( 'WCAP_TEXT_VERSION', '1.5.1' );
+	define( 'WCAP_TEXT_VERSION', '1.5.2' );
 }
 
 if ( ! defined( 'WCAP_TEXT_DOMAIN' ) ) {
