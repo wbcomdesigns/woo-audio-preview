@@ -28,6 +28,29 @@ Every surface this product is known by. When these drift, a site owner reports a
 | Basecamp board | `Audio Preview for WooCommerce` (42374833) |
 | Basecamp URL | https://3.basecamp.com/5798509/projects/42374833 |
 
+## Current Task List
+
+Ordered by how many store owners are affected, not by how interesting the code is.
+Derived from a code audit on 2026-08-08 that verified every open Basecamp card against this branch.
+**Work happens on this branch (`1.5.2`).**
+
+### 1. Placement - the most requested thing owners cannot do
+- [ ] **Shortcode + Gutenberg block.** Third-party themes routinely drop `woocommerce_before_add_to_cart_form`, and there is currently no escape hatch, so the player silently does not appear. This is the single highest-value addition for the free tier.
+
+### 2. Performance
+- [ ] **Assets load on every page.** `public/class-wc-audio-preview-public.php:65,95` enqueue unconditionally. (Pro has the identical defect - fix both.)
+
+### 3. Real gap
+- [ ] **Variable products cannot have per-variation audio.**
+
+### Do not build in free
+Waveform, watermark, playlist, play counts and download protection are Pro differentiators.
+
+### Ground rules for this list
+- A card is a lead, not a spec. Several open cards were found to be already fixed or factually wrong about this tree - re-verify before building.
+- Fix at the seam, not on the screen that reported it. Where a fix has a shared cause, the entry below says so.
+- Most customers do not run our themes. Verify on a generic theme (Storefront or a block theme), not only on Reign/BuddyX.
+
 ## What It Does
 Adds audio preview players to WooCommerce product pages. Customers can listen to audio samples (music tracks, audiobook excerpts, sound effects) before purchasing. Supports up to 3 audio previews per product in the free version.
 
