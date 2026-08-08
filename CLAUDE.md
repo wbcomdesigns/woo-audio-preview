@@ -28,6 +28,20 @@ Every surface this product is known by. When these drift, a site owner reports a
 | Basecamp board | `Audio Preview for WooCommerce` (42374833) |
 | Basecamp URL | https://3.basecamp.com/5798509/projects/42374833 |
 
+## Where the work is tracked
+
+Two places, deliberately, and they reconcile:
+
+| | |
+|---|---|
+| **Basecamp board** | [Audio Preview for WooCommerce](https://3.basecamp.com/5798509/projects/42374833) |
+| **Cards to work** | **4** — 0 in Bugs, 4 in Scope |
+| **Checklist below** | **20** items on branch `1.5.2` |
+
+**Why the two numbers differ.** A card is the trackable unit a person picks up; a checklist item is one verifiable step inside it. The portfolio-floor items in particular repeat across all 11 plugins — four suite-wide faults, counted once per plugin here.
+
+**To verify progress:** the card is done when every checklist item it names is ticked in this file, on this branch. Neither source is authoritative alone — the board says what is being worked, this file says what "done" means.
+
 ## Current Task List
 
 Ordered by how many store owners are affected, not by how interesting the code is.
