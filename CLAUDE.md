@@ -14,6 +14,20 @@
 - **Pro Version:** woo-audio-preview-pro (separate plugin)
 - **Basecamp:** https://3.basecamp.com/5798509/projects/42374833
 
+## Names & Identity
+
+Every surface this product is known by. When these drift, a site owner reports a bug under one name and support searches for another.
+
+| Surface | Value |
+|---|---|
+| Plugin Name (what the site owner sees) | `Audio Preview for WooCommerce` |
+| Install slug (`wp-content/plugins/`) | `woo-audio-preview` |
+| Git repo | `woo-audio-preview` |
+| Text domain | `woo-audio-preview` |
+| readme.txt title | `Audio Preview for WooCommerce` |
+| Basecamp board | `Audio Preview for WooCommerce` (42374833) |
+| Basecamp URL | https://3.basecamp.com/5798509/projects/42374833 |
+
 ## What It Does
 Adds audio preview players to WooCommerce product pages. Customers can listen to audio samples (music tracks, audiobook excerpts, sound effects) before purchasing. Supports up to 3 audio previews per product in the free version.
 
