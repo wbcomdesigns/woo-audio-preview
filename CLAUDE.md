@@ -12,6 +12,7 @@
 - **Requires WooCommerce:** 4.0+
 - **Tested up to:** WordPress 6.9
 - **Pro Version:** woo-audio-preview-pro (separate plugin)
+- **Basecamp:** https://3.basecamp.com/5798509/projects/42374833
 
 ## What It Does
 Adds audio preview players to WooCommerce product pages. Customers can listen to audio samples (music tracks, audiobook excerpts, sound effects) before purchasing. Supports up to 3 audio previews per product in the free version.
@@ -147,11 +148,3 @@ The free version checks for `woo-audio-preview-pro/woo-audio-preview-pro.php` in
 - JS files: 6 (3 source + 3 minified)
 - CSS files: 10 (source, minified, RTL variants)
 - Total non-git files: ~40
-
-## Recent Changes
-
-| Version | Changes |
-|---------|---------|
-| 1.5.1 | WPCS compliance, Plugin Check improvements, WP 6.9 compat |
-| 1.5.0 | Major: CDN support (Google Drive, SoundCloud, Dropbox, S3), modern player, fixed 3-field layout, mobile optimization, new audio formats |
-| 1.4.2 | WooCommerce 8.0+ compatibility fix |
