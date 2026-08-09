@@ -193,23 +193,38 @@ class Wc_Audio_Preview {
 		 */
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
 
-		WCAP_Settings_Tabs::init();
-		Wbcom_Settings_Page::boot(
-			array(
-				'prefix'       => 'wcap',
-				'slug'         => 'woo-audio-preview-settings',
-				'icon'         => 'audio-lines',
-				'assets_url'   => plugin_dir_url( __DIR__ ),
-				'version'      => WCAP_TEXT_VERSION,
-				'legacy_slugs' => array( 'wcap-pro-settings', 'wbcom-license-page' ),
-				'labels'       => array(
-					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
-					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
-					'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
-					'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
-					'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
-				),
-			)
+		/*
+		 * Deferred to init because the labels below are translated, and this runs on
+		 * plugins_loaded - before translations are available. WordPress 6.7 reports that as
+		 * "Translation loading was triggered too early" on EVERY request, storefront included.
+		 *
+		 * Nothing here needs to run earlier: boot() only registers admin_menu,
+		 * admin_enqueue_scripts and in_admin_header callbacks, all of which fire long after
+		 * init. The shared library's own highest-version-wins loader still runs at
+		 * plugins_loaded -999 and is unaffected.
+		 */
+		add_action(
+			'init',
+			function () {
+				WCAP_Settings_Tabs::init();
+					Wbcom_Settings_Page::boot(
+						array(
+							'prefix'       => 'wcap',
+							'slug'         => 'woo-audio-preview-settings',
+							'icon'         => 'audio-lines',
+							'assets_url'   => plugin_dir_url( __DIR__ ),
+							'version'      => WCAP_TEXT_VERSION,
+							'legacy_slugs' => array( 'wcap-pro-settings', 'wbcom-license-page' ),
+							'labels'       => array(
+								'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
+								'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
+								'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
+								'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
+								'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
+							),
+						)
+					);
+			}
 		);
 
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );

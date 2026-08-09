@@ -190,6 +190,19 @@ class Wc_Audio_Preview_Public {
 		}
 
 		$product_id = $product->get_id();
+
+		/*
+		 * The raw stored value, passed to the two public hooks below.
+		 *
+		 * Those hooks documented a $wcap_audio parameter and passed a variable that no longer
+		 * existed here - it was left behind when reading moved to WCAP_Audio. So every render
+		 * emitted two "Undefined variable" warnings, and, worse, every listener on
+		 * wcap_before_audio_preview / wcap_after_audio_preview received null where the
+		 * documented payload should have been. The hooks are a public contract, so they get
+		 * the value they promise rather than losing the parameter.
+		 */
+		$wcap_audio = get_post_meta( $product_id, WCAP_Audio::META_KEY, true );
+
 		/*
 		 * Read through WCAP_Audio, which understands every shape this plugin pair has ever
 		 * written. The code this replaced accepted only the newest one and looped the NAMES
