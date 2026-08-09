@@ -36,7 +36,7 @@
      */
     bindEvents: function() {
       // Determine mode based on presence of fixed fields
-      if ($('.wcap-fixed-audio-fields').length > 0) {
+      if ($('.wcap-fixed-audio-fields').length >0) {
         this.config.isFixedMode = true;
         this.bindFixedModeEvents();
       } else {
@@ -135,35 +135,18 @@
      */
     createAudioRow: function() {
       const rowHtml = `
-        <tr class="wcap-audio-file">
-          <td class="sort" data-label="Sort"></td>
-          <td class="file_name" data-label="Name">
-            <input class="input_text wcap-file-name" 
+        <tr class="wcap-audio-file"><td class="sort" data-label="Sort"></td><td class="file_name" data-label="Name"><input class="input_text wcap-file-name" 
                    placeholder="Audio Name" 
                    name="wcap_audio[wcap_audio_names][]" 
                    value="" 
                    type="text" 
-                   required>
-          </td>
-          <td class="file_url" data-label="Audio URL">
-            <input class="input_text wcap_audio_urls" 
+                   required></td><td class="file_url" data-label="Audio URL"><input class="input_text wcap_audio_urls" 
                    placeholder="Enter URL or choose from Media Library" 
                    name="wcap_audio[wcap_audio_urls][]" 
                    value="" 
-                   type="url">
-          </td>
-          <td class="file_url_choose" width="1%" data-label="Choose">
-            <button type="button" class="button wcap-media-button">Media Library</button>
-          </td>
-          <td width="15%" data-label="Actions">
-            <button type="button" class="wcap-add-audio-cl button button-primary button-small" title="Add a new audio file">
-              Add
-            </button>
-            <button type="button" class="wcap-delete-audio-cl button button-secondary button-small" title="Remove this audio file">
-              Remove
-            </button>
-          </td>
-        </tr>`;
+                   type="url"></td><td class="file_url_choose" width="1%" data-label="Choose"><button type="button" class="button wcap-media-button">Media Library</button></td><td width="15%" data-label="Actions"><button type="button" class="wcap-add-audio-cl button button-primary button-small" title="Add a new audio file">Add
+            </button><button type="button" class="wcap-delete-audio-cl button button-secondary button-small" title="Remove this audio file">Remove
+            </button></td></tr>`;
       
       return $(rowHtml);
     },
@@ -308,7 +291,7 @@
       $fieldRow.find('.wcap-service-indicator').remove();
       
       // Add new indicator
-      const indicator = `<div class="wcap-service-indicator">🔗 ${cdnInfo.serviceName} link detected</div>`;
+      const indicator = `<div class="wcap-service-indicator">${cdnInfo.serviceName} link detected</div>`;
       $fieldRow.append(indicator);
     },
 
@@ -395,7 +378,7 @@
       
       if (filename && filename.includes('.')) {
         const nameWithoutExt = filename.split('.')[0];
-        return nameWithoutExt.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        return nameWithoutExt.replace(/[-_]/g, ' ').replace(/\b\w/g, l =>l.toUpperCase());
       }
       
       return baseName;
@@ -408,12 +391,7 @@
       WCAP.removeServiceIndicator($row);
       
       const indicator = `
-        <div class="wcap-service-indicator wcap-service-${serviceInfo.service}">
-          <span class="service-icon">${WCAP.getServiceIcon(serviceInfo.service)}</span>
-          <span class="service-text">${serviceInfo.serviceName} link detected</span>
-          <span class="service-status">✓ Ready for preview</span>
-        </div>
-      `;
+        <div class="wcap-service-indicator wcap-service-${serviceInfo.service}"><span class="service-icon">${WCAP.getServiceIcon(serviceInfo.service)}</span><span class="service-text">${serviceInfo.serviceName} link detected</span><span class="service-status">Ready for preview</span></div>`;
       
       $row.find('.file_url').append(indicator);
       $row.addClass('wcap-cdn-row');
@@ -435,14 +413,14 @@
      */
     getServiceIcon: function(service) {
       const icons = {
-        soundcloud: '☁️',
-        spotify: '🎵',
-        amazon_s3: '📦',
-        cloudfront: '⚡',
-        google_drive: '📁',
-        dropbox: '📦'
+        soundcloud: '',
+        spotify: '',
+        amazon_s3: '',
+        cloudfront: '',
+        google_drive: '',
+        dropbox: ''
       };
-      return icons[service] || '🔗';
+      return icons[service] || '';
     },
 
     /**
@@ -619,7 +597,7 @@
         });
       }
       
-      if (errors.length > 0) {
+      if (errors.length >0) {
         e.preventDefault();
         WCAP.showErrors(errors);
         WCAP.scrollToErrors();
@@ -654,7 +632,7 @@
       if (serviceInfo) {
         $input.removeClass('error').addClass('success cdn-detected');
         WCAP.hideFieldError($input);
-        WCAP.showFieldSuccess($input, `${serviceInfo.serviceName} link detected! ✓`);
+        WCAP.showFieldSuccess($input, `${serviceInfo.serviceName} link detected! `);
         return;
       }
       
@@ -741,7 +719,7 @@
       const cleanUrl = url.split('?')[0].split('#')[0];
       // Extract extension from the clean URL
       const parts = cleanUrl.split('.');
-      return parts.length > 1 ? parts.pop().toLowerCase() : '';
+      return parts.length >1 ? parts.pop().toLowerCase() : '';
     },
 
     isValidAudioType: function(extension) {
@@ -763,7 +741,7 @@
     debounce: function(func, wait) {
       let timeout;
       return function executedFunction(...args) {
-        const later = () => {
+        const later = () =>{
           clearTimeout(timeout);
           func.apply(this, args);
         };
@@ -788,26 +766,20 @@
         $container = $(WCAP.config.errorContainer);
       }
       
-      const errorHtml = errors.map(error => `<p class="error-message">⚠️ ${error}</p>`).join('');
+      const errorHtml = errors.map(error =>`<p class="error-message">${error}</p>`).join('');
       
       $container.html(`
-        <div class="wcap-error-box">
-          <h4>Please fix the following errors:</h4>
-          ${errorHtml}
-        </div>
-      `).show();
+        <div class="wcap-error-box"><h4>Please fix the following errors:</h4>${errorHtml}
+        </div>`).show();
     },
 
     showSuccess: function(message) {
       const $container = $('.wcap-error-messages');
       $container.html(`
-        <div class="wcap-success-box">
-          <p class="success-message">✅ ${message}</p>
-        </div>
-      `).show();
+        <div class="wcap-success-box"><p class="success-message">${message}</p></div>`).show();
       
       // Auto-hide success message after 3 seconds
-      setTimeout(() => {
+      setTimeout(() =>{
         $container.fadeOut();
       }, 3000);
     },
@@ -836,7 +808,7 @@
       $field.after(`<span class="field-success">${message}</span>`);
       
       // Auto-hide success message after 3 seconds
-      setTimeout(() => {
+      setTimeout(() =>{
         $field.siblings('.field-success').fadeOut();
       }, 3000);
     },
@@ -867,7 +839,7 @@
     const isWCAPSettingsPage = currentUrl.includes('page=woo-audio-preview-settings');
     
     // Only initialize on product edit pages and admin settings
-    if (isProductEditPage || isWCAPSettingsPage || $('.woo-audio-preview-table').length > 0 || $('.wcap-fixed-audio-fields').length > 0) {
+    if (isProductEditPage || isWCAPSettingsPage || $('.woo-audio-preview-table').length >0 || $('.wcap-fixed-audio-fields').length >0) {
       WCAP.init();
     }
   });
