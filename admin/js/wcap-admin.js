@@ -850,179 +850,43 @@
 })(jQuery);
 
 /* Enhanced CSS for CDN URL detection and fixed fields */
-jQuery(document).ready(function($) {
-  $('<style>')
-    .text(`
-      .wcap-error-messages {
-        margin-bottom: 15px;
-        display: none;
-      }
-      
-      .wcap-error-box {
-        background: #ffebee;
-        border: 1px solid #f44336;
-        border-radius: 4px;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-left: 4px solid #f44336;
-      }
-      
-      .wcap-error-box h4 {
-        margin: 0 0 10px 0;
-        color: #d32f2f;
-        font-size: 14px;
-        font-weight: 600;
-      }
-      
-      .error-message {
-        margin: 5px 0;
-        color: #d32f2f;
-        font-size: 13px;
-      }
-      
-      .wcap-success-box {
-        background: #e8f5e8;
-        border: 1px solid #4caf50;
-        border-radius: 4px;
-        padding: 10px 15px;
-        margin-bottom: 15px;
-        border-left: 4px solid #4caf50;
-      }
-      
-      .success-message {
-        margin: 0;
-        color: #2e7d32;
-        font-size: 13px;
-      }
-      
-      .field-error {
-        color: #dc3232;
-        font-size: 12px;
-        display: block;
-        margin-top: 3px;
-      }
-      
-      .field-success {
-        color: #0073aa;
-        font-size: 12px;
-        display: block;
-        margin-top: 3px;
-      }
-      
-      .wcap-audio-file input.error,
-      .wcap-audio-field-group input.error {
-        border-color: #dc3232;
-        box-shadow: 0 0 2px rgba(220, 50, 50, 0.8);
-      }
-      
-      .wcap-audio-file input.success,
-      .wcap-audio-field-group input.success {
-        border-color: #4caf50;
-        box-shadow: 0 0 2px rgba(76, 175, 80, 0.8);
-      }
-      
-      .wcap-cdn-row {
-        background-color: #f0f8ff !important;
-        border-left: 3px solid #0073aa;
-      }
-      
-      .wcap-service-indicator {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 5px;
-        padding: 5px 10px;
-        background: #e8f4f8;
-        border: 1px solid #0073aa;
-        border-radius: 4px;
-        font-size: 12px;
-        color: #0073aa;
-      }
-      
-      .wcap-service-indicator .service-icon {
-        font-size: 14px;
-      }
-      
-      .wcap-service-indicator .service-status {
-        margin-left: auto;
-        font-weight: bold;
-        color: #28a745;
-      }
-      
-      /* Google Drive specific styling */
-      .wcap-service-google_drive {
-        background: #e8f5e9;
-        border-color: #4caf50;
-      }
-      
-      .wcap-service-google_drive .service-icon {
-        color: #4caf50;
-      }
-      
-      .wcap_audio_urls.cdn-detected,
-      .wcap-audio-url.cdn-detected {
-        border-color: #0073aa;
-        box-shadow: 0 0 0 1px #0073aa;
-      }
-      
-      .wcap-sort-placeholder {
-        background: #f0f0f0;
-        border: 2px dashed #ccc;
-        height: 50px;
-      }
-      
-      .wcap-loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-      }
-      
-      .wcap-loader .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #0073aa;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    `)
-    .appendTo('head');
-});
 /**
- * Add another preview row.
+ * Add and remove preview rows.
  *
  * The markup comes from a template the PHP renders with render_row(), so a row added here is the
- * same row the server would have drawn - including fields contributed by an extension. Cloning the
- * last visible row instead would copy its values, and building the markup in JS would mean two
- * definitions of a row drifting apart.
+ * row the server would have drawn - including cells contributed by an extension. Cloning the last
+ * visible row would copy its values; building the markup in JS would mean two definitions of a row
+ * drifting apart.
  */
 ( function ( $ ) {
 	'use strict';
+
+	function rows() {
+		return document.querySelectorAll( '.wcap-audio-rows .wcap-audio-row' );
+	}
 
 	$( document ).on( 'click', '[data-wcap-add-row], #wcap-pro-add-more', function ( e ) {
 		e.preventDefault();
 
 		var template = document.getElementById( 'wcap-metabox-row-template' );
-		var wrap     = document.querySelector( '.wcap-fixed-audio-fields' );
+		var body     = document.querySelector( '.wcap-audio-rows' );
 
-		if ( ! template || ! wrap ) {
+		if ( ! template || ! body ) {
 			return;
 		}
 
-		var index = wrap.querySelectorAll( '[name^="wcap_audio[wcap_audio_names]"]' ).length;
+		body.insertAdjacentHTML( 'beforeend', template.innerHTML.split( '__INDEX__' ).join( rows().length ) );
+	} );
 
-		wrap.insertAdjacentHTML( 'beforeend', template.innerHTML.split( '__INDEX__' ).join( index ) );
+	$( document ).on( 'click', '.wcap-remove-row', function ( e ) {
+		e.preventDefault();
+
+		// Never remove the last row - an empty table gives the owner nothing to type into.
+		if ( rows().length > 1 ) {
+			this.closest( 'tr' ).remove();
+			return;
+		}
+
+		$( this ).closest( 'tr' ).find( 'input' ).val( '' );
 	} );
 }( jQuery ) );

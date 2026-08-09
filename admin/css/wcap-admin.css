@@ -794,3 +794,154 @@
     display: block;
     margin-top: 3px;
 }
+
+/* Product meta box table - responsive ------------------------------------------------------ */
+
+/*
+ * Below the WordPress admin's own breakpoint the table stops being a table and each row becomes a
+ * stack of labelled fields. The cells already carried data-label attributes for this - the markup
+ * was written for a responsive design that was never finished, so on a phone the table simply
+ * overflowed its box and the last columns were unreachable.
+ */
+@media screen and (max-width: 782px) {
+	.wcap-audio-table,
+	.wcap-audio-table thead,
+	.wcap-audio-table tbody,
+	.wcap-audio-table tr,
+	.wcap-audio-table td {
+		display: block;
+		width: auto;
+	}
+
+	.wcap-audio-table thead {
+		display: none;
+	}
+
+	.wcap-audio-table tr {
+		border: 1px solid #dcdcde;
+		border-radius: 4px;
+		padding: 8px 10px;
+		margin-bottom: 10px;
+	}
+
+	.wcap-audio-table td {
+		padding: 6px 0;
+		border: 0;
+	}
+
+	.wcap-audio-table td.sort {
+		display: none;
+	}
+
+	.wcap-audio-table td::before {
+		content: attr(data-label);
+		/*
+		 * position:static is not redundant. Another stylesheet in the admin already has a
+		 * responsive table pattern that positions td::before ABSOLUTELY, and it wins here - the
+		 * label rendered on top of the field instead of above it, which measured as a perfectly
+		 * stacked layout and looked like overlapping text.
+		 */
+		position: static;
+		display: block;
+		font-weight: 600;
+		margin-bottom: 4px;
+	}
+
+	.wcap-audio-table td input[type="text"],
+	.wcap-audio-table td input[type="url"],
+	.wcap-audio-table td input[type="number"] {
+		width: 100%;
+	}
+}
+
+/*
+ * Product metabox - shared spec.
+ *
+ * This block mirrors the equivalent one in woo-document-preview's
+ * wcdp-admin.css. Both plugins put the same box on the same screen, so a store
+ * owner who sells audio and documents sees one design, not two. Class names
+ * differ by prefix; the rules do not. Change one, change the other.
+ *
+ * Until now the audio table had NO desktop rules at all - only a 390px block -
+ * so its header row rendered unshaded and its cells unpadded next to the
+ * document box.
+ */
+.wcap-metabox-help {
+	margin: 0 0 16px;
+}
+
+.wcap-metabox-help > summary {
+	cursor: pointer;
+	padding: 8px 0;
+	font-weight: 600;
+	display: list-item;
+	list-style-position: inside;
+}
+
+.wcap-metabox-help > summary:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.wcap-metabox-help__body {
+	padding: 4px 0 0;
+}
+
+.wcap-metabox-help__body p {
+	margin: 0 0 6px;
+	color: #646970;
+}
+
+.wcap-audio-table {
+	margin-top: 10px;
+}
+
+.wcap-audio-table th {
+	font-weight: 600;
+	padding: 12px 8px;
+	background: #f8f9fa;
+	border-bottom: 2px solid #e1e1e1;
+	text-align: start;
+	white-space: nowrap;
+}
+
+.wcap-audio-table td {
+	padding: 10px 8px;
+	vertical-align: middle;
+	border-bottom: 1px solid #e1e1e1;
+}
+
+.wcap-audio-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.wcap-audio-table td input[type="text"],
+.wcap-audio-table td input[type="url"] {
+	width: 100%;
+}
+
+/*
+ * The error twin of this rule already lived here; the success twin only existed
+ * inside a 150-line stylesheet that wcap-admin.js built as a template string and
+ * injected into <head> on every product screen. Every other rule in that block
+ * was already declared in this file - it was a duplicate copy that could drift
+ * from the real stylesheet without anything failing. The block is gone; only
+ * this rule was genuinely missing.
+ */
+.wcap-audio-file .field-success {
+	display: block;
+	margin-top: 3px;
+	font-size: 12px;
+	color: #2271b1;
+}
+
+/*
+ * The only rule that was unique to get_enhanced_styles() - an 88-line PHP method
+ * that returned a CSS string and passed it to wp_add_inline_style(). Every other
+ * selector it declared was already in this file, and because inline styles land
+ * after the stylesheet in the cascade, that stale copy silently overrode the real
+ * values here. The method is gone; this is what it actually contributed.
+ */
+.wcap-service-google_drive .service-icon {
+	color: #4caf50;
+}

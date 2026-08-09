@@ -165,7 +165,6 @@ class Wc_Audio_Preview_Admin {
 				);
 
 				// Add enhanced styles for better UI.
-				wp_add_inline_style( $this->plugin_name, $this->get_enhanced_styles() );
 			}
 		}
 	}
@@ -400,73 +399,65 @@ class Wc_Audio_Preview_Admin {
 	 * @param string     $audio_url  Saved URL.
 	 */
 	public function render_row( $i, $audio_name = '', $audio_url = '' ) {
-		$field_number = is_numeric( $i ) ? ( (int) $i + 1 ) : '';
+		$cdn_info = ( '' !== $audio_url ) ? $this->is_cdn_url( $audio_url ) : false;
 		?>
-					<div class="wcap-audio-field-group"><h4 class="wcap-field-title">
-					<?php
-					/* translators: %d: Audio preview field number. */
-					echo esc_html( sprintf( __( 'Audio Preview %d', 'woo-audio-preview' ), $field_number ) );
-					?>
-							<?php
-							if ( 0 === $i ) :
-								?>
-								<span class="wcap-required"><?php esc_html_e( '(Primary)', 'woo-audio-preview' ); ?></span>
-								<?php
-else :
-	?>
-								<span class="wcap-optional"><?php esc_html_e( '(Optional)', 'woo-audio-preview' ); ?></span><?php endif; ?></h4><div class="wcap-field-row"><label for="wcap_audio_name_<?php echo esc_attr( $i ); ?>"><?php esc_html_e( 'Audio Name:', 'woo-audio-preview' ); ?></label><input type="text" 
-								id="wcap_audio_name_<?php echo esc_attr( $i ); ?>"
-								class="wcap-audio-name widefat" 
-								name="wcap_audio[wcap_audio_names][]" 
-								value="<?php echo esc_attr( $audio_name ); ?>" 
-								placeholder="
-				<?php
-				/* translators: %d: Track number. */
-				echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'woo-audio-preview' ), $field_number ) );
-				?>
-								" /></div><div class="wcap-field-row"><label for="wcap_audio_url_<?php echo esc_attr( $i ); ?>"><?php esc_html_e( 'Audio URL:', 'woo-audio-preview' ); ?></label><div class="wcap-url-input-group"><input type="url" 
-									id="wcap_audio_url_<?php echo esc_attr( $i ); ?>"
-									class="wcap-audio-url widefat" 
-									name="wcap_audio[wcap_audio_urls][]" 
-									value="<?php echo esc_url( $audio_url ); ?>" 
-									placeholder="<?php esc_attr_e( 'https://example.com/audio.mp3 or CDN link', 'woo-audio-preview' ); ?>" /><button type="button" 
-										class="button wcap-media-button" 
-										data-field-index="<?php echo esc_attr( $i ); ?>"><?php esc_html_e( 'Media Library', 'woo-audio-preview' ); ?></button>
-										<?php
-										if ( ! empty( $audio_url ) ) :
-											?>
-											<button type="button" 
-											class="button wcap-clear-button" 
-											data-field-index="<?php echo esc_attr( $i ); ?>"><?php esc_html_e( 'Clear', 'woo-audio-preview' ); ?></button><?php endif; ?></div>
-											<?php
-											// Show CDN indicator if URL is from a CDN.
-											if ( ! empty( $audio_url ) ) {
-												$cdn_info = $this->is_cdn_url( $audio_url );
-												if ( $cdn_info ) :
-													?>
-									<div class="wcap-service-indicator"><?php echo esc_html( ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) ) ); ?>link detected
-									</div>
-													<?php
-												endif;
-											}
-											?>
-							</div>
-					<?php
-					/**
-					 * Render extra fields inside a preview row.
-					 *
-					 * The seam the Pro plugin uses to add its per-track preview duration, rather
-					 * than drawing an entire second meta box with its own copy of the name and URL
-					 * fields. Both write into the same wcap_audio row, so one save handler owns it.
-					 *
-					 * @since 1.5.3
-					 * @param int    $i          Row index.
-					 * @param string $audio_name Saved name for this row.
-					 * @param string $audio_url  Saved URL for this row.
-					 */
-					do_action( 'wcap_metabox_row_fields', $i, $audio_name, $audio_url );
-					?>
-					</div>
+		<tr class="wcap-audio-row">
+			<td class="sort" data-label="<?php esc_attr_e( 'Sort', 'woo-audio-preview' ); ?>"></td>
+
+			<td class="audio_name" data-label="<?php esc_attr_e( 'Name', 'woo-audio-preview' ); ?>">
+				<input type="text"
+					class="input_text wcap-audio-name"
+					name="wcap_audio[wcap_audio_names][]"
+					value="<?php echo esc_attr( $audio_name ); ?>"
+					placeholder="<?php esc_attr_e( 'Track name', 'woo-audio-preview' ); ?>" />
+			</td>
+
+			<td class="audio_url" data-label="<?php esc_attr_e( 'URL', 'woo-audio-preview' ); ?>">
+				<input type="url"
+					class="input_text wcap-audio-url"
+					name="wcap_audio[wcap_audio_urls][]"
+					value="<?php echo esc_url( $audio_url ); ?>"
+					placeholder="<?php esc_attr_e( 'https://example.com/audio.mp3 or CDN link', 'woo-audio-preview' ); ?>" />
+				<?php if ( $cdn_info ) : ?>
+					<span class="wcap-service-indicator">
+						<?php
+						printf(
+							/* translators: %s: Detected service name, e.g. Dropbox. */
+							esc_html__( '%s link detected', 'woo-audio-preview' ),
+							esc_html( ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) ) )
+						);
+						?>
+					</span>
+				<?php endif; ?>
+			</td>
+
+			<td class="audio_choose" width="1%" data-label="<?php esc_attr_e( 'Upload', 'woo-audio-preview' ); ?>">
+				<button type="button" class="button wcap-media-button" data-field-index="<?php echo esc_attr( $i ); ?>">
+					<?php esc_html_e( 'Choose file', 'woo-audio-preview' ); ?>
+				</button>
+			</td>
+
+			<?php
+			/**
+			 * Render extra cells inside a preview row.
+			 *
+			 * Cells, not a block: the row is a table row, so an extension contributing here must
+			 * emit <td>. The Pro plugin puts its per-track preview duration in one.
+			 *
+			 * @since 1.5.3
+			 * @param int|string $i          Row index, or the template placeholder.
+			 * @param string     $audio_name Saved name.
+			 * @param string     $audio_url  Saved URL.
+			 */
+			do_action( 'wcap_metabox_row_fields', $i, $audio_name, $audio_url );
+			?>
+
+			<td class="audio_actions" width="1%" data-label="<?php esc_attr_e( 'Actions', 'woo-audio-preview' ); ?>">
+				<button type="button" class="button button-small wcap-remove-row" title="<?php esc_attr_e( 'Remove this preview', 'woo-audio-preview' ); ?>">
+					<?php esc_html_e( 'Remove', 'woo-audio-preview' ); ?>
+				</button>
+			</td>
+		</tr>
 		<?php
 	}
 
@@ -506,7 +497,28 @@ else :
 			do_action( 'wcap_metabox_before_rows', $post );
 			?>
 
-			<div class="wcap-fixed-audio-fields">
+			<table class="widefat wcap-audio-table">
+				<thead>
+					<tr>
+						<th class="sort">&nbsp;</th>
+						<th><?php esc_html_e( 'Name', 'woo-audio-preview' ); ?></th>
+						<th><?php esc_html_e( 'Audio URL', 'woo-audio-preview' ); ?></th>
+						<th><?php esc_html_e( 'Upload', 'woo-audio-preview' ); ?></th>
+						<?php
+						/**
+						 * Render extra column headings.
+						 *
+						 * Paired with wcap_metabox_row_fields: an extension adding a cell to each
+						 * row adds its heading here, so the columns line up.
+						 *
+						 * @since 1.5.3
+						 */
+						do_action( 'wcap_metabox_row_headings' );
+						?>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody class="wcap-audio-rows">
 		<?php
 		for ( $i = 0; $i < $wcap_rows; $i++ ) :
 			$audio_name = isset( $wcap_items[ $i ]['name'] ) ? $wcap_items[ $i ]['name'] : '';
@@ -515,7 +527,8 @@ else :
 			$this->render_row( $i, $audio_name, $audio_url );
 		endfor;
 		?>
-		</div>
+				</tbody>
+			</table>
 					<?php
 					/**
 					 * Render below the preview rows.
@@ -905,100 +918,6 @@ else :
 		}
 	}
 
-	/**
-	 * Get enhanced styles for the admin area
-	 *
-	 * @since    1.5.0
-	 * @return   string    CSS styles.
-	 */
-	private function get_enhanced_styles() {
-		return '
-			.wcap-help-section {
-				margin-bottom: 20px;
-				padding: 15px;
-				background: #f0f8ff;
-				border-left: 4px solid #0073aa;
-				border-radius: 4px;
-			}
-			
-			.wcap-help-section h4 {
-				margin: 0 0 10px 0;
-				color: #0073aa;
-			}
-			
-			.wcap-supported-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-				gap: 15px;
-				font-size: 13px;
-			}
-			
-			.wcap-help-tip {
-				margin: 10px 0 0 0;
-				font-style: italic;
-				color: #666;
-			}
-			
-			.wcap-cdn-row {
-				background-color: #f0f8ff;
-			}
-			
-			.wcap-service-indicator {
-				font-size: 11px;
-				color: #0073aa;
-				margin-top: 3px;
-				font-style: italic;
-			}
-			
-			.wcap-usage-examples {
-				margin-top: 15px;
-				padding: 12px;
-				background: #f9f9f9;
-				border-radius: 4px;
-				font-size: 13px;
-			}
-			
-			.wcap-usage-examples h4 {
-				margin: 0 0 8px 0;
-				color: #333;
-			}
-			
-			.wcap-usage-examples ul {
-				margin: 0;
-				padding-left: 20px;
-				color: #666;
-			}
-			
-			.woo-audio-preview-table .wcap-media-button {
-				white-space: nowrap;
-				min-width: 100px;
-			}
-			
-			.woo-audio-preview-table .sort {
-				cursor: move;
-				width: 20px;
-				text-align: center;
-				background: url("data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'><path d=\'M9 3h6v2H9zm0 4h6v2H9zm0 4h6v2H9zm0 4h6v2H9z\' fill=\'%23666\'/></svg>") no-repeat center;
-				background-size: 16px;
-				opacity: 0.6;
-				transition: opacity 0.3s ease;
-			}
-			
-			.woo-audio-preview-table .sort:hover {
-				opacity: 1;
-			}
-			
-			/* Google Drive specific styling */
-			.wcap-service-google_drive {
-				background: #e8f5e9;
-				border-color: #4caf50;
-			}
-			
-			.wcap-service-google_drive .service-icon {
-				color: #4caf50;
-			}
-		';
-	}
 
 	/**
 	 * Get asset filename with intelligent fallback.
