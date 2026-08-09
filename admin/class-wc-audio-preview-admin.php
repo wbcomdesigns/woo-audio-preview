@@ -319,6 +319,31 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
+	 * How many preview rows the box shows.
+	 *
+	 * Three in the free plugin - the limit IS the free tier. The Pro plugin filters this to lift
+	 * it, which is why the number is not hardcoded in the loop any more; it used to appear three
+	 * times (render, save, and the heading) and Pro's answer was to draw a whole second meta box
+	 * with its own name and URL fields.
+	 *
+	 * @since  1.5.3
+	 * @param  int $saved How many previews the product already has.
+	 * @return int Rows to render, never fewer than what is already saved.
+	 */
+	public static function row_count( $saved = 0 ) {
+		/**
+		 * Filter the number of preview rows.
+		 *
+		 * @since 1.5.3
+		 * @param int $rows  Row count. Default 3.
+		 * @param int $saved Previews already saved on this product.
+		 */
+		$rows = (int) apply_filters( 'wcap_metabox_max_rows', 3, $saved );
+
+		return max( 1, $rows, (int) $saved );
+	}
+
+	/**
 	 * Register enhanced meta box.
 	 */
 	public function wcap_register_meta_boxes() {
@@ -340,12 +365,18 @@ class Wc_Audio_Preview_Admin {
 			return;
 		}
 
-		global $post;
-		$label_text = sprintf(
-			/* translators: %s: Supported audio format information. */
-			__( 'Audio Preview Items %s', 'woo-audio-preview' ),
-			'<span class="wcap-required-span">' . __( '(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)', 'woo-audio-preview' ) . '</span>'
-		);
+		/**
+		 * Filter the meta box title.
+		 *
+		 * A plain title. The supported-format list used to live in the heading, which made it
+		 * three lines long on a narrow screen and read as a warning rather than as help - it is
+		 * one collapsed note inside the box now. The filter is the seam an extension uses to add
+		 * to the heading instead of registering a second box.
+		 *
+		 * @since 1.5.3
+		 * @param string $label_text Meta box title. May contain markup.
+		 */
+		$label_text = apply_filters( 'wcap_metabox_title', __( 'Audio previews', 'woo-audio-preview' ) );
 
 		add_meta_box(
 			'wc-preview-audio-mata-id',
@@ -365,12 +396,37 @@ class Wc_Audio_Preview_Admin {
 		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
 
 		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
-		?><div class="form-field preview_files"><div class="wcap-error-messages"></div><!-- Enhanced help section --><div class="wcap-help-section"><h4><?php esc_html_e( 'Add Up to 3 Audio Previews', 'woo-audio-preview' ); ?></h4><p><?php esc_html_e( 'You can add up to 3 audio preview files for this product. Leave fields empty if you need fewer previews.', 'woo-audio-preview' ); ?></p><div class="wcap-supported-formats"><strong><?php esc_html_e( 'Supported:', 'woo-audio-preview' ); ?></strong><?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files • Direct URLs • CDN links (Google Drive, Dropbox, SoundCloud, etc.)', 'woo-audio-preview' ); ?></div></div><div class="wcap-fixed-audio-fields">
+		$wcap_items = class_exists( 'WCAP_Audio' ) ? WCAP_Audio::get( $post->ID ) : array();
+		$wcap_rows  = self::row_count( count( $wcap_items ) );
+		?>
+		<div class="form-field preview_files">
+			<div class="wcap-error-messages"></div>
+
+			<details class="wcap-metabox-help">
+				<summary><?php esc_html_e( 'What can I add here?', 'woo-audio-preview' ); ?></summary>
+				<div class="wcap-metabox-help__body">
+					<p><?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA and WEBM files, a direct URL, or a CDN link from Google Drive, Dropbox or SoundCloud.', 'woo-audio-preview' ); ?></p>
+				</div>
+			</details>
+
+			<?php
+			/**
+			 * Render above the preview rows.
+			 *
+			 * The seam the Pro plugin uses to add the player theme control, instead of registering
+			 * a second meta box beside this one.
+			 *
+			 * @since 1.5.3
+			 * @param WP_Post $post Product being edited.
+			 */
+			do_action( 'wcap_metabox_before_rows', $post );
+			?>
+
+			<div class="wcap-fixed-audio-fields">
 		<?php
-				// Always show exactly 3 fields.
-		for ( $i = 0; $i < 3; $i++ ) :
-			$audio_name   = isset( $wcap_audio['wcap_audio_names'][ $i ] ) ? $wcap_audio['wcap_audio_names'][ $i ] : '';
-			$audio_url    = isset( $wcap_audio['wcap_audio_urls'][ $i ] ) ? $wcap_audio['wcap_audio_urls'][ $i ] : '';
+		for ( $i = 0; $i < $wcap_rows; $i++ ) :
+			$audio_name   = isset( $wcap_items[ $i ]['name'] ) ? $wcap_items[ $i ]['name'] : '';
+			$audio_url    = isset( $wcap_items[ $i ]['url'] ) ? $wcap_items[ $i ]['url'] : '';
 			$field_number = $i + 1;
 			?>
 					<div class="wcap-audio-field-group"><h4 class="wcap-field-title">
@@ -421,7 +477,36 @@ else :
 												endif;
 											}
 											?>
-							</div></div><?php endfor; ?></div><div class="wcap-pro-notice"><p><strong><?php esc_html_e( 'Need more than 3 audio previews?', 'woo-audio-preview' ); ?></strong><br>
+							</div>
+					<?php
+					/**
+					 * Render extra fields inside a preview row.
+					 *
+					 * The seam the Pro plugin uses to add its per-track preview duration, rather
+					 * than drawing an entire second meta box with its own copy of the name and URL
+					 * fields. Both write into the same wcap_audio row, so one save handler owns it.
+					 *
+					 * @since 1.5.3
+					 * @param int    $i          Row index.
+					 * @param string $audio_name Saved name for this row.
+					 * @param string $audio_url  Saved URL for this row.
+					 */
+					do_action( 'wcap_metabox_row_fields', $i, $audio_name, $audio_url );
+					?>
+					</div><?php endfor; ?></div>
+					<?php
+					/**
+					 * Render below the preview rows.
+					 *
+					 * Where the Pro plugin puts Add More and Bulk Import.
+					 *
+					 * @since 1.5.3
+					 * @param WP_Post $post Product being edited.
+					 */
+					do_action( 'wcap_metabox_after_rows', $post );
+					?>
+					<?php if ( ! has_action( 'wcap_metabox_after_rows' ) ) : ?>
+					<div class="wcap-pro-notice"><p><strong><?php esc_html_e( 'Need more audio previews?', 'woo-audio-preview' ); ?></strong><br>
 							<?php
 							printf(
 							/* translators: %s: Pro version link. */
@@ -429,7 +514,9 @@ else :
 								'<a href="https://wbcomdesigns.com/downloads/woo-audio-preview-pro/" target="_blank">' . esc_html__( 'Pro Version', 'woo-audio-preview' ) . '</a>'
 							);
 							?>
-					</p></div></div>
+					</p></div>
+					<?php endif; ?>
+				</div>
 					<?php
 	}
 
@@ -475,8 +562,16 @@ else :
 			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized individually below.
 				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-				// Process exactly 3 fields.
-				for ( $i = 0; $i < 3; $i++ ) {
+				/*
+				 * Bounded by however many rows the box actually rendered, not a hardcoded 3. With
+				 * the Pro plugin lifting the limit, a fixed 3 here would silently discard every
+				 * preview past the third on save - the fields would accept them and the row would
+				 * come back short.
+				 */
+				$submitted = isset( $wcap_audio_raw['wcap_audio_names'] ) ? count( (array) $wcap_audio_raw['wcap_audio_names'] ) : 0;
+				$limit     = self::row_count( $submitted );
+
+				for ( $i = 0; $i < $limit; $i++ ) {
 					$audio_name = isset( $wcap_audio_raw['wcap_audio_names'][ $i ] ) ?
 						sanitize_text_field( $wcap_audio_raw['wcap_audio_names'][ $i ] ) : '';
 					$audio_url  = isset( $wcap_audio_raw['wcap_audio_urls'][ $i ] ) ?
@@ -497,12 +592,40 @@ else :
 				}
 			}
 
-			// Save or delete meta.
+			/*
+			 * Merge over what is stored rather than replacing the row.
+			 *
+			 * The Pro plugin keeps its per-track durations and the player theme in this same meta
+			 * row, under sub-keys this handler knows nothing about. Writing $processed_audio
+			 * wholesale erased them on every save from this box - and the delete branch erased
+			 * them even when the owner had simply cleared the fields.
+			 */
+			$stored = get_post_meta( $post_id, 'wcap_audio', true );
+			$stored = is_array( $stored ) ? $stored : array();
+
 			if ( $has_valid_audio ) {
-				update_post_meta( $post_id, 'wcap_audio', $processed_audio );
+				update_post_meta( $post_id, 'wcap_audio', array_merge( $stored, $processed_audio ) );
 			} else {
-				delete_post_meta( $post_id, 'wcap_audio' );
+				$remaining = array_diff_key( $stored, $processed_audio );
+
+				if ( $remaining ) {
+					update_post_meta( $post_id, 'wcap_audio', $remaining );
+				} else {
+					delete_post_meta( $post_id, 'wcap_audio' );
+				}
 			}
+
+			/**
+			 * Save extra fields contributed to the preview rows.
+			 *
+			 * The seam the Pro plugin uses to store its durations and player theme, so there is
+			 * one meta box with one save handler rather than two boxes racing each other.
+			 *
+			 * @since 1.5.3
+			 * @param int   $post_id         Product being saved.
+			 * @param array $processed_audio The names, URLs and sources this handler stored.
+			 */
+			do_action( 'wcap_metabox_save', $post_id, $processed_audio );
 		}
 	}
 	/**
