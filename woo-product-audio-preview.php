@@ -92,6 +92,16 @@ function run_wc_audio_preview() {
 function wcap_plugin_init() {
 	run_wc_audio_preview();
 }
+/*
+ * The public class is defined at include time, not when the plugin boots.
+ *
+ * The Pro plugin's renderer EXTENDS this class, and WordPress loads plugins alphabetically, so
+ * woo-audio-preview is included before woo-audio-preview-pro. Pro boots at include time, which is
+ * earlier than this plugin's plugins_loaded boot - so if the parent class were only required
+ * during boot, Pro's `extends` would fatal on a class that did not exist yet.
+ */
+require_once plugin_dir_path( __FILE__ ) . 'public/class-wc-audio-preview-public.php';
+
 add_action( 'plugins_loaded', 'wcap_plugin_init' );
 /**
  * Check plugin requirement on plugins loaded

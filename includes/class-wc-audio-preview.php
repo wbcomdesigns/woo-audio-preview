@@ -184,23 +184,30 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'wp_ajax_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'wp_ajax_nopriv_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 
-		$wcap_free_activated_plugins = get_option( 'active_plugins' );
-		if ( ! in_array( 'woo-audio-preview-pro/woo-audio-preview-pro.php', $wcap_free_activated_plugins, true ) ) {
-			$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
+		/*
+		 * This used to stand down entirely when the Pro plugin was active - no menu, no settings
+		 * page - on the assumption that Pro replaced it. It does not. This plugin is the core:
+		 * it owns the settings screen, the shared admin assets and the base player, and Pro adds
+		 * its premium tabs on top through the seams below. Standing down left Pro with nothing to
+		 * extend, which is why the two ended up carrying a copy of the same screen each.
+		 *
+		 * The only thing that changes when Pro is present is that the locked upgrade tabs step
+		 * aside for the real ones - handled inside WCAP_Settings_Tabs, not here.
+		 */
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
 
-			WCAP_Settings_Tabs::init();
-			WCAP_Settings_Page::boot(
-				plugin_dir_url( __DIR__ ),
-				WCAP_TEXT_VERSION,
-				array(
-					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
-					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
-					'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
-					'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
-					'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
-				)
-			);
-		}
+		WCAP_Settings_Tabs::init();
+		WCAP_Settings_Page::boot(
+			plugin_dir_url( __DIR__ ),
+			WCAP_TEXT_VERSION,
+			array(
+				'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
+				'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
+				'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
+				'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
+				'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
+			)
+		);
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wcap_display_admin_errors' );
 	}
@@ -216,9 +223,43 @@ class Wc_Audio_Preview {
 
 		$plugin_public = new Wc_Audio_Preview_Public( $this->get_plugin_name(), $this->get_version() );
 
+		/**
+		 * Filter the object that renders audio previews on the front end.
+		 *
+		 * This is the seam the Pro plugin uses to take over rendering: it returns a subclass of
+		 * Wc_Audio_Preview_Public with the premium behaviour overridden. Everything below then
+		 * registers Pro's methods on ONE object, so there is a single renderer rather than two
+		 * plugins both hooking the product page and drawing a player each.
+		 *
+		 * @since 1.5.3
+		 * @param Wc_Audio_Preview_Public $plugin_public The renderer.
+		 */
+		$filtered = apply_filters( 'wcap_public_instance', $plugin_public );
+
+		/*
+		 * Anything that is not a Wc_Audio_Preview_Public is ignored rather than trusted. A filter
+		 * returning the wrong type would otherwise take the whole product page down with a fatal
+		 * on the first method call.
+		 */
+		if ( $filtered instanceof Wc_Audio_Preview_Public ) {
+			$plugin_public = $filtered;
+		}
+
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action( 'woocommerce_before_add_to_cart_form', $plugin_public, 'wcap_add_preview_field', 0 );
+		/**
+		 * Filter where the preview is rendered on the product page.
+		 *
+		 * The free plugin renders before the add-to-cart form. Pro lets the owner choose, and sets
+		 * that choice here rather than registering a second render on a different hook - which is
+		 * what produced two players on the page when both plugins were active.
+		 *
+		 * @since 1.5.3
+		 * @param string $hook WooCommerce action the preview renders on.
+		 */
+		$wcap_preview_hook = apply_filters( 'wcap_preview_hook', 'woocommerce_before_add_to_cart_form' );
+
+		$this->loader->add_action( $wcap_preview_hook, $plugin_public, 'wcap_add_preview_field', 0 );
 	}
 
 	/**

@@ -64,6 +64,17 @@ class WCAP_Settings_Tabs {
 			),
 		);
 
+		/*
+		 * The Pro tabs are shown here only while Pro is absent. When it is installed it registers
+		 * these same three ids with real settings behind them, through the same filter - so
+		 * leaving the locked copies in place would put two nav entries and two sections under one
+		 * id. The owner sees the same three entries either way; what changes is whether they open
+		 * a settings screen or an explanation of what Pro adds.
+		 */
+		if ( self::pro_is_active() ) {
+			return $groups;
+		}
+
 		$groups['upgrade'] = array(
 			'label' => __( 'In Pro', 'woo-audio-preview' ),
 			'items' => array(
@@ -89,12 +100,29 @@ class WCAP_Settings_Tabs {
 	}
 
 	/**
+	 * Whether the Pro plugin is present and supplying the premium tabs.
+	 *
+	 * Detected by the class that registers those tabs rather than by a version constant, because
+	 * that class IS the thing whose presence matters here.
+	 *
+	 * @since  1.5.3
+	 * @return bool
+	 */
+	private static function pro_is_active() {
+		return class_exists( 'WCAP_Pro_Settings_Tabs' );
+	}
+
+	/**
 	 * Render one tab.
 	 *
 	 * @since 1.5.3
 	 * @param string $tab Tab id.
 	 */
 	public static function render_tab( $tab ) {
+		if ( self::pro_is_active() && in_array( $tab, array( 'player', 'watermark', 'advanced' ), true ) ) {
+			return;
+		}
+
 		switch ( $tab ) {
 			case 'welcome':
 				self::welcome();

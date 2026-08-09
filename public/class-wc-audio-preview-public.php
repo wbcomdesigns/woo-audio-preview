@@ -24,6 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @subpackage Wc_Audio_Preview/public
  * @author     Wbcom Designs <admin@wbcomdesigns.com>
  */
+/*
+ * Helper methods here are `protected`, not `private`, on purpose.
+ *
+ * The Pro plugin's renderer extends this class, and a private helper is invisible to a subclass -
+ * which is exactly how the Pro plugin ended up with its own copy of the CDN detection, the MIME
+ * lookup, the Google Drive id parser and six other helpers. Ten near-identical implementations of
+ * one idea, drifting apart with every fix applied to only one of them. Widening the visibility is
+ * what lets that duplication be deleted rather than maintained.
+ */
 class Wc_Audio_Preview_Public {
 
 	/**
@@ -63,6 +72,14 @@ class Wc_Audio_Preview_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
+		/*
+		 * Fixed handles rather than $this->plugin_name.
+		 *
+		 * The Pro plugin's renderer extends this class, so both sets of assets are registered from
+		 * ONE object - and $this->plugin_name is that object's name, which made both use the same
+		 * handle. WordPress silently ignores the second registration of a handle, so whichever ran
+		 * later simply never loaded. Distinct constant handles are what let both load.
+		 */
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -78,7 +95,7 @@ class Wc_Audio_Preview_Public {
 		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public' );
 		if ( $css_file ) {
 			wp_enqueue_style(
-				$this->plugin_name,
+				'wcap-public',
 				plugin_dir_url( __FILE__ ) . $css_file,
 				array(),
 				$this->version,
@@ -118,7 +135,7 @@ class Wc_Audio_Preview_Public {
 				true
 			);
 			wp_enqueue_script(
-				$this->plugin_name,
+				'wcap-public',
 				plugin_dir_url( __FILE__ ) . $js_file,
 				array( 'jquery', 'soundcloud-widget-api' ),
 				$this->version,
@@ -127,7 +144,7 @@ class Wc_Audio_Preview_Public {
 
 			// Localize script for better UX.
 			wp_localize_script(
-				$this->plugin_name,
+				'wcap-public',
 				'wcap_public',
 				array(
 					'ajax_url'     => admin_url( 'admin-ajax.php' ),
@@ -260,7 +277,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $audio_url Audio URL.
 	 * @param array  $is_cdn    CDN info.
 	 */
-	private function render_audio_player( $key, $name, $audio_url, $is_cdn ) {
+	protected function render_audio_player( $key, $name, $audio_url, $is_cdn ) {
 		// Convert CDN URLs to playable format.
 		$playable_url = $this->wcap_convert_cdn_url_for_playback( $audio_url );
 		$mime_type    = $this->wcap_get_audio_mime_type( $playable_url );
@@ -324,7 +341,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $name      Audio name.
 	 * @param string $audio_url Audio URL.
 	 */
-	private function render_google_drive_player( $key, $name, $audio_url ) {
+	protected function render_google_drive_player( $key, $name, $audio_url ) {
 		// Extract Google Drive file ID.
 		$file_id = $this->extract_google_drive_id( $audio_url );
 		if ( ! $file_id ) {
@@ -391,7 +408,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $name      Audio name.
 	 * @param string $audio_url Audio URL.
 	 */
-	private function render_sound_cloud_player( $key, $name, $audio_url ) {
+	protected function render_sound_cloud_player( $key, $name, $audio_url ) {
 
 		$embed_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $audio_url );
 
@@ -441,7 +458,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url Google Drive URL.
 	 * @return string|false File ID or false.
 	 */
-	private function extract_google_drive_id( $url ) {
+	protected function extract_google_drive_id( $url ) {
 		$patterns = array(
 			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
 			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
@@ -463,7 +480,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url Audio URL.
 	 * @return bool
 	 */
-	private function wcap_needs_iframe_player( $url ) {
+	protected function wcap_needs_iframe_player( $url ) {
 		// Currently only Google Drive and SoundCloud need iframe.
 		return false !== strpos( $url, 'drive.google.com' ) || false !== strpos( $url, 'soundcloud.com' );
 	}
@@ -474,7 +491,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url The original URL.
 	 * @return string The playable URL.
 	 */
-	private function wcap_convert_cdn_url_for_playback( $url ) {
+	protected function wcap_convert_cdn_url_for_playback( $url ) {
 		if ( empty( $url ) ) {
 			return $url;
 		}
@@ -521,7 +538,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url The URL to check.
 	 * @return array|false Service info or false.
 	 */
-	private function wcap_is_cdn_url( $url ) {
+	protected function wcap_is_cdn_url( $url ) {
 		if ( empty( $url ) ) {
 			return false;
 		}
@@ -601,7 +618,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url The audio URL.
 	 * @return string The MIME type.
 	 */
-	private function wcap_get_audio_mime_type( $url ) {
+	protected function wcap_get_audio_mime_type( $url ) {
 		// For CDN URLs where we can't determine extension.
 		if ( false !== strpos( $url, 'drive.google.com' ) ||
 			false !== strpos( $url, 'dropbox.com' ) ||
@@ -642,7 +659,7 @@ class Wc_Audio_Preview_Public {
 	 * @param    string $filename Base filename without extension.
 	 * @return   string|false     Full filename with path or false if not found.
 	 */
-	private function get_asset_filename( $type, $filename ) {
+	protected function get_asset_filename( $type, $filename, $base = '' ) {
 		// Determine if we should use minified files.
 		$use_minified = ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
 
@@ -650,7 +667,14 @@ class Wc_Audio_Preview_Public {
 		$is_rtl = ( 'css' === $type ) ? is_rtl() : false;
 
 		// Build the base directory path.
-		$base_dir        = plugin_dir_path( __FILE__ ) . $type . '/';
+		/*
+		 * Which plugin's assets to search. Defaults to this one's - and a subclass MUST pass its
+		 * own, because __FILE__ here is lexical and always points at this file. Resolving the
+		 * subclass's assets against this directory is how a file present in free and absent in Pro
+		 * was reported as found and then 404ed from Pro's URL.
+		 */
+		$base            = '' === $base ? plugin_dir_path( __FILE__ ) : trailingslashit( $base );
+		$base_dir        = $base . $type . '/';
 		$actual_type     = $type;
 		$actual_base_dir = $base_dir;
 
@@ -678,7 +702,7 @@ class Wc_Audio_Preview_Public {
 
 		if ( 'css' === $type && $is_rtl ) {
 			$actual_type     = 'css-rtl';
-			$actual_base_dir = plugin_dir_path( __FILE__ ) . 'css-rtl/';
+			$actual_base_dir = $base . 'css-rtl/';
 		}
 
 		// Check each variant in order.
