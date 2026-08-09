@@ -20,6 +20,11 @@ code out of here.
 | `wcap_settings_nav_groups` | filter | Add tabs to the settings page this plugin owns |
 | `wcap_settings_tab_content` | action | Render those tabs inside this plugin's page shell |
 
+Plus `register_shared_assets()`, a public method Pro inherits and does NOT override, where
+third-party libraries both plugins need are registered. Anything registered inside
+`enqueue_scripts()` is lost when Pro replaces that method - which is how SoundCloud playback ended
+up silently dead in Pro.
+
 Helpers on the public class are `protected`, not `private`, so a subclass can use them instead of
 growing its own copy. `get_asset_filename()` takes the directory to search - a subclass must pass
 its own, because `__FILE__` is lexical.
@@ -48,6 +53,9 @@ its own, because `__FILE__` is lexical.
       to PEAR and reported hundreds of failures CI does not check.
 - [x] **`audit/manifest.json`** - measured surface: 11 classes, 11 hooks fired, 4 options, 2 meta
       keys, 1 shortcode. Zero dead files, zero unreferenced classes.
+
+- [x] **Shared third-party libraries registered outside `enqueue_scripts()`**, so they survive Pro
+      replacing that method. Fixes SoundCloud playback in Pro.
 
 ## Pending
 

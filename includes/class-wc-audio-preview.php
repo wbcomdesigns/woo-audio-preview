@@ -250,6 +250,12 @@ class Wc_Audio_Preview {
 		}
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		/*
+		 * Priority 5: shared third-party libraries are registered before anything tries to enqueue
+		 * them. This callback is not overridden by Pro, so the handles exist whichever renderer is
+		 * running.
+		 */
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'register_shared_assets', 5 );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		/**
 		 * Filter where the preview is rendered on the product page.

@@ -105,6 +105,29 @@ class Wc_Audio_Preview_Public {
 	}
 
 	/**
+	 * Register third-party libraries both plugins share.
+	 *
+	 * Deliberately NOT part of enqueue_scripts(). The Pro plugin extends this class and replaces
+	 * that method wholesale - it draws its own player, so it wants none of this plugin's
+	 * presentation - and anything registered inside it is therefore lost whenever Pro is active.
+	 * That is what made SoundCloud previews silently do nothing in Pro: it asked for a widget
+	 * script that was never registered, and a missing handle raises no error.
+	 *
+	 * Registering is free when nothing enqueues the handle.
+	 *
+	 * @since 1.5.3
+	 */
+	public function register_shared_assets() {
+		wp_register_script(
+			'soundcloud-widget-api',
+			plugin_dir_url( __FILE__ ) . 'js/soundcloud.min.js',
+			array(),
+			WCAP_TEXT_VERSION,
+			true
+		);
+	}
+
+	/**
 	 * Register the JavaScript for the public-facing side of the site.
 	 *
 	 * @since    1.0.0
@@ -127,13 +150,7 @@ class Wc_Audio_Preview_Public {
 		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public' );
 
 		if ( $js_file ) {
-			wp_enqueue_script(
-				'soundcloud-widget-api',
-				plugin_dir_url( __FILE__ ) . 'js/soundcloud.min.js',
-				array(),
-				WCAP_TEXT_VERSION,
-				true
-			);
+			wp_enqueue_script( 'soundcloud-widget-api' );
 			wp_enqueue_script(
 				'wcap-public',
 				plugin_dir_url( __FILE__ ) . $js_file,
