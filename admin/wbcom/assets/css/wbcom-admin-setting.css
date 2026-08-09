@@ -55,9 +55,6 @@ Wbcom Admin Wrapper Style
 #wb_admin_logo a img {
     width: 100%;
 }
-
-/* Typography */
-.wbcom-admin-title-section h3,
 h4.wbcom-support-section {
     margin-top: 0;
     color: var(--primary-color);
@@ -85,9 +82,7 @@ h4.wbcom-support-section {
     color: #000;
     margin: 8px 0 3px;
 }
-
-.wbcom-welcome-support-info .wbcom-support-inner p,
-.wbcom-tab-content p.description {
+.wbcom-welcome-support-info .wbcom-support-inner p {
     font-size: var(--font-size-medium);
     color: var(--text-light);
 }
@@ -98,9 +93,6 @@ h4.wbcom-support-section {
 .wbcom-addons-image-card {
     display: none;
 }
-
-/* ========== Common Containers ========== */
-.wbcom-admin-option-wrap,
 .wbcom-welcome-support-info,
 .wb-plugins-license-tables-wrap,
 #wbcom-faq-settings-section,
@@ -115,37 +107,6 @@ ul#wbcom_support_list {
     overflow: hidden;
     border-radius: var(--border-radius-large);
     width: auto;
-}
-
-.wbcom-settings-section-wrap {
-    background: #fff;
-    border-radius: var(--border-radius-large);
-    padding: 15px 25px 25px;
-    border: 1px solid var(--border-color);
-    box-shadow: 5px 5px 20px rgba(32, 53, 85, 0.10);
-    margin-bottom: 20px;
-    overflow: hidden;
-    width: auto;
-}
-
-.wbcom-settings-section-options-heading {
-    border-bottom: 1px solid var(--border-color-medium);
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    line-height: 1.6;
-}
-
-.wbcom-settings-section-options-heading label {
-    color: var(--text-dark);
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-weight-medium);
-}
-
-.wbcom-settings-section-options-heading p.description {
-    margin: 0;
-    padding: 0 !important;
-    font-size: var(--font-size-medium);
-    color: #000;
 }
 
 .wbcom-wrap {
@@ -172,32 +133,6 @@ ul#wbcom_support_list {
     padding: var(--spacing-large);
     background: #fff;
 }
-
-ul.wbcom-settings-member-retraction.wbcom-settings-section-options-flex {
-    margin: 0;
-}
-
-.wbcom-settings-section-options ul.wbcom-settings-member-retraction.wbcom-settings-section-options-flex li {
-    width: 33.33%;
-}
-
-.wbcom-settings-section-options ul.wbcom-settings-member-retraction li label {
-    margin-left: 8px;
-    font-weight: 500;
-}
-
-.wbcom-settings-section-options ul.wbcom-settings-member-retraction li label.wb-switch {
-    margin: 0;
-}
-
-/* ========== Form Elements ========== */
-/* Inputs & Selects */
-.form-table.wbcom-admin-option-wrap input[type=text],
-.form-table.wbcom-admin-option-wrap select,
-.wbcom-settings-section-options select,
-.wbcom-settings-section-options .selectize-input,
-.wbcom-settings-section-options [type="text"],
-.wbcom-settings-section-options [type="number"],
 .wb-license-form-table td.wb-plugin-license-key input {
     height: 40px;
     border-radius: var(--border-radius-small) !important;
@@ -206,41 +141,6 @@ ul.wbcom-settings-member-retraction.wbcom-settings-section-options-flex {
     width: 100%;
     box-shadow: none;
 }
-
-.wbcom-settings-section-options .selectize-input {
-    height: auto;
-    box-shadow: none;
-    padding: 0px 10px !important;
-}
-
-/* Radio & Checkbox */
-.wbcom-settings-section-options input[type=radio] {
-    width: 30px;
-    height: 30px;
-    border: 2px solid #ccc;
-    box-shadow: none !important;
-    margin: 0 5px 0 0;
-}
-
-.wbcom-settings-section-options input[type=radio]:checked::before {
-    width: 18px;
-    height: 18px;
-    margin: 4px;
-    background-color: var(--primary-color);
-}
-
-.wbcom-admin-option-wrap th {
-    width: 250px;
-    padding: 20px;
-    vertical-align: middle;
-}
-
-.form-table.wbcom-admin-option-wrap .form-table td {
-    padding: 20px;
-}
-
-/* ========== Flexbox Layout ========== */
-.wbcom-settings-section-options-flex,
 .wbcom_admin_header-wrapper,
 ul.wbcom-addons-plugins-links,
 .wbcom-bp-addons-plugins-title-section,
@@ -254,8 +154,6 @@ ul#wbcom_support_list,
     display: -ms-flexbox;
     display: flex;
 }
-
-.wbcom-settings-section-options-flex,
 ul.wbcom-addons-plugins-links,
 .wbcom-bp-addons-plugins-title-section,
 #wb_admin_header #wb_admin_nav ul li.wb_admin_nav_item a {
@@ -288,16 +186,8 @@ ul#wbcom_support_list,
     -ms-flex-pack: center;
     justify-content: center;
 }
-
-.wbcom-settings-section-options-flex select#my_dashboard_page {
-    margin-right: 15px;
-}
-
-/* ========== Button Styles ========== */
-.wbcom-settings-section-options.wbcom-settings-section-options-flex a.button-secondary,
 .wbcom-bp-addons-plugins-title-section a.wbcom-addons-button,
 .wbcom_help_support_details .wbcom_help_support_button a.wb_btn.wb_btn_default,
-.wbcom-admin-settings-page .wbcom-tab-content .button.button-primary:not(.button-welcome-support),
 .wb-license-form-table .wb-license-action .button-secondary,
 .wbcom-support-info-wrap .wbcom-support-info-widgets a.button-primary.button-welcome-support {
     background: var(--primary-color);
@@ -311,21 +201,6 @@ ul#wbcom_support_list,
     transition: var(--transition-normal);
     text-decoration: none;
     display: inline-block;
-}
-
-.wbcom-settings-section-options.wbcom-settings-section-options-flex a.button-secondary {
-    height: 40px;
-    line-height: 40px;
-    width: 100px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
 }
 
 .wbcom-bp-addons-plugins-title-section {
@@ -378,14 +253,6 @@ ul.wbcom-addons-plugins-links li {
     box-shadow: var(--shadow-small);
 }
 
-.wbcom-admin-settings-page .wbcom-tab-content .button.button-primary:not(.button-welcome-support) {
-    line-height: 55px;
-    padding: 0 45px;
-    border: 0;
-    box-shadow: 0px 10px 25px rgba(32, 53, 85, 0.35);
-    border-radius: var(--border-radius-large);
-}
-
 .wbcom_help_support_details .wbcom_help_support_button a.wb_btn.wb_btn_default {
     line-height: 30px;
     padding: 10px 15px;
@@ -425,12 +292,8 @@ ul.wbcom-addons-plugins-links li {
     background-color: rgba(255, 64, 140, .2);
     color: #ff4040;
 }
-
-/* Button hover states */
-.wbcom-settings-section-options.wbcom-settings-section-options-flex a.button-secondary:hover,
 .wbcom-bp-addons-plugins-title-section a.wbcom-addons-button:hover,
 .wbcom_help_support_details .wbcom_help_support_button a.wb_btn.wb_btn_default:hover,
-.wbcom-admin-settings-page .wbcom-tab-content .button.button-primary:not(.button-welcome-support):hover,
 .wb-license-form-table .wb-license-action .button-secondary:hover,
 .wbcom-support-info-wrap .wbcom-support-info-widgets a.button-primary.button-welcome-support:hover,
 .wbcom-addons-card-button a.wbcom-addons-button:hover {
@@ -634,30 +497,6 @@ div#wb_admin_plugin_name span {
     border: none;
 }
 
-.wbcom-admin-settings-page .wbcom-tab-content {
-    width: 81%;
-    background: #fff;
-    padding-left: 30px;
-}
-
-.wbcom-tab-content select,
-.wbcom-tab-content select option {
-    width: 100%;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-}
-
-.wbcom-tab-content p.description {
-    color: #49505a;
-    font-size: var(--font-size-normal);
-    line-height: 18px;
-    display: block;
-    padding-top: 3px;
-}
-
 /* Nav Tab Icons */
 .nav-tab-wrapper ul li a.nav-tab:before {
     content: "\f229";
@@ -756,22 +595,8 @@ div#wb_admin_plugin_name span {
     box-shadow: var(--shadow-normal);
 }
 
-/* Welcome Page */
-.wbcom-welcome-title {
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-bold);
-    margin: 0;
-    padding: 0px 0 4px 0;
-    line-height: 1.3;
-}
-
 .wbcom-welcome-description {
     margin: 0 0 30px;
-}
-
-.wbcom-welcome-main-wrapper {
-    position: relative;
-    font-size: var(--font-size-medium);
 }
 
 .wbcom-welcome-support-info h3 {
@@ -985,49 +810,6 @@ div#wb_admin_plugin_name span {
     margin: 0 !important;
     padding: 0 !important;
 }
-
-.wbcom-admin-option-wrap .form-table input[type=checkbox] {
-    border: none !important;
-    border-radius: var(--border-radius-small);
-    background: #ed6f6f;
-    position: relative;
-    line-height: 0;
-    height: 32px;
-    width: 70px;
-    min-width: 70px;
-    box-shadow: none;
-}
-
-.wbcom-admin-option-wrap .form-table input[type=checkbox]:before {
-    content: "";
-    bottom: 4px;
-    position: absolute;
-    top: 6px;
-    left: 6px !important;
-    width: 24px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 6px;
-    -webkit-transition: all .3s;
-    transition: all .3s;
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.35);
-}
-
-.wbcom-admin-option-wrap .form-table input[type=checkbox]:checked {
-    background-color: var(--success-color);
-}
-
-.wbcom-admin-option-wrap .form-table input[type=checkbox]:checked::before {
-    -webkit-transform: translateX(33px);
-    -ms-transform: translateX(33px);
-    transform: translateX(33px);
-    background-color: #ffffff;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.wbcom-admin-option-wrap .form-table input[type=checkbox]:after,
-.wbcom-admin-option-wrap .form-table input[type=checkbox]:checked::after,
 .wb-slider.wb-round::after {
     content: "OFF";
     color: #fff;
@@ -1037,8 +819,6 @@ div#wb_admin_plugin_name span {
     top: 16px;
     right: 11px;
 }
-
-.wbcom-admin-option-wrap .form-table input[type=checkbox]:checked::after,
 .wb-switch input:checked+.wb-slider::after {
     content: "ON";
     right: unset;
@@ -1283,10 +1063,6 @@ div.wbcom-faq-panel p {
         padding: var(--spacing-medium);
     }
 
-    .wbcom-admin-option-wrap {
-        padding: var(--spacing-small) var(--spacing-medium) var(--spacing-medium);
-    }
-
     .wbcom-tabs-section {
         border-radius: var(--border-radius-medium);
         width: auto;
@@ -1297,11 +1073,6 @@ div.wbcom-faq-panel p {
     .nav-tab-wrapper ul.wbcom-show-mobile-menu {
         display: block;
         padding: 0 var(--spacing-normal) var(--spacing-normal);
-    }
-
-    .wbcom-admin-settings-page .wbcom-tab-content {
-        width: auto;
-        padding: var(--spacing-medium) 5px;
     }
 
     .wbcom-welcome-support-info {
@@ -1402,10 +1173,6 @@ div.wbcom-faq-panel p {
         padding-bottom: 0;
     }
 
-    .wbcom-admin-settings-page .wbcom-tab-content .button.button-primary {
-        float: none;
-    }
-
     .reign-importer-section {
         padding: 16px 0;
     }
@@ -1481,10 +1248,8 @@ div.wbcom-faq-panel p {
 }
 
 @media screen and (min-width: 1190px) and (max-width: 1335px) {
-
-    div#wb_admin_plugin_name,
-    .wbcom-admin-title-section h3,
-    h4.wbcom-support-section {
+div#wb_admin_plugin_name,
+h4.wbcom-support-section {
         font-size: var(--font-size-medium);
     }
 
@@ -1540,20 +1305,6 @@ div.wbcom-faq-panel p {
     #wb_admin_header #wb_admin_nav ul li.wb_admin_nav_item a {
         min-width: inherit;
         padding: 5px;
-    }
-
-    .wbcom-tab-content .bpolls-support-setting {
-        float: none;
-        width: 100%;
-    }
-
-    .wbcom-settings-section-options ul.wbcom-settings-member-retraction.wbcom-settings-section-options-flex li {
-        width: 100%;
-    }
-
-    .wbcom-settings-section-options-flex select#my_dashboard_page {
-        max-width: 100%;
-        margin: 0 0 var(--spacing-normal);
     }
 }
 
