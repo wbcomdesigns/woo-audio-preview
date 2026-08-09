@@ -114,6 +114,15 @@ class Wc_Audio_Preview {
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
+		/*
+		 * The settings page shell is shared with the Pro plugin, byte for byte. Pro replaces this
+		 * plugin rather than extending it, so neither can rely on the other being present - and
+		 * without one shell they drift into two different-looking admin screens, which is exactly
+		 * what happened before: a sidebar here, horizontal tabs there.
+		 */
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-settings-page.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wcap-settings-tabs.php';
+
 		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wc-audio-preview-admin.php';
 
 		/**
@@ -172,10 +181,13 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'post_edit_form_tag', $plugin_admin, 'wcap_update_edit_form' );
 		$this->loader->add_action( 'wp_ajax_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'wp_ajax_nopriv_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'wcap_init_plugin_settings' );
+
 		$wcap_free_activated_plugins = get_option( 'active_plugins' );
 		if ( ! in_array( 'woo-audio-preview-pro/woo-audio-preview-pro.php', $wcap_free_activated_plugins, true ) ) {
 			$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
+
+			WCAP_Settings_Tabs::init();
+			WCAP_Settings_Page::boot( plugin_dir_url( __DIR__ ), WCAP_TEXT_VERSION );
 		}
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wcap_display_admin_errors' );

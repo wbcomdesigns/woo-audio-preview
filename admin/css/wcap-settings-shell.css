@@ -1,0 +1,450 @@
+/**
+ * Pattern A settings shell - shared by Audio Preview and Audio Preview Pro.
+ *
+ * This file is IDENTICAL in both plugins. It styles the page furniture only: the sidebar, the
+ * nav, the cards and the form rows inside them. Tab renderers contribute content, never chrome,
+ * so a tab added by Pro is laid out by exactly the rules that lay out a tab added by free.
+ */
+
+.wcap-admin *,
+.wcap-admin *::before,
+.wcap-admin *::after {
+	box-sizing: border-box;
+}
+
+.wcap-admin {
+	--wcap-border: #e2e8f0;
+	--wcap-surface: #fff;
+	--wcap-muted: #646970;
+	--wcap-text: #1e1e1e;
+	--wcap-accent: #2271b1;
+	--wcap-sidebar-bg: #f6f7f7;
+	margin-inline-end: 20px;
+}
+
+/* WordPress paints its own notices at the top of the page; keep ours, drop other plugins'. */
+.wcap-admin .notice:not(.wcap-notice):not(.settings-error) {
+	display: none;
+}
+
+.wcap-settings-wrap {
+	display: grid;
+	grid-template-columns: 240px minmax(0, 1fr);
+	gap: 20px;
+	margin-top: 20px;
+	align-items: start;
+}
+
+/* Sidebar ------------------------------------------------------------------------------- */
+
+.wcap-settings-sidebar {
+	background: var(--wcap-surface);
+	border: 1px solid var(--wcap-border);
+	border-radius: 8px;
+	padding: 8px;
+	position: sticky;
+	top: 46px;
+}
+
+.wcap-settings-sidebar__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 10px 14px;
+	border-bottom: 1px solid var(--wcap-border);
+	margin-bottom: 8px;
+}
+
+.wcap-settings-sidebar__logo {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 8px;
+	background: var(--wcap-accent);
+	color: #fff;
+	flex: 0 0 auto;
+}
+
+.wcap-settings-sidebar__brand strong {
+	display: block;
+	font-size: 13px;
+	line-height: 1.3;
+	color: var(--wcap-text);
+}
+
+.wcap-settings-sidebar__brand span:not(.wcap-settings-sidebar__logo) {
+	display: block;
+	font-size: 11px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--wcap-muted);
+}
+
+.wcap-settings-nav-group + .wcap-settings-nav-group {
+	margin-top: 12px;
+}
+
+.wcap-settings-nav-group__label {
+	display: block;
+	padding: 6px 10px 4px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--wcap-muted);
+}
+
+.wcap-settings-nav-item {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	min-height: 40px;
+	padding: 8px 10px;
+	border-radius: 6px;
+	font-size: 13px;
+	color: var(--wcap-text);
+	text-decoration: none;
+	transition: background 0.12s ease;
+}
+
+.wcap-settings-nav-item:hover {
+	background: var(--wcap-sidebar-bg);
+	color: var(--wcap-text);
+}
+
+.wcap-settings-nav-item:focus-visible {
+	outline: 2px solid var(--wcap-accent);
+	outline-offset: 1px;
+}
+
+.wcap-settings-nav-item.is-active {
+	background: var(--wcap-accent);
+	color: #fff;
+	font-weight: 600;
+}
+
+/*
+ * The label takes the free space so the Pro badge is pushed to the trailing edge and every badge
+ * lines up. Excluding the badge matters: it is a span too, and a bare `> span` gave it flex-grow
+ * as well, so each badge started wherever its own label happened to end.
+ */
+.wcap-settings-nav-item > span:not(.wcap-pro-badge) {
+	flex: 1 1 auto;
+}
+
+.wcap-pro-badge {
+	flex: 0 0 auto;
+	background: linear-gradient(135deg, #6366f1, #8b5cf6);
+	color: #fff;
+	font-size: 9px;
+	font-weight: 700;
+	padding: 1px 6px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+/* Content ------------------------------------------------------------------------------- */
+
+.wcap-settings-section {
+	display: none;
+}
+
+.wcap-settings-section.is-active {
+	display: block;
+}
+
+/*
+ * Rule 4 of the rulebook: one wrapper owns tab spacing. Renderers emit bare sections and this
+ * supplies the padding, so a tab cannot arrive with its own idea of margins.
+ */
+.wcap-settings-body > .wcap-card:last-of-type {
+	margin-bottom: 0;
+}
+
+.wcap-card {
+	background: var(--wcap-surface);
+	border: 1px solid var(--wcap-border);
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	margin-bottom: 16px;
+	overflow: hidden;
+}
+
+.wcap-card__head {
+	padding: 14px 20px 12px;
+	border-bottom: 1px solid var(--wcap-border);
+	background: #fafafa;
+}
+
+.wcap-card__title {
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--wcap-text);
+	margin: 0 0 2px;
+}
+
+.wcap-card__desc {
+	font-size: 13px;
+	color: #757575;
+	margin: 0;
+}
+
+.wcap-card__body {
+	padding: 4px 20px;
+}
+
+.wcap-card__body .form-table th {
+	padding-inline-start: 0;
+	width: 220px;
+	font-weight: 600;
+}
+
+.wcap-card__body .form-table td p.description {
+	margin-top: 4px;
+}
+
+.wcap-settings-section__footer {
+	margin-top: 16px;
+}
+
+/* Toggle -------------------------------------------------------------------------------- */
+
+.wcap-toggle {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	flex: 0 0 auto;
+}
+
+.wcap-toggle input {
+	position: absolute;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: pointer;
+}
+
+.wcap-toggle-slider {
+	position: absolute;
+	inset: 0;
+	background: #c3c4c7;
+	border-radius: 999px;
+	transition: background 0.15s ease;
+	pointer-events: none;
+}
+
+.wcap-toggle-slider::before {
+	content: "";
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	inset-block-start: 3px;
+	inset-inline-start: 3px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.15s ease;
+}
+
+.wcap-toggle input:checked + .wcap-toggle-slider {
+	background: var(--wcap-accent);
+}
+
+.wcap-toggle input:checked + .wcap-toggle-slider::before {
+	transform: translateX(20px);
+}
+
+.wcap-toggle input:focus-visible + .wcap-toggle-slider {
+	outline: 2px solid var(--wcap-accent);
+	outline-offset: 2px;
+}
+
+/* Icons --------------------------------------------------------------------------------- */
+
+.wcap-admin [data-lucide] {
+	width: 18px;
+	height: 18px;
+	stroke-width: 1.75;
+	flex: 0 0 auto;
+}
+
+/* Responsive ---------------------------------------------------------------------------- */
+
+@media screen and (max-width: 782px) {
+	.wcap-settings-wrap {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.wcap-settings-sidebar {
+		position: static;
+	}
+
+	.wcap-settings-sidebar__brand {
+		display: none;
+	}
+
+	/* The nav becomes a scrollable row rather than a tall column that buries the content. */
+	.wcap-settings-nav-group {
+		display: flex;
+		gap: 6px;
+		overflow-x: auto;
+	}
+
+	.wcap-settings-nav-group + .wcap-settings-nav-group {
+		margin-top: 6px;
+	}
+
+	.wcap-settings-nav-group__label {
+		display: none;
+	}
+
+	.wcap-settings-nav-item {
+		white-space: nowrap;
+	}
+
+	.wcap-card__body .form-table th {
+		width: auto;
+		padding-bottom: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wcap-admin * {
+		transition: none !important;
+	}
+}
+
+/* Buttons ------------------------------------------------------------------------------- */
+
+.wcap-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 40px;
+	padding: 0 14px;
+	font-size: 13px;
+	font-weight: 500;
+	border-radius: 6px;
+	border: 1px solid var(--wcap-border);
+	background: var(--wcap-surface);
+	color: var(--wcap-text);
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.wcap-btn:hover {
+	background: var(--wcap-sidebar-bg);
+	color: var(--wcap-text);
+}
+
+.wcap-btn:focus-visible {
+	outline: 2px solid var(--wcap-accent);
+	outline-offset: 2px;
+}
+
+.wcap-btn--primary {
+	background: var(--wcap-accent);
+	border-color: var(--wcap-accent);
+	color: #fff;
+}
+
+.wcap-btn--primary:hover {
+	background: #135e96;
+	color: #fff;
+}
+
+/* Getting-started steps ------------------------------------------------------------------ */
+
+.wcap-steps {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 10px;
+}
+
+.wcap-step {
+	display: flex;
+	gap: 12px;
+	align-items: flex-start;
+	padding: 12px 14px;
+	border: 1px solid var(--wcap-border);
+	border-radius: 6px;
+	background: #fbfbfc;
+}
+
+.wcap-step__num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: var(--wcap-accent);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 700;
+	flex: 0 0 auto;
+}
+
+.wcap-step p {
+	margin: 2px 0 0;
+	color: var(--wcap-muted);
+}
+
+/* FAQ ------------------------------------------------------------------------------------ */
+
+.wcap-faq__item {
+	border: 1px solid var(--wcap-border);
+	border-radius: 6px;
+	margin-bottom: 8px;
+	background: #fbfbfc;
+}
+
+.wcap-faq__item summary {
+	cursor: pointer;
+	padding: 12px 14px;
+	font-weight: 600;
+	min-height: 40px;
+	display: flex;
+	align-items: center;
+}
+
+.wcap-faq__item summary:focus-visible {
+	outline: 2px solid var(--wcap-accent);
+	outline-offset: -2px;
+}
+
+.wcap-faq__item p {
+	margin: 0;
+	padding: 0 14px 12px;
+	color: var(--wcap-muted);
+}
+
+/* Feature list (Pro tabs seen from free) --------------------------------------------------- */
+
+.wcap-feature-list {
+	list-style: none;
+	margin: 0 0 16px;
+	padding: 0;
+	display: grid;
+	gap: 8px;
+}
+
+.wcap-feature-list li {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin: 0;
+}
+
+.wcap-feature-list [data-lucide] {
+	color: #1a7c3b;
+	margin-top: 2px;
+}

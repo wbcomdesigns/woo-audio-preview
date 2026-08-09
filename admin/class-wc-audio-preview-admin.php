@@ -276,120 +276,36 @@ class Wc_Audio_Preview_Admin {
 
 
 	/**
-	 * Actions performed to create a submenu page content.
+	 * The shared "WB Plugins" landing page.
 	 *
-	 * @since    1.0.0
-	 * @access public
-	 */
-	public function wcap_admin_options_page() {
-		global $allowedposttags;
-		$tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
-		?>
-	<div class="wrap">
-		<div class="wbcom-bb-plugins-offer-wrapper">
-				<div id="wb_admin_logo">
-				</div>
-			</div>
-		<div class="wbcom-wrap wbcom-plugin-wrapper">
-			<div class="bupr-header">
-				<div class="wbcom_admin_header-wrapper">
-					<div id="wb_admin_plugin_name">
-						<?php esc_html_e( 'Audio Preview for WooCommerce', 'woo-audio-preview' ); ?>
-						<span>
-					<?php
-					/* translators: %s: Plugin version number. */
-					printf( esc_html__( 'Version %s', 'woo-audio-preview' ), esc_html( WCAP_TEXT_VERSION ) );
-					?>
-					</span>
-					</div>
-					<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
-				</div>
-			</div>
-			<div class="wbcom-admin-settings-page">
-				<?php
-				settings_errors();
-				$this->wcap_plugin_settings_tabs();
-				settings_fields( $tab );
-				do_settings_sections( $tab );
-				?>
-			</div>
-		</div>
-	</div>
-		<?php
-	}
-
-	/**
-	 * Actions performed on loading plugin settings
+	 * Several Wbcom plugins register this same parent menu and whichever loads first supplies the
+	 * callback, so this has to render the shared landing page rather than anything specific to
+	 * Audio Preview. It previously pointed at this plugin's own settings renderer, which is why
+	 * removing that renderer would have fataled the menu for every Wbcom plugin on the site.
 	 *
-	 * @since    1.0.9
-	 * @access   public
-	 * @author   Wbcom Designs
+	 * @since 1.5.3
 	 */
-	public function wcap_init_plugin_settings() {
-		$this->plugin_settings_tabs['woo-audio-preview-welcome'] = esc_html__( 'Welcome', 'woo-audio-preview' );
-		register_setting(
-			'woo_audio_preview_admin_welcome_options',
-			'woo_audio_preview_admin_welcome_options',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-			)
-		);
-		add_settings_section( 'woo-audio-preview-welcome', ' ', array( $this, 'wcap_admin_welcome_content' ), 'woo-audio-preview-welcome' );
+	public function wcap_wb_plugins_page() {
+		$template = plugin_dir_path( __FILE__ ) . 'wbcom/templates/wbcom-plugins-page.php';
 
-		$this->plugin_settings_tabs['woo-audio-preview-pro'] = esc_html__( 'General (PRO)', 'woo-audio-preview' );
-		add_settings_section( 'woo-audio-preview-general-pro', ' ', array( $this, 'wcap_general_pro' ), 'woo-audio-preview-pro' );
-
-		$this->plugin_settings_tabs['woo-audio-preview-faq'] = esc_html__( 'FAQ', 'woo-audio-preview' );
-		register_setting(
-			'woo_audio_preview_general_options',
-			'woo_audio_preview_general_options',
-			array(
-				'sanitize_callback' => 'sanitize_text_field',
-			)
-		);
-		add_settings_section( 'woo-audio-preview-faq', ' ', array( $this, 'wcap_general_options_content' ), 'woo-audio-preview-faq' );
-	}
-
-	/**
-	 * Actions performed to create tabs on the sub menu page.
-	 */
-	public function wcap_plugin_settings_tabs() {
-		$current_tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
-		// Plugin settings tabs.
-		echo '<div class="wbcom-tabs-section"><div class="nav-tab-wrapper"><div class="wb-responsive-menu"><span>' . esc_html( 'Menu' ) . '</span><input class="wb-toggle-btn" type="checkbox" id="wb-toggle-btn"><label class="wb-toggle-icon" for="wb-toggle-btn"><span class="wb-icon-bars"></span></label></div><ul>';
-		foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
-			$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
-			echo '<li class="' . esc_attr( $tab_key ) . '"><a class="nav-tab ' . esc_attr( $active ) . '" id="' . esc_attr( $tab_key ) . '-tab" href="?page=woo-audio-preview-settings&tab=' . esc_attr( $tab_key ) . '">' . esc_attr( $tab_caption ) . '</a></li>';
+		if ( file_exists( $template ) ) {
+			include $template;
+			return;
 		}
-		echo '</div></ul></div>';
+
+		echo '<div class="wrap"><h1>' . esc_html__( 'WB Plugins', 'woo-audio-preview' ) . '</h1></div>';
 	}
 
-	/**
-	 * Audio Preview for WooCommerce admin welcome tab content.
+	/*
+	 * The Welcome / General (PRO) / FAQ screens used to be built here: a settings-section per tab,
+	 * a hand-rolled horizontal tab strip, and three partials of wbcom- markup. They are now tabs
+	 * on the shared settings page (WCAP_Settings_Tabs), which the Pro plugin also draws through,
+	 * so free and Pro present one product instead of two different admin screens.
 	 *
-	 * @return void
+	 * The register_setting() calls that went with them registered two option rows that never held
+	 * a setting - the sections were informational - so nothing is migrated and nothing is lost.
 	 */
-	public function wcap_admin_welcome_content() {
-		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-welcome-page.php';
-	}
 
-	/**
-	 * Audio Preview for WooCommerce admin general tab content.
-	 *
-	 * @return void
-	 */
-	public function wcap_general_options_content() {
-		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-faq.php';
-	}
-
-	/**
-	 * Audio Preview for WooCommerce admin general pro tab content.
-	 *
-	 * @return void
-	 */
-	public function wcap_general_pro() {
-		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-general-pro.php';
-	}
 
 	/**
 	 * Actions performed on loading admin_menu.
@@ -400,11 +316,14 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_views_add_admin_settings() {
 		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
-			add_menu_page( esc_html__( 'WB Plugins', 'woo-audio-preview' ), esc_html__( 'WB Plugins', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_admin_options_page' ), 'dashicons-lightbulb', 59 );
+			add_menu_page( esc_html__( 'WB Plugins', 'woo-audio-preview' ), esc_html__( 'WB Plugins', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_wb_plugins_page' ), 'dashicons-lightbulb', 59 );
 			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'woo-audio-preview' ), esc_html__( 'Welcome', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins' );
 
 		}
-		add_submenu_page( 'wbcomplugins', esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ), esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'wcap_admin_options_page' ) );
+		/*
+		 * The settings page itself is registered by WCAP_Settings_Page, which the Pro plugin also
+		 * carries. Registering it here as well would put the entry in the menu twice.
+		 */
 	}
 
 
