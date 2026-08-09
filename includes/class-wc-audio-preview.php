@@ -120,7 +120,9 @@ class Wc_Audio_Preview {
 		 * without one shell they drift into two different-looking admin screens, which is exactly
 		 * what happened before: a sidebar here, horizontal tabs there.
 		 */
-		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-settings-page.php';
+		if ( ! class_exists( 'WCAP_Settings_Page' ) ) {
+			require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-settings-page.php';
+		}
 		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wcap-settings-tabs.php';
 
 		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wc-audio-preview-admin.php';
@@ -187,7 +189,17 @@ class Wc_Audio_Preview {
 			$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
 
 			WCAP_Settings_Tabs::init();
-			WCAP_Settings_Page::boot( plugin_dir_url( __DIR__ ), WCAP_TEXT_VERSION );
+			WCAP_Settings_Page::boot(
+				plugin_dir_url( __DIR__ ),
+				WCAP_TEXT_VERSION,
+				array(
+					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
+					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
+					'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
+					'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
+					'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
+				)
+			);
 		}
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wcap_display_admin_errors' );

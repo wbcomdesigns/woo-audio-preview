@@ -448,3 +448,96 @@
 	color: #1a7c3b;
 	margin-top: 2px;
 }
+
+/* Settings sections ---------------------------------------------------------------------- */
+
+/*
+ * The Pro tab partials already group their fields in `.wcap-section` blocks headed by an h3.
+ * Styling those AS cards is deliberate: rewriting the nested markup of four long partials to emit
+ * card classes would have risked breaking field nesting for no visible gain, and this way the
+ * sections are laid out by exactly the rules that lay out free's cards.
+ */
+.wcap-settings-body .wcap-section {
+	background: var(--wcap-surface);
+	border: 1px solid var(--wcap-border);
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	margin-bottom: 16px;
+	overflow: hidden;
+	padding: 0 20px 8px;
+}
+
+.wcap-settings-body .wcap-section > h3 {
+	margin: 0 -20px 12px;
+	padding: 14px 20px 12px;
+	border-bottom: 1px solid var(--wcap-border);
+	background: #fafafa;
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--wcap-text);
+}
+
+.wcap-settings-body .wcap-field {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 12px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wcap-settings-body .wcap-field:last-child {
+	border-bottom: 0;
+}
+
+.wcap-settings-body .wcap-field > label,
+.wcap-settings-body .wcap-field-info > label {
+	font-weight: 600;
+	display: block;
+}
+
+.wcap-settings-body .wcap-field .description {
+	margin: 2px 0 0;
+	color: var(--wcap-muted);
+	font-style: normal;
+}
+
+/* A field whose control sits under its label rather than beside it. */
+.wcap-settings-body .wcap-field:not(.wcap-field-group) {
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.wcap-settings-body .wcap-field-group {
+	flex-direction: row;
+	align-items: center;
+}
+
+.wcap-settings-body .wcap-field-info {
+	flex: 1 1 auto;
+}
+
+.wcap-settings-body .wcap-field-control {
+	flex: 0 0 auto;
+}
+
+.wcap-settings-body .wcap-input,
+.wcap-settings-body .wcap-select,
+.wcap-settings-body .wcap-textarea {
+	max-width: 420px;
+	width: 100%;
+	min-height: 40px;
+}
+
+.wcap-settings-body .wcap-textarea {
+	min-height: 90px;
+}
+
+@media screen and (max-width: 782px) {
+	.wcap-settings-body .wcap-field-group {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+}

@@ -26,9 +26,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'WCAP_Settings_Page' ) ) {
-	return;
-}
+/*
+ * Both plugins ship this file, so on the moment of upgrade - free still active, Pro just
+ * activated - it can be reached from two different paths, and require_once dedupes by resolved
+ * path, not by class name. The guard therefore lives at each require site (see load_dependencies()
+ * in either plugin) as `if ( ! class_exists( 'WCAP_Settings_Page' ) )`.
+ *
+ * It deliberately does NOT live here as a top-level `if ( class_exists() ) { return; }`. PHP binds
+ * an unconditional class at compile time, before a single statement in the file runs, so such a
+ * guard is evaluated far too late and the second include fatals with "Cannot declare class ...
+ * because the name is already in use".
+ */
 
 /**
  * Pattern A settings page: sidebar left, content right, hash-routed.
@@ -81,6 +89,19 @@ class WCAP_Settings_Page {
 	private static $assets_url = '';
 
 	/**
+	 * Visible strings, already translated by whichever plugin booted the shell.
+	 *
+	 * The shell is byte-identical in both plugins, so it cannot contain a translatable string: a
+	 * literal text domain is right in one plugin and wrong in the other, and gettext would extract
+	 * the string into a catalogue the other plugin does not ship. The caller translates in its own
+	 * domain and passes the result in.
+	 *
+	 * @since 1.5.3
+	 * @var   array
+	 */
+	private static $labels = array();
+
+	/**
 	 * Version of the plugin that booted the shell, for asset cache busting.
 	 *
 	 * @since 1.5.3
@@ -97,8 +118,9 @@ class WCAP_Settings_Page {
 	 * @since 1.5.3
 	 * @param string $assets_url URL of the calling plugin's root, with trailing slash.
 	 * @param string $version    Calling plugin's version.
+	 * @param array  $labels     Visible strings, translated by the CALLER in its own text domain.
 	 */
-	public static function boot( $assets_url, $version ) {
+	public static function boot( $assets_url, $version, $labels = array() ) {
 		if ( self::$registered ) {
 			return;
 		}
@@ -106,10 +128,21 @@ class WCAP_Settings_Page {
 		self::$registered = true;
 		self::$assets_url = trailingslashit( $assets_url );
 		self::$version    = $version;
+		self::$labels     = array_merge(
+			array(
+				'menu_title' => 'Audio Preview',
+				'brand'      => 'Audio Preview',
+				'subtitle'   => 'Settings',
+				'nav_label'  => 'Settings sections',
+				'pro_badge'  => 'Pro',
+			),
+			array_filter( (array) $labels )
+		);
 
 		add_action( 'admin_menu', array( __CLASS__, 'register_page' ), 20 );
-		add_action( 'admin_init', array( __CLASS__, 'redirect_legacy_slugs' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'redirect_legacy_slugs' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
+		add_action( 'in_admin_header', array( __CLASS__, 'quieten_foreign_notices' ), 1 );
 	}
 
 	/**
@@ -120,8 +153,8 @@ class WCAP_Settings_Page {
 	public static function register_page() {
 		add_submenu_page(
 			self::PARENT,
-			esc_html__( 'Audio Preview', 'woo-audio-preview' ),
-			esc_html__( 'Audio Preview', 'woo-audio-preview' ),
+			esc_html( self::$labels['menu_title'] ),
+			esc_html( self::$labels['menu_title'] ),
 			'manage_options',
 			self::SLUG,
 			array( __CLASS__, 'render' )
@@ -130,6 +163,13 @@ class WCAP_Settings_Page {
 
 	/**
 	 * Send retired settings URLs to the current one.
+	 *
+	 * Hooked to admin_menu, not admin_init, and that is not interchangeable here. WordPress builds
+	 * the menu in wp-admin/menu.php, then checks whether the current user can reach the requested
+	 * page and calls wp_die() with a 403 if the slug is not registered - and all of that happens
+	 * BEFORE admin_init fires. A redirect on admin_init is therefore unreachable for exactly the
+	 * case it exists to handle: a slug that no longer exists. admin_menu fires inside menu.php,
+	 * before the access check, so this runs while the redirect is still possible.
 	 *
 	 * @since 1.5.3
 	 */
@@ -143,6 +183,69 @@ class WCAP_Settings_Page {
 
 		wp_safe_redirect( admin_url( 'admin.php?page=' . self::SLUG ) );
 		exit;
+	}
+
+	/**
+	 * Keep other plugins' notices off this screen.
+	 *
+	 * A settings screen covered in "rate us" banners and unrelated licence nags from six other
+	 * plugins is not a settings screen the owner can read. Notices are stripped rather than
+	 * hidden with CSS on purpose: display:none still leaves the text in the document, where a
+	 * screen reader announces every one of them before reaching the actual settings.
+	 *
+	 * Ours stay, and so does anything WordPress core registers as a closure - that is where
+	 * update and error notices come from, and swallowing those would be worse than the clutter.
+	 *
+	 * @since 1.5.3
+	 */
+	public static function quieten_foreign_notices() {
+		global $wp_filter;
+
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+		if ( ! $screen || false === strpos( (string) $screen->id, self::SLUG ) ) {
+			return;
+		}
+
+		foreach ( array( 'admin_notices', 'all_admin_notices', 'user_admin_notices', 'network_admin_notices' ) as $hook ) {
+			if ( empty( $wp_filter[ $hook ] ) ) {
+				continue;
+			}
+
+			foreach ( $wp_filter[ $hook ]->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $id => $callback ) {
+					if ( self::is_ours_or_core( $callback['function'] ) ) {
+						continue;
+					}
+
+					unset( $wp_filter[ $hook ]->callbacks[ $priority ][ $id ] );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Whether a notice callback belongs to this product or to WordPress itself.
+	 *
+	 * @since  1.5.3
+	 * @param  mixed $callback Registered callback.
+	 * @return bool
+	 */
+	private static function is_ours_or_core( $callback ) {
+		// Core registers its update and error notices as closures. Never remove those.
+		if ( $callback instanceof Closure ) {
+			return true;
+		}
+
+		$name = '';
+
+		if ( is_string( $callback ) ) {
+			$name = $callback;
+		} elseif ( is_array( $callback ) && isset( $callback[0], $callback[1] ) ) {
+			$name = ( is_object( $callback[0] ) ? get_class( $callback[0] ) : (string) $callback[0] ) . '::' . $callback[1];
+		}
+
+		return false !== stripos( $name, 'wcap' ) || false !== stripos( $name, 'audio_preview' ) || false !== stripos( $name, 'audio-preview' );
 	}
 
 	/**
@@ -233,12 +336,12 @@ class WCAP_Settings_Page {
 			<?php settings_errors(); ?>
 
 			<div class="wcap-settings-wrap">
-				<nav class="wcap-settings-sidebar" aria-label="<?php esc_attr_e( 'Settings sections', 'woo-audio-preview' ); ?>">
+				<nav class="wcap-settings-sidebar" aria-label="<?php echo esc_attr( self::$labels['nav_label'] ); ?>">
 					<div class="wcap-settings-sidebar__brand">
 						<span class="wcap-settings-sidebar__logo"><i data-lucide="audio-lines"></i></span>
 						<div>
-							<strong><?php esc_html_e( 'Audio Preview', 'woo-audio-preview' ); ?></strong>
-							<span><?php esc_html_e( 'Settings', 'woo-audio-preview' ); ?></span>
+							<strong><?php echo esc_html( self::$labels['brand'] ); ?></strong>
+							<span><?php echo esc_html( self::$labels['subtitle'] ); ?></span>
 						</div>
 					</div>
 
@@ -261,7 +364,7 @@ class WCAP_Settings_Page {
 									<i data-lucide="<?php echo esc_attr( isset( $item['icon'] ) ? $item['icon'] : 'circle' ); ?>"></i>
 									<span><?php echo esc_html( isset( $item['title'] ) ? $item['title'] : $tab_id ); ?></span>
 									<?php if ( ! empty( $item['pro'] ) ) : ?>
-										<span class="wcap-pro-badge"><?php esc_html_e( 'Pro', 'woo-audio-preview' ); ?></span>
+										<span class="wcap-pro-badge"><?php echo esc_html( self::$labels['pro_badge'] ); ?></span>
 									<?php endif; ?>
 								</a>
 							<?php endforeach; ?>
