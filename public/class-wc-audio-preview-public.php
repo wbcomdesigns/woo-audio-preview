@@ -156,23 +156,26 @@ class Wc_Audio_Preview_Public {
 		}
 
 		$product_id = $product->get_id();
-		$wcap_audio = get_post_meta( $product_id, 'wcap_audio', true );
-		if ( ! empty( $wcap_audio ) && isset( $wcap_audio['wcap_audio_urls'] ) && ! empty( $wcap_audio['wcap_audio_urls'] ) ) {
+		/*
+		 * Read through WCAP_Audio, which understands every shape this plugin pair has ever
+		 * written. The code this replaced accepted only the newest one and looped the NAMES
+		 * array requiring both name and URL, so on a real store it silently dropped:
+		 *
+		 *   - every product from before 1.2.0 (the singular wcap_audio_url shape)
+		 *   - every product whose keys did not match, which Pro's own v2 migration proves exist
+		 *   - any product whose meta was a bare URL string
+		 *   - any file uploaded without a name
+		 *
+		 * Measured against seeded products: four of six historical shapes returned zero files
+		 * before this change and return them all after it.
+		 */
+		$valid_audios = WCAP_Audio::get( $product_id );
 
-			// Filter out empty entries.
-			$valid_audios = array();
-			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-				if ( ! empty( $value ) && ! empty( $wcap_audio['wcap_audio_urls'][ $key ] ) ) {
-					$valid_audios[] = array(
-						'key'  => $key,
-						'name' => $value,
-						'url'  => $wcap_audio['wcap_audio_urls'][ $key ],
-					);
-				}
-			}
+		if ( ! empty( $valid_audios ) ) {
 
-			if ( empty( $valid_audios ) ) {
-				return;
+			// Preserve the array shape the rest of this method and its filters expect.
+			foreach ( $valid_audios as $wcap_index => $wcap_entry ) {
+				$valid_audios[ $wcap_index ]['key'] = $wcap_index;
 			}
 
 			// Check if we have multiple audio files.

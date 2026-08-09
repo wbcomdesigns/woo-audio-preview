@@ -2,3 +2,8 @@
 node_modules
 package-lock.json
 dist/
+# Composer DEV dependencies only. Anything under vendor/ the plugin LOADS AT RUNTIME must be
+# exempted by name - composer does not restore it on a customer's site.
+/vendor/*
+/.phpunit.result.cache
+composer.lock

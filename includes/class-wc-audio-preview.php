@@ -125,6 +125,12 @@ class Wc_Audio_Preview {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
+		/**
+		 * Shape-tolerant reader for a product's audio. Loaded before the public class, which
+		 * depends on it.
+		 */
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-audio.php';
+
 		require_once plugin_dir_path( __DIR__ ) . 'public/class-wc-audio-preview-public.php';
 
 		require_once plugin_dir_path( __DIR__ ) . 'admin/wbcom/wbcom-admin-settings.php';
