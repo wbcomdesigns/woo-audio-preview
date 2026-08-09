@@ -154,7 +154,7 @@ class Wc_Audio_Preview_Admin {
 		$screen = get_current_screen();
 		if ( ( $screen->id === 'product' && ( $screen->action === 'add' || $screen->action === '' ) ) || ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'woo-audio-preview-settings' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-			$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-admin' );
+			$css_file = $this->get_asset_filename( 'css', 'wcap-admin' );
 			if ( $css_file ) {
 				wp_enqueue_style(
 					$this->plugin_name,
@@ -194,7 +194,7 @@ class Wc_Audio_Preview_Admin {
 
 			// Enqueue media uploader.
 			wp_enqueue_media();
-			$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-admin' );
+			$js_file = $this->get_asset_filename( 'js', 'wcap-admin' );
 			if ( $js_file ) {
 				wp_enqueue_script(
 					$this->plugin_name,
