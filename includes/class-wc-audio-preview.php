@@ -115,14 +115,11 @@ class Wc_Audio_Preview {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		/*
-		 * The settings page shell is shared with the Pro plugin, byte for byte. Pro replaces this
-		 * plugin rather than extending it, so neither can rely on the other being present - and
-		 * without one shell they drift into two different-looking admin screens, which is exactly
-		 * what happened before: a sidebar here, horizontal tabs there.
+		 * The settings screen is a bundled library, not code owned by this plugin. Every Wbcom
+		 * plugin ships a copy and the newest one on the site is the only one loaded, so a fix
+		 * shipped here reaches every other plugin's screen too. Registered in the bootstrap, at
+		 * include time, because the loader has to see every copy before any plugin boots.
 		 */
-		if ( ! class_exists( 'WCAP_Settings_Page' ) ) {
-			require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-settings-page.php';
-		}
 		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wcap-settings-tabs.php';
 
 		require_once plugin_dir_path( __DIR__ ) . 'admin/class-wc-audio-preview-admin.php';
@@ -197,17 +194,24 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
 
 		WCAP_Settings_Tabs::init();
-		WCAP_Settings_Page::boot(
-			plugin_dir_url( __DIR__ ),
-			WCAP_TEXT_VERSION,
+		Wbcom_Settings_Page::boot(
 			array(
-				'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
-				'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
-				'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
-				'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
-				'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
+				'prefix'       => 'wcap',
+				'slug'         => 'woo-audio-preview-settings',
+				'icon'         => 'audio-lines',
+				'assets_url'   => plugin_dir_url( __DIR__ ),
+				'version'      => WCAP_TEXT_VERSION,
+				'legacy_slugs' => array( 'wcap-pro-settings' ),
+				'labels'       => array(
+					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
+					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
+					'subtitle'   => __( 'Settings', 'woo-audio-preview' ),
+					'nav_label'  => __( 'Settings sections', 'woo-audio-preview' ),
+					'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
+				),
 			)
 		);
+
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wcap_display_admin_errors' );
 	}

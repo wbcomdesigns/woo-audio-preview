@@ -65,6 +65,31 @@ its own, because `__FILE__` is lexical.
       It becomes due the moment a per-product listing is added - do not add one without pagination,
       an indexed `COUNT(*)`, and a filter.
 
+---
+
+## Architecture decision: the settings screen is a bundled library
+
+`lib/wbcom-settings/` is **not this plugin's code**. It is a shared library, byte-identical in
+every Wbcom plugin that ships it, and it is versioned:
+
+- Each plugin registers its copy at include time via `wbcom_settings_register( version, file )`.
+- On `plugins_loaded:-999` the **highest version wins** and is the only copy loaded.
+- Every other copy stands down.
+
+This is the pattern Action Scheduler and the EDD licensing SDK use, and it was chosen over the two
+alternatives on purpose:
+
+- **A shared toolkit plugin** would have to be installed, updated and version-matched by the site
+  owner, and a product that breaks because a dependency was deactivated is worse than duplication
+  on disk. The house rule is explicit that each plugin keeps its own files.
+- **Copy-paste per plugin** is what this replaces. There was exactly one implementation and the
+  next step was to copy it into a second product; at 100+ plugins that is 100 screens drifting
+  apart, which is the failure this codebase has already had with detectors and renderers.
+
+The practical consequence: a fix shipped in ANY plugin's release becomes the screen every other
+Wbcom plugin on that site uses. Do not fork it. If a product needs something the screen cannot do,
+add it to the library and bump `Wbcom_Settings_Page::VERSION`.
+
 ## Known gaps carried deliberately
 
 - The Welcome and FAQ tabs are static content. They are the only surfaces here that could drift

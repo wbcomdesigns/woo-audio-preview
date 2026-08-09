@@ -194,15 +194,15 @@ class WCAP_Settings_Tabs {
 			),
 		);
 
-		WCAP_Settings_Page::card_open(
+		Wbcom_Settings_Page::card_open(
 			__( 'Quick start', 'woo-audio-preview' ),
 			__( 'Four steps from installed to a working preview on your store.', 'woo-audio-preview' )
 		);
 		?>
-		<ol class="wcap-steps">
+		<ol class="wbcom-steps">
 			<?php foreach ( $steps as $i => $step ) : ?>
-				<li class="wcap-step">
-					<span class="wcap-step__num"><?php echo esc_html( $i + 1 ); ?></span>
+				<li class="wbcom-step">
+					<span class="wbcom-step__num"><?php echo esc_html( $i + 1 ); ?></span>
 					<div>
 						<strong><?php echo esc_html( $step['title'] ); ?></strong>
 						<p><?php echo esc_html( $step['desc'] ); ?></p>
@@ -211,9 +211,9 @@ class WCAP_Settings_Tabs {
 			<?php endforeach; ?>
 		</ol>
 		<?php
-		WCAP_Settings_Page::card_close();
+		Wbcom_Settings_Page::card_close();
 
-		WCAP_Settings_Page::card_open(
+		Wbcom_Settings_Page::card_open(
 			__( 'Supported audio', 'woo-audio-preview' ),
 			__( 'What you can point a preview at.', 'woo-audio-preview' )
 		);
@@ -222,7 +222,7 @@ class WCAP_Settings_Tabs {
 			<?php esc_html_e( 'MP3, WAV, OGG, M4A and AAC, uploaded to your Media Library or hosted anywhere reachable by URL - including Google Drive, Dropbox and any CDN.', 'woo-audio-preview' ); ?>
 		</p>
 		<?php
-		WCAP_Settings_Page::card_close();
+		Wbcom_Settings_Page::card_close();
 	}
 
 	/**
@@ -258,21 +258,21 @@ class WCAP_Settings_Tabs {
 			),
 		);
 
-		WCAP_Settings_Page::card_open(
+		Wbcom_Settings_Page::card_open(
 			__( 'Frequently asked questions', 'woo-audio-preview' ),
 			__( 'The things store owners ask most often.', 'woo-audio-preview' )
 		);
 		?>
-		<div class="wcap-faq">
+		<div class="wbcom-faq">
 			<?php foreach ( $faqs as $faq ) : ?>
-				<details class="wcap-faq__item">
+				<details class="wbcom-faq__item">
 					<summary><?php echo esc_html( $faq['q'] ); ?></summary>
 					<p><?php echo esc_html( $faq['a'] ); ?></p>
 				</details>
 			<?php endforeach; ?>
 		</div>
 		<?php
-		WCAP_Settings_Page::card_close();
+		Wbcom_Settings_Page::card_close();
 	}
 
 	/**
@@ -287,20 +287,20 @@ class WCAP_Settings_Tabs {
 	 * @param array  $features What Pro adds here.
 	 */
 	private static function locked( $title, $desc, $features ) {
-		WCAP_Settings_Page::card_open( $title, $desc );
+		Wbcom_Settings_Page::card_open( $title, $desc );
 		?>
-		<ul class="wcap-feature-list">
+		<ul class="wbcom-feature-list">
 			<?php foreach ( $features as $feature ) : ?>
 				<li><i data-lucide="check"></i><span><?php echo esc_html( $feature ); ?></span></li>
 			<?php endforeach; ?>
 		</ul>
 		<p>
-			<a class="wcap-btn wcap-btn--primary" href="<?php echo esc_url( self::UPGRADE_URL ); ?>" target="_blank" rel="noopener noreferrer">
+			<a class="wbcom-btn wbcom-btn--primary" href="<?php echo esc_url( self::UPGRADE_URL ); ?>" target="_blank" rel="noopener noreferrer">
 				<i data-lucide="arrow-up-circle"></i>
 				<?php esc_html_e( 'See what Pro adds', 'woo-audio-preview' ); ?>
 			</a>
 		</p>
 		<?php
-		WCAP_Settings_Page::card_close();
+		Wbcom_Settings_Page::card_close();
 	}
 }

@@ -100,6 +100,15 @@ function wcap_plugin_init() {
  * earlier than this plugin's plugins_loaded boot - so if the parent class were only required
  * during boot, Pro's `extends` would fatal on a class that did not exist yet.
  */
+/*
+ * Offer this plugin's copy of the shared settings screen. Every Wbcom plugin registers its own
+ * copy and the highest version wins, so the screen is implemented once per SITE rather than once
+ * per plugin. Registration happens at include time because the loader must see every copy before
+ * any plugin boots.
+ */
+require_once plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/loader.php';
+wbcom_settings_register( '1.0.0', plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/class-wbcom-settings-page.php' );
+
 require_once plugin_dir_path( __FILE__ ) . 'public/class-wc-audio-preview-public.php';
 
 add_action( 'plugins_loaded', 'wcap_plugin_init' );

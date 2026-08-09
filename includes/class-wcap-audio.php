@@ -59,9 +59,9 @@ class WCAP_Audio {
 	 * @since 1.5.3
 	 * @var   string
 	 */
-	const URL_KEY      = 'wcap_audio_urls';
-	const NAME_KEY     = 'wcap_audio_names';
-	const DURATION_KEY = 'wcap_audio_durations';
+	const URL_KEY       = 'wcap_audio_urls';
+	const NAME_KEY      = 'wcap_audio_names';
+	const DURATION_KEY  = 'wcap_audio_durations';
 	const WATERMARK_KEY = 'wcap_audio_watermarks';
 
 	/**
