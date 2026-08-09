@@ -323,6 +323,24 @@ class Wc_Audio_Preview_Admin {
 	 * Register enhanced meta box.
 	 */
 	public function wcap_register_meta_boxes() {
+		/**
+		 * Whether something else is providing the product's audio preview box.
+		 *
+		 * The Pro plugin renders a richer box - unlimited rows, per-track duration, reordering -
+		 * and returns true here so only one is shown. Without this seam both plugins registered a
+		 * box on the same product, and because this one reads only its own three fixed fields it
+		 * came up EMPTY beside Pro's populated one. Two boxes claiming to manage the same audio,
+		 * one of them blank: fill in the blank one, press Update, and whichever saves last wins.
+		 *
+		 * That is a data-loss path, not a cosmetic duplicate.
+		 *
+		 * @since 1.5.3
+		 * @param bool $handled Whether another plugin owns the metabox.
+		 */
+		if ( apply_filters( 'wcap_product_metabox_handled', false ) ) {
+			return;
+		}
+
 		global $post;
 		$label_text = sprintf(
 			/* translators: %s: Supported audio format information. */
