@@ -86,9 +86,18 @@
     background: rgba(0, 0, 0, 0.02) !important;
 }
 
-.wcap-preview-button:focus {
+/*
+ * Keyboard only. On :focus the ring also appeared on a mouse click, and it was drawn
+ * square around a button whose visual is a circle - so a click looked like a
+ * rendering fault. The pro plugin carries the same pair of fixes.
+ */
+.wcap-preview-button {
+    border-radius: 50%;
+}
+
+.wcap-preview-button:focus-visible {
     outline: 2px solid currentColor;
-    outline-offset: -2px;
+    outline-offset: 2px;
 }
 
 .wcap-button-content {
