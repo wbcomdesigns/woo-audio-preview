@@ -1000,3 +1000,29 @@ jQuery(document).ready(function($) {
     `)
     .appendTo('head');
 });
+/**
+ * Add another preview row.
+ *
+ * The markup comes from a template the PHP renders with render_row(), so a row added here is the
+ * same row the server would have drawn - including fields contributed by an extension. Cloning the
+ * last visible row instead would copy its values, and building the markup in JS would mean two
+ * definitions of a row drifting apart.
+ */
+( function ( $ ) {
+	'use strict';
+
+	$( document ).on( 'click', '[data-wcap-add-row], #wcap-pro-add-more', function ( e ) {
+		e.preventDefault();
+
+		var template = document.getElementById( 'wcap-metabox-row-template' );
+		var wrap     = document.querySelector( '.wcap-fixed-audio-fields' );
+
+		if ( ! template || ! wrap ) {
+			return;
+		}
+
+		var index = wrap.querySelectorAll( '[name^="wcap_audio[wcap_audio_names]"]' ).length;
+
+		wrap.insertAdjacentHTML( 'beforeend', template.innerHTML.split( '__INDEX__' ).join( index ) );
+	} );
+}( jQuery ) );

@@ -387,48 +387,21 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Enhanced meta box display callback with exactly 3 fixed fields
+	 * One preview row.
 	 *
-	 * @param WP_Post $post Current post object.
+	 * Extracted so the render loop and the "add another" template share a single definition. They
+	 * used to be separate: the Pro plugin carried its own row markup AND its own JS template, so
+	 * the add button stopped working the moment its meta box was folded into this one - there was
+	 * no template left to clone.
+	 *
+	 * @since 1.5.3
+	 * @param int|string $i          Row index, or a placeholder token for the JS template.
+	 * @param string     $audio_name Saved name.
+	 * @param string     $audio_url  Saved URL.
 	 */
-	public function wcap_display_callback( $post ) {
-		// Add nonce for security and authentication.
-		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
-
-		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
-		$wcap_items = class_exists( 'WCAP_Audio' ) ? WCAP_Audio::get( $post->ID ) : array();
-		$wcap_rows  = self::row_count( count( $wcap_items ) );
+	public function render_row( $i, $audio_name = '', $audio_url = '' ) {
+		$field_number = is_numeric( $i ) ? ( (int) $i + 1 ) : '';
 		?>
-		<div class="form-field preview_files">
-			<div class="wcap-error-messages"></div>
-
-			<details class="wcap-metabox-help">
-				<summary><?php esc_html_e( 'What can I add here?', 'woo-audio-preview' ); ?></summary>
-				<div class="wcap-metabox-help__body">
-					<p><?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA and WEBM files, a direct URL, or a CDN link from Google Drive, Dropbox or SoundCloud.', 'woo-audio-preview' ); ?></p>
-				</div>
-			</details>
-
-			<?php
-			/**
-			 * Render above the preview rows.
-			 *
-			 * The seam the Pro plugin uses to add the player theme control, instead of registering
-			 * a second meta box beside this one.
-			 *
-			 * @since 1.5.3
-			 * @param WP_Post $post Product being edited.
-			 */
-			do_action( 'wcap_metabox_before_rows', $post );
-			?>
-
-			<div class="wcap-fixed-audio-fields">
-		<?php
-		for ( $i = 0; $i < $wcap_rows; $i++ ) :
-			$audio_name   = isset( $wcap_items[ $i ]['name'] ) ? $wcap_items[ $i ]['name'] : '';
-			$audio_url    = isset( $wcap_items[ $i ]['url'] ) ? $wcap_items[ $i ]['url'] : '';
-			$field_number = $i + 1;
-			?>
 					<div class="wcap-audio-field-group"><h4 class="wcap-field-title">
 					<?php
 					/* translators: %d: Audio preview field number. */
@@ -493,7 +466,56 @@ else :
 					 */
 					do_action( 'wcap_metabox_row_fields', $i, $audio_name, $audio_url );
 					?>
-					</div><?php endfor; ?></div>
+					</div>
+		<?php
+	}
+
+	/**
+	 * Enhanced meta box display callback with exactly 3 fixed fields
+	 *
+	 * @param WP_Post $post Current post object.
+	 */
+	public function wcap_display_callback( $post ) {
+		// Add nonce for security and authentication.
+		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
+
+		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
+		$wcap_items = class_exists( 'WCAP_Audio' ) ? WCAP_Audio::get( $post->ID ) : array();
+		$wcap_rows  = self::row_count( count( $wcap_items ) );
+		?>
+		<div class="form-field preview_files">
+			<div class="wcap-error-messages"></div>
+
+			<details class="wcap-metabox-help">
+				<summary><?php esc_html_e( 'What can I add here?', 'woo-audio-preview' ); ?></summary>
+				<div class="wcap-metabox-help__body">
+					<p><?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA and WEBM files, a direct URL, or a CDN link from Google Drive, Dropbox or SoundCloud.', 'woo-audio-preview' ); ?></p>
+				</div>
+			</details>
+
+			<?php
+			/**
+			 * Render above the preview rows.
+			 *
+			 * The seam the Pro plugin uses to add the player theme control, instead of registering
+			 * a second meta box beside this one.
+			 *
+			 * @since 1.5.3
+			 * @param WP_Post $post Product being edited.
+			 */
+			do_action( 'wcap_metabox_before_rows', $post );
+			?>
+
+			<div class="wcap-fixed-audio-fields">
+		<?php
+		for ( $i = 0; $i < $wcap_rows; $i++ ) :
+			$audio_name = isset( $wcap_items[ $i ]['name'] ) ? $wcap_items[ $i ]['name'] : '';
+			$audio_url  = isset( $wcap_items[ $i ]['url'] ) ? $wcap_items[ $i ]['url'] : '';
+
+			$this->render_row( $i, $audio_name, $audio_url );
+		endfor;
+		?>
+		</div>
 					<?php
 					/**
 					 * Render below the preview rows.
@@ -505,6 +527,21 @@ else :
 					 */
 					do_action( 'wcap_metabox_after_rows', $post );
 					?>
+
+					<?php
+					/*
+					 * The template for a new row, built from the SAME render_row() the loop uses - so a row
+					 * added in the browser carries every field a rendered row has, including any an
+					 * extension contributed through wcap_metabox_row_fields.
+					 *
+					 * The Pro plugin used to keep its own template beside its own row markup. When its meta
+					 * box was folded into this one the template went with it, and "add another preview"
+					 * silently stopped adding anything.
+					 */
+					?>
+					<script type="text/template" id="wcap-metabox-row-template">
+						<?php $this->render_row( '__INDEX__' ); ?>
+					</script>
 					<?php if ( ! has_action( 'wcap_metabox_after_rows' ) ) : ?>
 					<div class="wcap-pro-notice"><p><strong><?php esc_html_e( 'Need more audio previews?', 'woo-audio-preview' ); ?></strong><br>
 							<?php
