@@ -136,6 +136,136 @@ class Wbcom_Settings_Page {
 	}
 
 	/**
+	 * Whether this request is the shared menu's landing page.
+	 *
+	 * @since  1.0.0
+	 * @return bool
+	 */
+	private static function is_landing_page() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Routing only.
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+
+		return self::PARENT === $page;
+	}
+
+	/**
+	 * Render the hub at the shared "WB Plugins" menu.
+	 *
+	 * Built from the WordPress submenu table, NOT from this library's own registry. That matters
+	 * on a real site: a shop can run Woo addons alongside BuddyPress addons, and only some of them
+	 * use this library. Reading the menu means every Wbcom plugin appears whether or not it does -
+	 * and it means this hub behaves identically to the one the BuddyPress plugins render, so
+	 * whichever plugin happens to own the parent menu, the owner sees the same page.
+	 *
+	 * Each of the Wbcom plugins used to point this menu at their OWN settings renderer, so the
+	 * entry labelled "Welcome" opened one product's settings - picked by plugin load order, and
+	 * drawn without that screen's assets, so it arrived unstyled.
+	 *
+	 * @since 1.0.0
+	 */
+	public static function render_welcome() {
+		$entries = isset( $GLOBALS['submenu'][ self::PARENT ] ) && is_array( $GLOBALS['submenu'][ self::PARENT ] )
+			? $GLOBALS['submenu'][ self::PARENT ]
+			: array();
+
+		/**
+		 * Slugs under the hub that are not products.
+		 *
+		 * Un-migrated Wbcom plugins register shared boilerplate pages here. They are not plugins,
+		 * so listing them as cards would read as duplicate tiles. Same filter name the BuddyPress
+		 * plugins use, so a site running both filters one list.
+		 *
+		 * @since 1.0.0
+		 * @param array $slugs Menu slugs to leave out of the hub.
+		 */
+		$helpers = apply_filters(
+			'wbcom_hub_wrapper_helper_slugs',
+			array( 'wbcom-plugins-page', 'wbcom-themes-page', 'wbcom-support-page', 'wbcom-license-page' )
+		);
+
+		$plugins = array();
+
+		foreach ( $entries as $entry ) {
+			$slug = isset( $entry[2] ) ? (string) $entry[2] : '';
+
+			if ( '' === $slug || self::PARENT === $slug || in_array( $slug, $helpers, true ) ) {
+				continue;
+			}
+
+			$plugins[] = array(
+				'slug'     => $slug,
+				'title'    => isset( $entry[0] ) ? wp_strip_all_tags( (string) $entry[0] ) : $slug,
+				'subtitle' => isset( $entry[3] ) ? wp_strip_all_tags( (string) $entry[3] ) : '',
+				'url'      => admin_url( 'admin.php?page=' . rawurlencode( $slug ) ),
+				'icon'     => isset( self::$pages[ $slug ]['icon'] ) ? self::$pages[ $slug ]['icon'] : 'plug',
+			);
+		}
+
+		$count = count( $plugins );
+		?>
+		<div class="wrap wbcom-admin">
+			<header class="wbcom-page-header">
+				<span class="wbcom-page-header__icon"><i data-lucide="lightbulb"></i></span>
+				<div>
+					<h1><?php esc_html_e( 'WB Plugins', 'default' ); ?></h1>
+					<p class="wbcom-page-header__subtitle">
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %d: number of active Wbcom plugins. */
+								_n( '%d Wbcom plugin active on this site.', '%d Wbcom plugins active on this site.', $count, 'default' ),
+								$count
+							)
+						);
+						?>
+					</p>
+				</div>
+			</header>
+
+			<?php if ( 0 === $count ) : ?>
+				<div class="wbcom-empty-state">
+					<i data-lucide="lightbulb"></i>
+					<p class="wbcom-empty-state__title"><?php esc_html_e( 'No Wbcom plugins attached to this hub yet', 'default' ); ?></p>
+					<p class="wbcom-empty-state__desc"><?php esc_html_e( 'Activate one and it will appear here automatically.', 'default' ); ?></p>
+				</div>
+			<?php else : ?>
+				<div class="wbcom-hub-grid">
+					<?php foreach ( $plugins as $plugin ) : ?>
+						<a class="wbcom-hub-card" href="<?php echo esc_url( $plugin['url'] ); ?>">
+							<span class="wbcom-hub-card__icon"><i data-lucide="<?php echo esc_attr( $plugin['icon'] ); ?>"></i></span>
+							<span class="wbcom-hub-card__title"><?php echo esc_html( $plugin['title'] ); ?></span>
+							<?php if ( '' !== $plugin['subtitle'] && $plugin['subtitle'] !== $plugin['title'] ) : ?>
+								<span class="wbcom-hub-card__subtitle"><?php echo esc_html( $plugin['subtitle'] ); ?></span>
+							<?php endif; ?>
+							<span class="wbcom-hub-card__cta">
+								<?php esc_html_e( 'Open settings', 'default' ); ?>
+								<i data-lucide="arrow-right"></i>
+							</span>
+						</a>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+
+			<?php
+			self::card_open( __( 'About WB Plugins', 'default' ) );
+			?>
+			<p>
+				<?php esc_html_e( 'This hub is the single entry point for every Wbcom Designs plugin installed on your site. Each plugin lives on its own page under this menu and keeps its own settings, licence, and data.', 'default' ); ?>
+			</p>
+			<p>
+				<a href="https://wbcomdesigns.com/" target="_blank" rel="noopener noreferrer">
+					<?php esc_html_e( 'Visit wbcomdesigns.com for more plugins and themes', 'default' ); ?>
+					<i data-lucide="arrow-right"></i>
+				</a>
+			</p>
+			<?php
+			self::card_close();
+			?>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Send retired settings URLs to the screen that replaced them.
 	 *
 	 * Hooked to admin_menu, not admin_init, and that is not interchangeable. WordPress builds the
@@ -222,6 +352,16 @@ class Wbcom_Settings_Page {
 	 */
 	public static function enqueue() {
 		$page = self::current_page();
+
+		/*
+		 * The shared landing page is not a registered settings screen, but it is drawn by this
+		 * class and needs the same stylesheet. Without this it rendered as unstyled HTML - a list
+		 * of plugin names and bare links - which is exactly what it looked like before anyone
+		 * noticed it was rendering a plugin's settings by accident.
+		 */
+		if ( ! $page && self::is_landing_page() ) {
+			$page = reset( self::$pages );
+		}
 
 		if ( ! $page ) {
 			return;

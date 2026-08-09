@@ -201,7 +201,7 @@ class Wc_Audio_Preview {
 				'icon'         => 'audio-lines',
 				'assets_url'   => plugin_dir_url( __DIR__ ),
 				'version'      => WCAP_TEXT_VERSION,
-				'legacy_slugs' => array( 'wcap-pro-settings' ),
+				'legacy_slugs' => array( 'wcap-pro-settings', 'wbcom-license-page' ),
 				'labels'       => array(
 					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
 					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),

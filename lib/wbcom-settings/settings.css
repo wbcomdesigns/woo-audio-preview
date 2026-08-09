@@ -544,3 +544,167 @@
 		align-items: flex-start;
 	}
 }
+
+/* Hub - the shared "WB Plugins" landing page --------------------------------------------- */
+
+.wbcom-page-header {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 20px 0 16px;
+	border-bottom: 1px solid var(--wbcom-border);
+	margin-bottom: 20px;
+}
+
+.wbcom-page-header__icon {
+	color: var(--wbcom-muted);
+	display: inline-flex;
+	margin-top: 4px;
+}
+
+.wbcom-page-header h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 22px;
+	line-height: 1.3;
+	color: var(--wbcom-text);
+}
+
+.wbcom-page-header__subtitle {
+	margin: 2px 0 0;
+	color: var(--wbcom-muted);
+}
+
+.wbcom-hub-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.wbcom-hub-card {
+	display: block;
+	padding: 20px;
+	background: var(--wbcom-surface);
+	border: 1px solid var(--wbcom-border);
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	text-decoration: none;
+	color: inherit;
+	transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.wbcom-hub-card:hover,
+.wbcom-hub-card:focus-visible {
+	border-color: var(--wbcom-accent);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	color: inherit;
+}
+
+.wbcom-hub-card:focus-visible {
+	outline: 2px solid var(--wbcom-accent);
+	outline-offset: 2px;
+}
+
+.wbcom-hub-card__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 8px;
+	background: #eef2ff;
+	color: var(--wbcom-accent);
+	margin-bottom: 14px;
+}
+
+.wbcom-hub-card__title {
+	display: block;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--wbcom-text);
+}
+
+.wbcom-hub-card__subtitle {
+	display: block;
+	margin-top: 4px;
+	color: var(--wbcom-muted);
+}
+
+.wbcom-hub-card__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 14px;
+	font-weight: 600;
+	color: var(--wbcom-accent);
+}
+
+.wbcom-empty-state {
+	text-align: center;
+	padding: 48px 20px;
+	background: var(--wbcom-surface);
+	border: 1px solid var(--wbcom-border);
+	border-radius: 8px;
+	margin-bottom: 20px;
+	color: var(--wbcom-muted);
+}
+
+.wbcom-empty-state__title {
+	font-weight: 600;
+	color: var(--wbcom-text);
+	margin: 10px 0 4px;
+}
+
+.wbcom-empty-state__desc {
+	margin: 0;
+}
+
+.wbcom-settings-wrap--single {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+/* Status badges and the save bar ----------------------------------------------------------- */
+
+.wbcom-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 10px;
+	font-size: 12px;
+	font-weight: 600;
+	border-radius: 999px;
+	white-space: nowrap;
+}
+
+.wbcom-badge::before {
+	content: "";
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.wbcom-badge--success {
+	background: rgba(46, 164, 79, 0.12);
+	color: #1a7c3b;
+}
+
+.wbcom-badge--warn {
+	background: rgba(217, 119, 6, 0.12);
+	color: #92400e;
+}
+
+.wbcom-badge--danger {
+	background: rgba(224, 62, 62, 0.12);
+	color: #991b1b;
+}
+
+.wbcom-save-bar {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 14px 0 4px;
+	border-top: 1px solid var(--wbcom-border);
+	margin-top: 8px;
+}

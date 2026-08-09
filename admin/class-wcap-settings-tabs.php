@@ -93,6 +93,11 @@ class WCAP_Settings_Tabs {
 					'icon'  => 'zap',
 					'pro'   => true,
 				),
+				'license'   => array(
+					'title' => __( 'License', 'woo-audio-preview' ),
+					'icon'  => 'key',
+					'pro'   => true,
+				),
 			),
 		);
 
@@ -119,7 +124,7 @@ class WCAP_Settings_Tabs {
 	 * @param string $tab Tab id.
 	 */
 	public static function render_tab( $tab ) {
-		if ( self::pro_is_active() && in_array( $tab, array( 'player', 'watermark', 'advanced' ), true ) ) {
+		if ( self::pro_is_active() && in_array( $tab, array( 'player', 'watermark', 'advanced', 'license' ), true ) ) {
 			return;
 		}
 
@@ -151,6 +156,17 @@ class WCAP_Settings_Tabs {
 						__( 'Or your own audio file', 'woo-audio-preview' ),
 						__( 'How often it plays, and how loud', 'woo-audio-preview' ),
 						__( 'Dip the track underneath it', 'woo-audio-preview' ),
+					)
+				);
+				break;
+			case 'license':
+				self::locked(
+					__( 'License', 'woo-audio-preview' ),
+					__( 'Pro is a licensed product. Your key lives here once you have one.', 'woo-audio-preview' ),
+					array(
+						__( 'Automatic updates for as long as your licence is active', 'woo-audio-preview' ),
+						__( 'Priority support from the people who build it', 'woo-audio-preview' ),
+						__( 'One key covers every site on your plan', 'woo-audio-preview' ),
 					)
 				);
 				break;

@@ -275,26 +275,11 @@ class Wc_Audio_Preview_Admin {
 	}
 
 
-	/**
-	 * The shared "WB Plugins" landing page.
-	 *
-	 * Several Wbcom plugins register this same parent menu and whichever loads first supplies the
-	 * callback, so this has to render the shared landing page rather than anything specific to
-	 * Audio Preview. It previously pointed at this plugin's own settings renderer, which is why
-	 * removing that renderer would have fataled the menu for every Wbcom plugin on the site.
-	 *
-	 * @since 1.5.3
+
+	/*
+	 * wcap_wb_plugins_page() lived here. It rendered the shared Wbcom landing page; the settings library renders it now.
+	 * Nothing referenced it once the parent menu stopped pointing at it.
 	 */
-	public function wcap_wb_plugins_page() {
-		$template = plugin_dir_path( __FILE__ ) . 'wbcom/templates/wbcom-plugins-page.php';
-
-		if ( file_exists( $template ) ) {
-			include $template;
-			return;
-		}
-
-		echo '<div class="wrap"><h1>' . esc_html__( 'WB Plugins', 'woo-audio-preview' ) . '</h1></div>';
-	}
 
 	/*
 	 * The Welcome / General (PRO) / FAQ screens used to be built here: a settings-section per tab,
@@ -316,7 +301,7 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_views_add_admin_settings() {
 		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
-			add_menu_page( esc_html__( 'WB Plugins', 'woo-audio-preview' ), esc_html__( 'WB Plugins', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_wb_plugins_page' ), 'dashicons-lightbulb', 59 );
+			add_menu_page( esc_html__( 'WB Plugins', 'woo-audio-preview' ), esc_html__( 'WB Plugins', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins', array( 'Wbcom_Settings_Page', 'render_welcome' ), 'dashicons-lightbulb', 59 );
 			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'woo-audio-preview' ), esc_html__( 'Welcome', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins' );
 
 		}
