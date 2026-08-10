@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "woo-audio-preview/preview",
+	"title": "Audio Preview",
+	"category": "woocommerce",
+	"icon": "format-audio",
+	"description": "Plays the audio previews attached to a product, so shoppers can listen before they buy.",
+	"keywords": [ "audio", "preview", "music", "woocommerce" ],
+	"textdomain": "woo-audio-preview",
+	"attributes": {
+		"productId": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"editorScript": "file:./index.js"
+}

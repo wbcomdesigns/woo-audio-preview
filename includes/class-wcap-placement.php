@@ -122,6 +122,30 @@ class WCAP_Placement {
 			return;
 		}
 
+		/*
+		 * Registered from block.json so the block appears in the INSERTER.
+		 *
+		 * Server-side registration alone gave a block that rendered correctly and previewed
+		 * correctly through the REST render route, but never showed up in the inserter - so an
+		 * owner had no way to find it, which for a placement escape hatch is most of the point.
+		 * block.json carries the editor script; the render callback still does the rendering,
+		 * so there is no second copy of the player markup in JavaScript.
+		 *
+		 * The array registration below stays as the fallback for a build that somehow ships
+		 * without the blocks directory: the block still works everywhere it worked before,
+		 * it just cannot be inserted from the picker.
+		 */
+		$block_dir = plugin_dir_path( __DIR__ ) . 'blocks/preview';
+
+		if ( file_exists( $block_dir . '/block.json' ) ) {
+			register_block_type(
+				$block_dir,
+				array( 'render_callback' => array( __CLASS__, 'render_block' ) )
+			);
+
+			return;
+		}
+
 		register_block_type(
 			'woo-audio-preview/preview',
 			array(
