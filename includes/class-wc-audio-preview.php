@@ -138,6 +138,7 @@ class Wc_Audio_Preview {
 		 * depends on it.
 		 */
 		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-audio.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-wcap-placement.php';
 
 		require_once plugin_dir_path( __DIR__ ) . 'public/class-wc-audio-preview-public.php';
 
@@ -302,6 +303,14 @@ class Wc_Audio_Preview {
 		$wcap_preview_hook = apply_filters( 'wcap_preview_hook', 'woocommerce_before_add_to_cart_form' );
 
 		$this->loader->add_action( $wcap_preview_hook, $plugin_public, 'wcap_add_preview_field', 0 );
+
+		/*
+		 * The shortcode and the block fire this, so manual placement renders through the same
+		 * method the WooCommerce hook uses instead of growing a second copy of the markup.
+		 */
+		$this->loader->add_action( 'wcap_render_preview', $plugin_public, 'wcap_add_preview_field', 0 );
+
+		WCAP_Placement::init();
 	}
 
 	/**

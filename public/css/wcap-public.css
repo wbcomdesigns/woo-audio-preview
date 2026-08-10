@@ -267,7 +267,14 @@
 }
 
 .wcap-preview-item.error .wcap-preview-name {
-    color: #dc3545;
+    /*
+     * The one colour this stylesheet does not inherit. Everything else uses currentColor
+     * or inherit, so the player takes the theme's own typography and colour - which is why
+     * there is no token file here. An error state cannot inherit, because the whole point
+     * is that it differs from the surrounding text, so it reads the theme's error token
+     * where one exists and falls back to a legible red.
+     */
+    color: var(--wcap-error, var(--bx-color-danger, var(--reign-color-error, #d63638)));
 }
 
 /*--------------------------------------------------------------
