@@ -198,7 +198,7 @@ class WCAP_Settings_Tabs {
 			),
 			array(
 				'title' => __( 'Find the Audio Preview box', 'woo-audio-preview' ),
-				'desc'  => __( 'It sits below the product description, named "Audio Preview Items".', 'woo-audio-preview' ),
+				'desc'  => __( 'It sits below the product description, named "Audio previews".', 'woo-audio-preview' ),
 			),
 			array(
 				'title' => __( 'Add your audio', 'woo-audio-preview' ),
