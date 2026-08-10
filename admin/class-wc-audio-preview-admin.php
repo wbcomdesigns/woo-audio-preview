@@ -222,6 +222,21 @@ class Wc_Audio_Preview_Admin {
 						 */
 						'allowedExtensions'  => apply_filters( 'wcap_allowed_audio_extensions', $this->allowed_file_types ),
 						'cdn_patterns'       => $this->get_cdn_patterns_for_js(),
+						/*
+						 * Strings for the admin JS. They were hardcoded English literals inside
+						 * wcap-admin.js, so a store running in any other language got English
+						 * dialogs on its own product screens - and a translator had no string to
+						 * translate, because it never passed through a gettext call.
+						 */
+						'i18n'               => array(
+							/* translators: %s: name of the cleared track. */
+							'cleared'        => __( '%s cleared.', 'woo-audio-preview' ),
+							/* translators: %s: name of the removed track. */
+							'removed'        => __( '%s removed.', 'woo-audio-preview' ),
+							'undo'           => __( 'Undo', 'woo-audio-preview' ),
+							'this_track'     => __( 'This track', 'woo-audio-preview' ),
+							'confirm_delete' => __( 'Remove this track and permanently delete its file from the server? This cannot be undone.', 'woo-audio-preview' ),
+						),
 						'error_messages'     => array(
 							'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'woo-audio-preview' ),
 							'file_required'     => __( 'Please select a file or enter a file URL.', 'woo-audio-preview' ),

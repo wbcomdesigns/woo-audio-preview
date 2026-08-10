@@ -1,0 +1,106 @@
+/**
+ * Review / feedback notice on the plugins screen.
+ *
+ * Was an inline <style> printed inside the notice markup on every plugins-page load,
+ * uncacheable and impossible for a site to override. Enqueued now under the same condition
+ * that decides whether the notice renders, so it costs nothing elsewhere in wp-admin.
+ */
+.notice.woo-audio-preview-notice {
+	border-left-color: #008ec2 !important;
+	padding: 20px;
+}
+
+.rtl .notice.woo-audio-preview-notice {
+	border-right-color: #008ec2 !important;
+}
+
+.notice.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner {
+	display: table;
+	width: 100%;
+}
+
+.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-icon,
+.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-content,
+.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-install-now {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.notice.woo-audio-preview-notice .woo-audio-preview-notice-icon {
+	color: #509ed2;
+	font-size: 50px;
+	width: 60px;
+}
+
+.notice.woo-audio-preview-notice .woo-audio-preview-notice-icon img {
+	width: 64px;
+}
+
+.notice.woo-audio-preview-notice .woo-audio-preview-notice-content {
+	padding: 0 40px 0 20px;
+}
+
+.notice.woo-audio-preview-notice p {
+	padding: 0;
+	margin: 0;
+}
+
+.notice.woo-audio-preview-notice h3 {
+	margin: 0 0 5px;
+}
+
+.notice.woo-audio-preview-notice .woo-audio-preview-install-now {
+	text-align: center;
+}
+
+.notice.woo-audio-preview-notice .woo-audio-preview-install-now .woo-audio-preview-install-button {
+	padding: 6px 50px;
+	height: auto;
+	line-height: 20px;
+}
+
+.notice.woo-audio-preview-notice a.no-thanks {
+	display: block;
+	margin-top: 10px;
+	color: #72777c;
+	text-decoration: none;
+}
+
+.notice.woo-audio-preview-notice a.no-thanks:hover {
+	color: #444;
+}
+
+@media (max-width: 767px) {
+
+	.notice.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner {
+		display: block;
+	}
+
+	.notice.woo-audio-preview-notice {
+		padding: 20px !important;
+	}
+
+	.notice.woo-audio-preview-noticee .woo-audio-preview-notice-inner {
+		display: block;
+	}
+
+	.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-content {
+		display: block;
+		padding: 0;
+	}
+
+	.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-icon {
+		display: none;
+	}
+
+	.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-install-now {
+		margin-top: 20px;
+		display: block;
+		text-align: left;
+	}
+
+	.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .no-thanks {
+		display: inline-block;
+		margin-left: 15px;
+	}
+}

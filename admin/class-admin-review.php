@@ -154,6 +154,7 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 				// If difference between install date and now is greater than time limit, then display notice.
 				if ( ( time() - $install_date ) > $this->time_limit ) {
 					add_action( 'admin_notices', array( $this, 'display_admin_notice' ) );
+					add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_notice_styles' ) );
 				}
 			}
 		}
@@ -161,6 +162,31 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 		/**
 		 * Display the admin notice.
 		 */
+		/**
+		 * Stylesheet for the notice.
+		 *
+		 * Must run on admin_enqueue_scripts, not from inside display_admin_notice(): that fires
+		 * on admin_notices, after styles have been printed, where wp_enqueue_style() is a no-op.
+		 * Gated on the same plugins screen the notice checks.
+		 *
+		 * @since 1.5.5
+		 */
+		public function enqueue_notice_styles() {
+			$screen = get_current_screen();
+
+			if ( ! isset( $screen->base ) || 'plugins' !== $screen->base ) {
+				return;
+			}
+
+			wp_enqueue_style(
+				'wcap-feedback-notice',
+				plugin_dir_url( __FILE__ ) . 'css/wcap-feedback-notice.css',
+				array(),
+				defined( 'WCAP_VERSION' ) ? WCAP_VERSION : false,
+				'all'
+			);
+		}
+
 		public function display_admin_notice() {
 			$screen = get_current_screen();
 
@@ -168,108 +194,6 @@ if ( ! class_exists( 'Woo_Audio_Feedback' ) ) :
 				$no_bug_url = wp_nonce_url( admin_url( '?' . $this->nobug_option . '=true' ), 'woo-audio-preview-feedback-nounce' );
 				$time       = $this->seconds_to_words( time() - get_site_option( $this->date_option ) );
 				?>
-
-				<style>
-				.notice.woo-audio-preview-notice {
-					border-left-color: #008ec2 !important;
-					padding: 20px;
-				}
-
-				.rtl .notice.woo-audio-preview-notice {
-					border-right-color: #008ec2 !important;
-				}
-
-				.notice.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner {
-					display: table;
-					width: 100%;
-				}
-
-				.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-icon,
-				.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-content,
-				.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-install-now {
-					display: table-cell;
-					vertical-align: middle;
-				}
-
-				.notice.woo-audio-preview-notice .woo-audio-preview-notice-icon {
-					color: #509ed2;
-					font-size: 50px;
-					width: 60px;
-				}
-
-				.notice.woo-audio-preview-notice .woo-audio-preview-notice-icon img {
-					width: 64px;
-				}
-
-				.notice.woo-audio-preview-notice .woo-audio-preview-notice-content {
-					padding: 0 40px 0 20px;
-				}
-
-				.notice.woo-audio-preview-notice p {
-					padding: 0;
-					margin: 0;
-				}
-
-				.notice.woo-audio-preview-notice h3 {
-					margin: 0 0 5px;
-				}
-
-				.notice.woo-audio-preview-notice .woo-audio-preview-install-now {
-					text-align: center;
-				}
-
-				.notice.woo-audio-preview-notice .woo-audio-preview-install-now .woo-audio-preview-install-button {
-					padding: 6px 50px;
-					height: auto;
-					line-height: 20px;
-				}
-
-				.notice.woo-audio-preview-notice a.no-thanks {
-					display: block;
-					margin-top: 10px;
-					color: #72777c;
-					text-decoration: none;
-				}
-
-				.notice.woo-audio-preview-notice a.no-thanks:hover {
-					color: #444;
-				}
-
-				@media (max-width: 767px) {
-
-					.notice.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner {
-						display: block;
-					}
-
-					.notice.woo-audio-preview-notice {
-						padding: 20px !important;
-					}
-
-					.notice.woo-audio-preview-noticee .woo-audio-preview-notice-inner {
-						display: block;
-					}
-
-					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-content {
-						display: block;
-						padding: 0;
-					}
-
-					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-notice-icon {
-						display: none;
-					}
-
-					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .woo-audio-preview-install-now {
-						margin-top: 20px;
-						display: block;
-						text-align: left;
-					}
-
-					.notice.woo-audio-preview-notice .woo-audio-preview-notice-inner .no-thanks {
-						display: inline-block;
-						margin-left: 15px;
-					}
-				}
-				</style>
 				<div class="notice updated woo-audio-preview-notice">
 					<div class="woo-audio-preview-notice-inner">
 						<div class="woo-audio-preview-notice-icon">

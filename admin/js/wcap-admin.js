@@ -95,23 +95,77 @@
       }
     },
 
-    /**
+        /**
+     * Show an inline "X cleared - Undo" message under a row.
+     *
+     * Replaces a browser confirm() for actions that are reversible. The dialog blocked the
+     * whole screen to ask permission for something the owner could simply undo, and could
+     * not be styled, translated, or announced properly to a screen reader.
+     *
+     * @param {jQuery}   $row   Row the message belongs to.
+     * @param {string}   name   Track name, for the message text.
+     * @param {Function} onUndo Restores whatever was cleared.
+     */
+    showUndo: function ($row, name, onUndo) {
+      const strings = (typeof wcap_ajax_object !== 'undefined' && wcap_ajax_object.i18n) ? wcap_ajax_object.i18n : {};
+      const label = $.trim(name) || strings.this_track || 'This track';
+
+      $row.find('.wcap-undo-notice').remove();
+
+      // role=alert so the change is announced without stealing focus.
+      const $notice = $(
+        '<div class="wcap-undo-notice" role="alert">' +
+          '<span class="wcap-undo-notice__text"></span>' +
+          '<button type="button" class="button-link wcap-undo-notice__button"></button>' +
+        '</div>'
+      );
+
+      $notice.find('.wcap-undo-notice__text').text((strings.cleared || '%s cleared.').replace('%s', label));
+      $notice.find('.wcap-undo-notice__button').text(strings.undo || 'Undo');
+
+      $notice.on('click', '.wcap-undo-notice__button', function () {
+        $notice.remove();
+        onUndo();
+      });
+
+      $row.append($notice);
+    },
+
+/**
      * Clear field (Fixed mode)
      */
     clearField: function(e) {
       e.preventDefault();
-      
+
       const $button = $(this);
       const fieldIndex = $button.data('field-index');
-      
-      if (confirm('Are you sure you want to clear this audio preview?')) {
-        $(`#wcap_audio_url_${fieldIndex}`).val('').trigger('change');
-        $(`#wcap_audio_name_${fieldIndex}`).val('');
-        $button.hide();
-        
-        // Remove any CDN indicators
-        $button.closest('.wcap-field-row').find('.wcap-service-indicator').remove();
+
+      /*
+       * No confirm() here. Clearing these two inputs changes nothing until the product is
+       * saved, so a blocking dialog asked the owner to approve something already reversible -
+       * and it did it in English regardless of the store's language, because the string was a
+       * literal in this file. The fields clear immediately and an inline Undo puts them back.
+       */
+      const $row = $button.closest('.wcap-field-row');
+      const $url = $(`#wcap_audio_url_${fieldIndex}`);
+      const $name = $(`#wcap_audio_name_${fieldIndex}`);
+      const previous = { url: $url.val(), name: $name.val() };
+
+      if (!previous.url && !previous.name) {
+        return;
       }
+
+      $url.val('').trigger('change');
+      $name.val('');
+      $button.hide();
+      $row.find('.wcap-service-indicator').remove();
+
+      WCAP.showUndo($row, previous.name, function () {
+        $url.val(previous.url).trigger('change');
+        $name.val(previous.name);
+        $button.show();
+        $name.trigger('focus');
+      });
     },
 
     /**
@@ -881,12 +935,46 @@
 	$( document ).on( 'click', '.wcap-remove-row', function ( e ) {
 		e.preventDefault();
 
-		// Never remove the last row - an empty table gives the owner nothing to type into.
-		if ( rows().length > 1 ) {
-			this.closest( 'tr' ).remove();
+		var $row     = $( this ).closest( 'tr' );
+		var $restore = $row.clone( true, true );
+		var hasData  = $row.find( 'input' ).filter( function () { return $( this ).val(); } ).length > 0;
+
+		/*
+		 * A row the owner has typed into is worth an Undo. This used to drop it silently: one
+		 * mis-click on a table of tracks and the name and URL were gone with no way back, and
+		 * nothing on screen acknowledged it had happened. There is no confirm() dialog either -
+		 * removing a row changes nothing until the product is saved, so blocking the screen to
+		 * ask permission would be asking about something already reversible.
+		 */
+		if ( ! hasData ) {
+			if ( rows().length > 1 ) {
+				$row.remove();
+			} else {
+				$row.find( 'input' ).val( '' );
+			}
 			return;
 		}
 
-		$( this ).closest( 'tr' ).find( 'input' ).val( '' );
+		var strings = ( typeof wcap_ajax_object !== 'undefined' && wcap_ajax_object.i18n ) ? wcap_ajax_object.i18n : {};
+		var name    = $.trim( $row.find( '.wcap-audio-name' ).val() ) || strings.this_track || 'This track';
+
+		var $notice = $(
+			'<tr class="wcap-undo-row"><td colspan="5">' +
+				'<div class="wcap-undo-notice" role="alert">' +
+					'<span class="wcap-undo-notice__text"></span>' +
+					'<button type="button" class="button-link wcap-undo-notice__button"></button>' +
+				'</div>' +
+			'</td></tr>'
+		);
+
+		$notice.find( '.wcap-undo-notice__text' ).text( ( strings.removed || '%s removed.' ).replace( '%s', name ) );
+		$notice.find( '.wcap-undo-notice__button' ).text( strings.undo || 'Undo' );
+
+		$notice.on( 'click', '.wcap-undo-notice__button', function () {
+			$notice.replaceWith( $restore );
+			$restore.find( '.wcap-audio-name' ).trigger( 'focus' );
+		} );
+
+		$row.replaceWith( $notice );
 	} );
 }( jQuery ) );
