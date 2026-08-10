@@ -45,7 +45,11 @@ Two filters, both needed:
 
 ## Changing where the player appears
 
-- `wcap_preview_hook` moves it to a different WooCommerce action.
+- `wcap_preview_hook` moves it to a different WooCommerce action. The default fires inside the
+  add-to-cart form, so a second registration on `woocommerce_single_product_summary` (priority
+  35) catches products that have no form at all — grouped, external, out of stock, or a
+  catalogue-mode store. It renders only when nothing has rendered for that product yet, so
+  changing this filter does not produce two players.
 - The `[audio_preview product="123"]` shortcode and the `woo-audio-preview/preview` block
   place it anywhere, including themes that never fire the WooCommerce hook.
 - `wcap_should_load_assets` opts a page into the stylesheet and script. Assets load on

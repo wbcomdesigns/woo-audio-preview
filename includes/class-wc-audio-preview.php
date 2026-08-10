@@ -305,6 +305,15 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( $wcap_preview_hook, $plugin_public, 'wcap_add_preview_field', 0 );
 
 		/*
+		 * Fallback for products the primary hook never reaches - it fires inside the
+		 * add-to-cart FORM, so a grouped or external product, one that is out of stock, or a
+		 * catalogue-mode store rendered no player at all. Priority 35 puts it after
+		 * WooCommerce's own add-to-cart template on this hook (priority 30), so the primary
+		 * gets its chance first and a normal product does not end up with two players.
+		 */
+		$this->loader->add_action( 'woocommerce_single_product_summary', $plugin_public, 'wcap_add_preview_field_fallback', 35 );
+
+		/*
 		 * The shortcode and the block fire this, so manual placement renders through the same
 		 * method the WooCommerce hook uses instead of growing a second copy of the markup.
 		 */

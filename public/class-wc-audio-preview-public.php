@@ -234,6 +234,43 @@ class Wc_Audio_Preview_Public {
 	/**
 	 * To display audio preview fields with modern UI.
 	 */
+	/**
+	 * Product ids already rendered on this request.
+	 *
+	 * Only the summary fallback consults this. Explicit placement - shortcode, block,
+	 * `wcap_render_preview` - is a deliberate instruction from the owner and always renders.
+	 *
+	 * @since 1.5.5
+	 * @var   array
+	 */
+	protected static $rendered = array();
+
+	/**
+	 * Render on the summary when the add-to-cart hook never fired.
+	 *
+	 * The primary hook lives inside the add-to-cart FORM. A product with no form - grouped or
+	 * external, out of stock, or a store running in catalogue mode - never fires it, so audio
+	 * attached to those products played nowhere and said nothing about why. Verified on a
+	 * grouped product: the player was simply absent.
+	 *
+	 * Runs late, after WooCommerce has rendered the add-to-cart template on this same hook at
+	 * priority 30, and only when nothing has rendered for this product yet - so a simple
+	 * product keeps its player in the usual place and does not get a second one here.
+	 *
+	 * @since 1.5.5
+	 */
+	public function wcap_add_preview_field_fallback() {
+		$product_id = ( $GLOBALS['product'] ?? null ) instanceof WC_Product
+			? $GLOBALS['product']->get_id()
+			: (int) get_the_ID();
+
+		if ( isset( self::$rendered[ $product_id ] ) ) {
+			return;
+		}
+
+		$this->wcap_add_preview_field();
+	}
+
 	public function wcap_add_preview_field() {
 		global $product;
 
@@ -296,6 +333,9 @@ class Wc_Audio_Preview_Public {
 			 * @param array $valid_audios Validated audio entries.
 			 */
 			do_action( 'wcap_before_audio_preview', $product_id, $wcap_audio, $valid_audios );
+
+			// Tells the summary fallback this product is already covered.
+			self::$rendered[ $product_id ] = true;
 			?>
 
 			<div class="wcap-audio-preview-container">
