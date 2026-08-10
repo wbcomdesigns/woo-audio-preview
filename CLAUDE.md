@@ -1,5 +1,15 @@
 # Audio Preview for WooCommerce (woo-audio-preview)
 
+## Start here when adding a feature
+
+- **`docs/EXTENDING.md`** — how this plugin is put together and where to plug in: the free/Pro
+  seam, how to add a setting / format / placement / renderer, and the traps that have already
+  cost this codebase real bugs. Read it before writing code.
+- **`docs/HOOKS.md`** — every action and filter, with file:line. **Generated** — do not hand-edit
+  it. Add a docblock above the `apply_filters()` / `do_action()` call and run
+  `php bin/generate-hook-docs.php` instead; an undocumented hook shows up there as a blank
+  description, which is the nudge to go write one.
+
 ## Basecamp board — one board for the pair
 
 **Audio Preview for WooCommerce (free + Pro) — project 42374833**

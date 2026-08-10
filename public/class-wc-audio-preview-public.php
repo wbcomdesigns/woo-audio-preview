@@ -747,6 +747,16 @@ class Wc_Audio_Preview_Public {
 			'oga'  => 'audio/ogg',
 		);
 
+		/**
+		 * Filter the extension-to-MIME map used for the <audio> source type.
+		 *
+		 * Add an entry here when teaching the player a new audio format, so the browser is
+		 * told what it is being handed. Pair it with `wcap_allowed_audio_extensions`, which
+		 * decides what the product box will accept in the first place.
+		 *
+		 * @since 1.5.4
+		 * @param array $mime_types Extension => MIME type.
+		 */
 		$mime_types = apply_filters( 'wcap_audio_mime_types', $mime_types );
 		return isset( $mime_types[ $extension ] ) ? $mime_types[ $extension ] : 'audio/mpeg';
 	}

@@ -210,6 +210,16 @@ class Wc_Audio_Preview_Admin {
 					array(
 						'ajax_url'           => admin_url( 'admin-ajax.php' ),
 						'nonce'              => wp_create_nonce( 'ajax-nonce' ),
+						/**
+						 * Filter the audio extensions the product box will accept.
+						 *
+						 * The admin-side half of adding a format: this decides what an owner can
+						 * upload or paste. `wcap_audio_mime_types` is the other half, telling the
+						 * browser what the file is when the player renders it.
+						 *
+						 * @since 1.5.4
+						 * @param array $allowed_file_types Accepted extensions.
+						 */
 						'allowedExtensions'  => apply_filters( 'wcap_allowed_audio_extensions', $this->allowed_file_types ),
 						'cdn_patterns'       => $this->get_cdn_patterns_for_js(),
 						'error_messages'     => array(
