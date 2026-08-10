@@ -442,6 +442,20 @@ class Wc_Audio_Preview_Public {
 
 		$embed_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $audio_url );
 
+		/**
+		 * Filter the SoundCloud embed URL.
+		 *
+		 * The seam Pro uses to add its player parameters. Pro used to override this whole
+		 * method to change one string, and the copy had already drifted: it lost the button's
+		 * aria-label and the data-soundcloud-key attribute this markup carries.
+		 *
+		 * @since 1.5.4
+		 * @param string $embed_url The widget URL.
+		 * @param string $audio_url The track URL being embedded.
+		 * @param mixed  $key       Row key for this preview.
+		 */
+		$embed_url = apply_filters( 'wcap_soundcloud_embed_url', $embed_url, $audio_url, $key );
+
 		?>
 		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-soundcloud-key="<?php echo esc_attr( $key ); ?>">
 			<button class="wcap-preview-button wcap-soundcloud-button" type="button"
