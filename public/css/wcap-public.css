@@ -7,14 +7,87 @@
  */
 
 /*--------------------------------------------------------------
+# Colour tokens and theme bridge
+--------------------------------------------------------------*/
+
+/*
+ * The player used raw rgba() everywhere. The translucent BLACK overlays are theme-agnostic and
+ * still are - they darken whatever is behind them. The white ones were not: a panel painted
+ * rgba(255,255,255,.8) is a white card, so on any dark theme the player rendered as a bright
+ * slab on a dark page. There was no prefers-color-scheme block at all.
+ *
+ * These tokens follow the theme where the theme exposes one, and fall back to a literal where
+ * it does not - so the player looks deliberate on a stock theme and on-brand on a themed store,
+ * without depending on either. Same chain the document plugin uses: BuddyX token, Reign token,
+ * both preset slugs (Reign's accent slug is `primary`, BuddyX's is `accent`), then the literal.
+ */
+:root,
+.wcap-audio-preview-container {
+	--wcap-surface: var(--bx-color-bg-page,
+		var(--reign-site-body-bg-color,
+		var(--wp--preset--color--base, #ffffff)));
+
+	--wcap-surface-raised: var(--bx-color-bg-elevated,
+		var(--reign-site-sections-bg-color, var(--wcap-surface)));
+
+	--wcap-text: var(--bx-color-text,
+		var(--reign-site-body-text-color,
+		var(--wp--preset--color--contrast, #1d2327)));
+
+	--wcap-accent: var(--bx-color-accent,
+		var(--reign-accent-color,
+		var(--wp--preset--color--primary,
+		var(--wp--preset--color--accent, #2271b1))));
+
+	/* Hairlines and washes: translucent so they read on any ground, light or dark. */
+	--wcap-border: rgba(0, 0, 0, 0.08);
+	--wcap-border-strong: rgba(0, 0, 0, 0.15);
+	--wcap-wash: rgba(0, 0, 0, 0.02);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-bx-mode="light"]):not([data-theme="light"]) {
+		--wcap-surface: var(--bx-color-bg-page,
+			var(--reign-site-body-bg-color,
+			var(--wp--preset--color--base, #16171a)));
+
+		--wcap-surface-raised: var(--bx-color-bg-elevated,
+			var(--reign-site-sections-bg-color, #1d1f22));
+
+		--wcap-text: var(--bx-color-text,
+			var(--reign-site-body-text-color,
+			var(--wp--preset--color--contrast, #ecede8)));
+
+		/* Inverted so the same hairlines lighten a dark ground instead of vanishing into it. */
+		--wcap-border: rgba(255, 255, 255, 0.12);
+		--wcap-border-strong: rgba(255, 255, 255, 0.22);
+		--wcap-wash: rgba(255, 255, 255, 0.04);
+	}
+}
+
+/*
+ * The player animates progress, hover and playing states. Respect a reader who has asked the
+ * system for less movement - required by the accessibility floor and simply correct.
+ */
+@media (prefers-reduced-motion: reduce) {
+	.wcap-audio-preview-container *,
+	.wcap-audio-preview-container *::before,
+	.wcap-audio-preview-container *::after {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/*--------------------------------------------------------------
 # Audio Preview Container
 --------------------------------------------------------------*/
 .wcap-audio-preview-container {
     margin: 20px 0;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.02);
+    background: var(--wcap-wash);
     border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--wcap-border);
+    color: var(--wcap-text);
 }
 
 .wcap-preview-title {
@@ -45,20 +118,20 @@
 --------------------------------------------------------------*/
 .wcap-preview-item {
     position: relative;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--wcap-surface-raised);
     border-radius: 6px;
     overflow: hidden;
     transition: all 0.2s ease;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--wcap-border);
 }
 
 .wcap-preview-item:hover {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: rgba(0, 0, 0, 0.15);
+    background: var(--wcap-surface-raised);
+    border-color: var(--wcap-border-strong);
 }
 
 .wcap-preview-item.playing {
-    background: rgba(255, 255, 255, 1);
+    background: var(--wcap-surface);
     border-color: currentColor;
 }
 
