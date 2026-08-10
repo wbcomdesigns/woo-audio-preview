@@ -249,6 +249,15 @@ class WCAP_Settings_Tabs {
 	private static function faq() {
 		$faqs = array(
 			array(
+				/*
+				 * First, because getting this wrong breaks the store. The Pro readme used to tell
+				 * owners to deactivate this plugin when upgrading, which would have taken Pro down
+				 * with it - Pro extends this plugin and deactivates itself without it.
+				 */
+				'q' => __( 'I bought Pro. Do I remove this plugin?', 'woo-audio-preview' ),
+				'a' => __( 'No - keep it active. Pro extends this plugin rather than replacing it, so both stay active: this one provides the previews and the product box, and Pro adds the player controls, watermarking and protection on top. Pro switches itself off if it cannot find this plugin.', 'woo-audio-preview' ),
+			),
+			array(
 				'q' => __( 'How many previews can I add per product?', 'woo-audio-preview' ),
 				'a' => __( 'Three in the free plugin. Pro removes the limit and lets you add and remove rows as you go.', 'woo-audio-preview' ),
 			),
