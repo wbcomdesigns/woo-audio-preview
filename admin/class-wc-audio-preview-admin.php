@@ -791,25 +791,6 @@ class Wc_Audio_Preview_Admin {
 		return $result;
 	}
 
-	/**
-	 * Display admin notice.
-	 *
-	 * @since    1.5.0
-	 * @param    string $message Message to display.
-	 * @param    string $type    Notice type.
-	 */
-	private function add_admin_notice( $message, $type = 'error' ) {
-		add_action(
-			'admin_notices',
-			function () use ( $message, $type ) {
-				printf(
-					'<div class="notice notice-%s wcap-admin-notice is-dismissible"><p>%s</p></div>',
-					esc_attr( $type ),
-					esc_html( $message )
-				);
-			}
-		);
-	}
 
 	/**
 	 * Function contains the audio delete functionality.
@@ -869,12 +850,6 @@ class Wc_Audio_Preview_Admin {
 	 * @param array $upload Upload directory information.
 	 * @return array Upload directory information.
 	 */
-	public function wcap_set_upload_dir( $upload ) {
-		$upload['subdir'] = '/wcap_files';
-		$upload['path']   = $upload['basedir'] . $upload['subdir'];
-		$upload['url']    = $upload['baseurl'] . $upload['subdir'];
-		return $upload;
-	}
 
 	/**
 	 * Display admin errors.

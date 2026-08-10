@@ -188,7 +188,15 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wcap_save_meta_box' );
 		$this->loader->add_action( 'post_edit_form_tag', $plugin_admin, 'wcap_update_edit_form' );
 		$this->loader->add_action( 'wp_ajax_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
-		$this->loader->add_action( 'wp_ajax_nopriv_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
+		/*
+		 * No nopriv twin for the delete endpoint.
+		 *
+		 * Deleting a preview is an editor action: the handler checks the nonce, then
+		 * edit_posts, then edit_post on the specific product, so a guest could never get
+		 * past it. Registering the logged-out variant therefore bought nothing and left an
+		 * endpoint that unauthenticated traffic could reach and be rejected by - work the
+		 * site does for no one's benefit.
+		 */
 
 		/*
 		 * This used to stand down entirely when the Pro plugin was active - no menu, no settings
