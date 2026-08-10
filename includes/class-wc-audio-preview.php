@@ -141,7 +141,16 @@ class Wc_Audio_Preview {
 
 		require_once plugin_dir_path( __DIR__ ) . 'public/class-wc-audio-preview-public.php';
 
-		require_once plugin_dir_path( __DIR__ ) . 'admin/wbcom/wbcom-admin-settings.php';
+		/*
+		 * The legacy Wbcom admin tree (admin/wbcom/) was removed on 2026-08-10.
+		 *
+		 * It registered the WB Plugins hub plus "Our Plugins", "Our Themes" and "Support"
+		 * pages, a legacy stylesheet, an admin-ajax handler and a CDN font-awesome request.
+		 * The shared settings library owns the hub now, and it already filtered those helper
+		 * pages out of its listing - it treated them as superseded. Every plugin shipped its
+		 * own copy of the tree guarded by class_exists(), so the copies were a maintenance
+		 * fork nobody could see: only the first one loaded ever ran.
+		 */
 
 		$this->loader = new Wc_Audio_Preview_Loader();
 	}
