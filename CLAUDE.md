@@ -1,5 +1,24 @@
 # Audio Preview for WooCommerce (woo-audio-preview)
 
+## Basecamp board — one board for the pair
+
+**Audio Preview for WooCommerce (free + Pro) — project 42374833**
+<https://3.basecamp.com/5798509/projects/42374833>
+
+This free+Pro pair shares ONE board. The separate Pro board was deleted on
+2026-08-10 and its open Bugs and Ready for Testing cards were copied here first;
+its Done history was not carried over, by decision. File every card for BOTH
+tiers on this board and say which tier a card is about in its title or body.
+
+Basecamp has no cross-project card move, so those cards were recreated rather
+than moved - each carries a provenance line naming the board it came from and
+its original card id. A pre-deletion snapshot of everything the Pro boards held
+lives at `~/Documents/work-artifacts/scratch/basecamp-pro-boards-backup-2026-08-10.md`.
+
+Reach the board through the Basecamp CLI (`~/.mcp-servers/basecamp-mcp-server`,
+`node build/cli.js`), never ad-hoc curl.
+
+
 ## Plugin Identity
 - **Plugin Name:** Audio Preview for WooCommerce
 - **Slug:** woo-audio-preview
@@ -25,7 +44,7 @@ Every surface this product is known by. When these drift, a site owner reports a
 | Git repo | `woo-audio-preview` |
 | Text domain | `woo-audio-preview` |
 | readme.txt title | `Audio Preview for WooCommerce` |
-| Basecamp board | `Audio Preview for WooCommerce` (42374833) |
+| Basecamp board | `Audio Preview for WooCommerce (free + Pro)` (42374833) |
 | Basecamp URL | https://3.basecamp.com/5798509/projects/42374833 |
 
 ## Where the work is tracked
