@@ -71,7 +71,60 @@ class Wc_Audio_Preview_Public {
 	 *
 	 * @since    1.0.0
 	 */
+	/**
+	 * Whether this request will actually show a preview.
+	 *
+	 * Every asset this plugin ships - and WaveSurfer, which is not small - was loading on
+	 * the home page, the shop, the cart and every other page of the store, for a feature
+	 * that only appears on product pages. A store owner pays for that on every page view.
+	 *
+	 * Deliberately generous about what counts as a product page: page builders such as
+	 * Elementor and Divi render product content without is_product() being true, so the
+	 * global and a direct lookup are both consulted before giving up.
+	 *
+	 * @since  1.5.4
+	 * @return bool
+	 */
+	protected function should_load_assets() {
+		$load = false;
+
+		if ( function_exists( 'is_product' ) && is_product() ) {
+			$load = true;
+		}
+
+		if ( ! $load ) {
+			global $product;
+			if ( is_a( $product, 'WC_Product' ) ) {
+				$load = true;
+			}
+		}
+
+		/*
+		 * Only on a singular view. On the shop archive get_the_ID() returns whichever
+		 * product the loop is on, so this fallback answered "yes" for every archive and
+		 * quietly undid the whole guard.
+		 */
+		if ( ! $load && is_singular() && function_exists( 'wc_get_product' ) ) {
+			$load = wc_get_product( get_the_ID() ) instanceof WC_Product;
+		}
+
+		/**
+		 * Filter whether the preview assets load on this request.
+		 *
+		 * The seam for anything that renders a player outside a product page - a shortcode
+		 * in a page, a block in a template, or Pro's shop-page badges.
+		 *
+		 * @since 1.5.4
+		 * @param bool $load Whether to enqueue.
+		 */
+		return (bool) apply_filters( 'wcap_should_load_assets', $load );
+	}
+
 	public function enqueue_styles() {
+		if ( ! $this->should_load_assets() ) {
+			return;
+		}
+
 		/*
 		 * Fixed handles rather than $this->plugin_name.
 		 *
@@ -133,6 +186,9 @@ class Wc_Audio_Preview_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
+		if ( ! $this->should_load_assets() ) {
+			return;
+		}
 
 		/**
 		 * This function is provided for demonstration purposes only.
