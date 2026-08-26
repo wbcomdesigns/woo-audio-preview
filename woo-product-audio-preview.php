@@ -107,7 +107,7 @@ function wcap_plugin_init() {
  * any plugin boots.
  */
 require_once plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/loader.php';
-wbcom_settings_register( '1.0.0', plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/class-wbcom-settings-page.php' );
+wbcom_settings_register( '1.0.2', plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/class-wbcom-settings-page.php' );
 
 require_once plugin_dir_path( __FILE__ ) . 'public/class-wc-audio-preview-public.php';
 
