@@ -235,14 +235,6 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 			);
 			add_submenu_page(
 				'wbcomplugins',
-				esc_html__( 'Our Themes', 'woo-audio-preview' ),
-				esc_html__( 'Our Themes', 'woo-audio-preview' ),
-				'manage_options',
-				'wbcom-themes-page',
-				array( $this, 'wbcom_themes_submenu_page_callback' )
-			);
-			add_submenu_page(
-				'wbcomplugins',
 				esc_html__( 'Support', 'woo-audio-preview' ),
 				esc_html__( 'Support', 'woo-audio-preview' ),
 				'manage_options',
@@ -262,16 +254,6 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 		}
 
 		/**
-		 * Function for include themes list page.
-		 *
-		 * @since 2.0.0
-		 * @access public
-		 */
-		public function wbcom_themes_submenu_page_callback() {
-			include 'templates/wbcom-themes-page.php';
-		}
-
-		/**
 		 * Function for include support page.
 		 *
 		 * @since 2.0.0
@@ -288,9 +270,8 @@ if ( ! class_exists( 'Wbcom_Admin_Settings' ) ) {
 		 * @access public
 		 */
 		public function wbcom_admin_setting_header_html() {
-			$page            = filter_input( INPUT_GET, 'page' ) ? filter_input( INPUT_GET, 'page' ) : 'wbcom-themes-page';
+			$page            = filter_input( INPUT_GET, 'page' ) ? filter_input( INPUT_GET, 'page' ) : 'wbcomplugins';
 			$plugin_active   = '';
-			$theme_active    = '';
 			$support_active  = '';
 			$settings_active = '';
 			switch ( $page ) {
