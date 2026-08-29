@@ -58,7 +58,7 @@ A check passes only with evidence — a command output or a screenshot you actua
 
 - [ ] Version agrees across main-file header, `WCAP_TEXT_VERSION`, `readme.txt` stable tag, and `package.json` (currently 1.5.1).
 - [ ] Built zip excludes `node_modules/`, tests, `.github/`, `*.md` audit docs, dev-only `vendor/` deps; includes `public/js/soundcloud.min.js` and the RTL/min CSS+JS.
-- [ ] Bundled EDD SL SDK (`vendor/edd-sl-sdk/edd-sl-sdk.php`) is present in the zip — asserted by named file, on the artifact.
+- [ ] No licensing/update SDK in the zip — `.org` forbids it: `vendor/edd-sl-sdk/` is absent and no `edd_sl_sdk`/`EDD_` reference remains in any bundled PHP.
 - [ ] Pristine install from the built zip (fresh Docker WP + WC): activates, single product returns 200, player renders.
 - [ ] Changelog in WooCommerce action-prefix style (New/Improve/Fix/Security/Dev/Compat), no em-dashes, no emoji; free ↔ Pro lockstep link.
 

@@ -592,7 +592,8 @@ class Wc_Audio_Preview_Admin {
 				'wcap_audio_source' => array(),
 			);
 
-			$has_valid_audio = false;
+			$has_valid_audio   = false;
+			$validation_errors = array();
 
 			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized individually below.
 				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -614,7 +615,23 @@ class Wc_Audio_Preview_Admin {
 							$processed_audio['wcap_audio_urls'][]   = $audio_url;
 							$processed_audio['wcap_audio_source'][] = $validation['source'];
 							$has_valid_audio                        = true;
+						} else {
+							// Surface the rejection instead of silently dropping the row.
+							$validation_errors[] = sprintf(
+								/* translators: 1: row number, 2: audio track name, 3: reason the URL was rejected. */
+								__( 'Audio row %1$d ("%2$s") was not saved: %3$s', 'woo-audio-preview' ),
+								$i + 1,
+								$audio_name,
+								$validation['message']
+							);
 						}
+					} elseif ( ! empty( $audio_url ) && empty( $audio_name ) ) {
+						// A URL with no name is also dropped today; tell the owner why.
+						$validation_errors[] = sprintf(
+							/* translators: %d: row number. */
+							__( 'Audio row %d was not saved: please add a name for the track.', 'woo-audio-preview' ),
+							$i + 1
+						);
 					}
 				}
 			}
@@ -624,6 +641,19 @@ class Wc_Audio_Preview_Admin {
 				update_post_meta( $post_id, 'wcap_audio', $processed_audio );
 			} else {
 				delete_post_meta( $post_id, 'wcap_audio' );
+			}
+
+			// Persist any rejection messages so they surface on the next admin load
+			// (wcap_display_admin_errors renders them on the product/settings screen).
+			// Written directly (not via the WP_DEBUG-gated wcap_log_error) so owners
+			// see them on production too.
+			if ( ! empty( $validation_errors ) ) {
+				$existing_errors = get_option( 'wcap_admin_errors', array() );
+				if ( ! is_array( $existing_errors ) ) {
+					$existing_errors = array();
+				}
+				$existing_errors = array_slice( array_merge( $existing_errors, $validation_errors ), -10 );
+				update_option( 'wcap_admin_errors', $existing_errors, false );
 			}
 		}
 	}

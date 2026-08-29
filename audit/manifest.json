@@ -27,7 +27,6 @@
     "loader": "Wc_Audio_Preview_Loader (hook registry pattern)",
     "wc_dependency": "wcap_check_require_plugins() on admin_init self-deactivates if WooCommerce absent; Requires Plugins header also declares woocommerce",
     "activation_redirect": "wcap_activation_redirect_settings + wcap_do_activation_redirect -> admin.php?page=woo-audio-preview-settings",
-    "edd_sl_sdk": "registered on edd_sl_sdk_registry (item_id 6, TODO placeholder); loaded from vendor/edd-sl-sdk/edd-sl-sdk.php if present",
     "pro_coexistence": "admin_menu for settings is NOT registered when woo-audio-preview-pro is active (free defers to Pro)"
   },
   "admin_surfaces": [
