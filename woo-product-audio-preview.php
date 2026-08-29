@@ -96,8 +96,7 @@ require_once plugin_dir_path( __FILE__ ) . 'public/class-wc-audio-preview-public
  * @since    1.0.0
  */
 function run_wc_audio_preview() {
-	$plugin = new Wc_Audio_Preview();
-	$plugin->run();
+	new Wc_Audio_Preview();
 }
 
 /**
