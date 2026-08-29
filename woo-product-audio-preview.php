@@ -53,6 +53,15 @@ if ( ! defined( 'WCAP_PLUGIN_FILE' ) ) {
 require plugin_dir_path( __FILE__ ) . 'includes/class-wc-audio-preview.php';
 
 /*
+ * The audio-data reader is DEFINED at include time for the same reason as the public
+ * class below: the Pro add-on reads stored audio through WCAP_Audio::get() during its
+ * own boot (plugins_loaded priority 4), which runs before this plugin boots. Defining
+ * the class here - a side-effect-free definition during the plugin-include phase -
+ * guarantees it exists when Pro (or this plugin's own renderer) calls it.
+ */
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wcap-audio.php';
+
+/*
  * The public class is DEFINED at include time, separately from booting.
  *
  * The Pro add-on subclasses Wc_Audio_Preview_Public, and WordPress orders plugins by directory
