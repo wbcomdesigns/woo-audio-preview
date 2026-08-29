@@ -264,7 +264,7 @@ class Wc_Audio_Preview_Admin {
 	 */
 	public function wcap_hide_all_admin_notices_from_setting_page() {
 
-		if ( isset( $_GET['page'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['page'] ) ), array( 'wbcomplugins', 'wbcom-plugins-page', 'wbcom-support-page', 'woo-audio-preview-settings' ), true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['page'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['page'] ) ), array( 'wbcomplugins', 'woo-audio-preview-settings' ), true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			// Remove non-critical notices only.
 			remove_action( 'admin_notices', 'update_nag', 3 );
