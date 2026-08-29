@@ -120,10 +120,16 @@ class Wc_Audio_Preview {
 		$this->loader->add_action( 'post_edit_form_tag', $plugin_admin, 'wcap_update_edit_form' );
 		$this->loader->add_action( 'wp_ajax_wcap_delete_audio_ajax', $plugin_admin, 'wcap_delete_audio_ajax' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'wcap_init_plugin_settings' );
-		$wcap_free_activated_plugins = get_option( 'active_plugins' );
-		if ( ! in_array( 'woo-audio-preview-pro/woo-audio-preview-pro.php', $wcap_free_activated_plugins, true ) ) {
-			$this->loader->add_action( 'admin_menu', $plugin_admin, 'wcap_views_add_admin_settings' );
-		}
+
+		/*
+		 * The settings screen is the shared Wbcom_Settings_Page shell. This plugin always boots it
+		 * (it is the core the Pro add-on extends, so it is the one that owns the screen); Pro adds
+		 * its tabs into the same shell rather than registering a second menu. boot() runs on init:1
+		 * to be in place before the shell's own admin_menu registration, and the parent WB Plugins
+		 * menu is created on admin_menu:5 if no other suite plugin has beaten us to it.
+		 */
+		$this->loader->add_action( 'init', $plugin_admin, 'boot_settings_page', 1 );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_parent_menu', 5 );
 		$this->loader->add_action( 'in_admin_header', $plugin_admin, 'wcap_hide_all_admin_notices_from_setting_page' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wcap_display_admin_errors' );
 	}
