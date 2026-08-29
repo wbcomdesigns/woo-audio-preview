@@ -54,7 +54,7 @@ if ( ! defined( 'WCAP_PLUGIN_FILE' ) ) {
  * the Pro add-on adds its watermark/player/advanced tabs into the same shell.
  */
 require_once plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/loader.php';
-wbcom_settings_register( '1.0.2', plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/class-wbcom-settings-page.php' );
+wbcom_settings_register( '1.0.3', plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/class-wbcom-settings-page.php' );
 
 /**
  * The core plugin class that is used to define internationalization,
