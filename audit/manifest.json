@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0.0",
+  "generated": "2026-08-29",
+  "source_ref": "master @ 1.5.1",
+  "plugin": {
+    "slug": "woo-audio-preview",
+    "name": "Audio Preview for WooCommerce",
+    "role": "free",
+    "pairs_with": "woo-audio-preview-pro",
+    "main_file": "woo-product-audio-preview.php",
+    "version": "1.5.1",
+    "text_domain": "woo-audio-preview",
+    "requires_plugins": ["woocommerce"],
+    "requires_php": "7.4",
+    "requires_wp": "5.0",
+    "constants": [
+      "WCAP_TEXT_VERSION",
+      "WCAP_TEXT_DOMAIN",
+      "WCAP_PLUGIN_URI",
+      "WCAP_PLUGIN_DIR",
+      "WCAP_PLUGIN_FILE"
+    ]
+  },
+  "bootstrap": {
+    "entry": "run_wc_audio_preview() on plugins_loaded",
+    "core_class": "Wc_Audio_Preview",
+    "loader": "Wc_Audio_Preview_Loader (hook registry pattern)",
+    "wc_dependency": "wcap_check_require_plugins() on admin_init self-deactivates if WooCommerce absent; Requires Plugins header also declares woocommerce",
+    "activation_redirect": "wcap_activation_redirect_settings + wcap_do_activation_redirect -> admin.php?page=woo-audio-preview-settings",
+    "edd_sl_sdk": "registered on edd_sl_sdk_registry (item_id 6, TODO placeholder); loaded from vendor/edd-sl-sdk/edd-sl-sdk.php if present",
+    "pro_coexistence": "admin_menu for settings is NOT registered when woo-audio-preview-pro is active (free defers to Pro)"
+  },
+  "admin_surfaces": [
+    {
+      "id": "settings_page",
+      "menu": "WB Plugins (wbcomplugins) > Audio Preview for WooCommerce",
+      "page_slug": "woo-audio-preview-settings",
+      "capability": "manage_options",
+      "render": "Wc_Audio_Preview_Admin::wcap_admin_options_page",
+      "tabs": {
+        "woo-audio-preview-welcome": "Welcome (partials/woo-audio-preview-welcome-page.php)",
+        "woo-audio-preview-pro": "General (PRO) upsell (partials/woo-audio-preview-general-pro.php)",
+        "woo-audio-preview-faq": "FAQ (partials/woo-audio-preview-faq.php)"
+      },
+      "note": "Uses shared wbcom admin settings shell (admin/wbcom/wbcom-admin-settings.php). Settings tabs are informational/upsell; there are no functional storefront options in free."
+    },
+    {
+      "id": "product_metabox",
+      "hook": "add_meta_boxes -> wcap_register_meta_boxes",
+      "metabox_id": "wc-preview-audio-mata-id",
+      "screen": "product",
+      "render": "Wc_Audio_Preview_Admin::wcap_display_callback",
+      "save": "Wc_Audio_Preview_Admin::wcap_save_meta_box on save_post",
+      "fields": "Exactly 3 fixed rows (name + URL). Row 1 primary, rows 2-3 optional. Media Library button (wp_enqueue_media) + Clear button. Live CDN detection indicator.",
+      "nonce": "wcap_nonce / wcap_nonce_action",
+      "cap_check": "current_user_can('edit_post', $post_id)",
+      "enctype": "post_edit_form_tag -> wcap_update_edit_form adds multipart/form-data"
+    }
+  ],
+  "frontend_surfaces": [
+    {
+      "id": "single_product_player",
+      "hook": "woocommerce_before_add_to_cart_form (priority 0)",
+      "render": "Wc_Audio_Preview_Public::wcap_add_preview_field",
+      "placement": "Single product page, just before the Add to Cart form",
+      "player": "Custom HTML5 <audio> player with play/pause, progress bar, elapsed time; preload=none. Google Drive + SoundCloud rendered via iframe embed instead.",
+      "product_retrieval": "wc_get_product(get_the_ID()) fallback for page builders / custom loops"
+    }
+  ],
+  "shortcodes": [],
+  "ajax": [
+    {
+      "action": "wcap_delete_audio_ajax",
+      "nopriv": true,
+      "handler": "Wc_Audio_Preview_Admin::wcap_delete_audio_ajax",
+      "nonce": "ajax-nonce (check_ajax_referer)",
+      "cap_check": "current_user_can('edit_posts') AND edit_post($post_id)",
+      "note": "nopriv variant is registered but handler enforces capability checks and bails for guests; deletes uploaded file under uploads/wcap_files and clears wcap_preview_attachment meta"
+    }
+  ],
+  "rest": [],
+  "data_stores": {
+    "post_meta": [
+      {
+        "key": "wcap_audio",
+        "type": "array",
+        "shape": {
+          "wcap_audio_names": "string[]",
+          "wcap_audio_urls": "string[] (esc_url_raw)",
+          "wcap_audio_source": "string[] (direct|cdn)"
+        },
+        "written_by": "wcap_save_meta_box",
+        "read_by": "wcap_add_preview_field (frontend)",
+        "shared_with_pro": true,
+        "note": "SAME meta key as Pro. Pro extends the array with wcap_audio_durations and wcap_audio_theme; free ignores those extra keys."
+      },
+      {
+        "key": "wcap_preview_attachment",
+        "type": "string",
+        "written_by": "wcap_delete_audio_ajax (cleared)",
+        "read_by": "none in current source",
+        "status": "legacy / vestigial"
+      }
+    ],
+    "options": [
+      {"key": "woo_audio_preview_admin_welcome_options", "purpose": "registered setting for Welcome tab (no functional payload)"},
+      {"key": "woo_audio_preview_general_options", "purpose": "registered setting for FAQ tab (no functional payload)"},
+      {"key": "wcap_admin_errors", "purpose": "transient-style error queue displayed via admin_notices, autoload=false"}
+    ],
+    "transients": [
+      {"key": "_woo_audio_preview_is_new_install", "purpose": "activation redirect flag (BuddyPress activation path)"}
+    ],
+    "uploads": "uploads/wcap_files/ (custom upload subdir via wcap_set_upload_dir)"
+  },
+  "cdn_support": {
+    "detected_in_admin_validation": ["soundcloud", "spotify", "amazon_s3", "cloudfront", "google_drive", "dropbox"],
+    "playback_conversion_frontend": ["google_drive (iframe)", "soundcloud (iframe/widget API)", "dropbox", "onedrive", "box", "amazon_s3", "cloudfront", "mediafire"],
+    "soundcloud_widget": "public/js/soundcloud.min.js (SoundCloud Widget API)"
+  },
+  "hooks_exposed": {
+    "actions": [
+      {"name": "wcap_before_audio_preview", "args": ["product_id", "wcap_audio", "valid_audios"], "since": "1.5.1"},
+      {"name": "wcap_after_audio_preview", "args": ["product_id", "wcap_audio", "valid_audios"], "since": "1.5.1"}
+    ],
+    "filters": [
+      {"name": "wcap_allowed_audio_extensions", "purpose": "admin allowed upload extensions"},
+      {"name": "wcap_audio_mime_types", "purpose": "frontend extension->MIME map"}
+    ]
+  },
+  "integrations": [],
+  "assets": {
+    "admin_js": "admin/js/wc-audio-preview-admin(.min).js",
+    "admin_css": "admin/css/wc-audio-preview-admin(.min).css (+ css-rtl)",
+    "public_js": "public/js/wc-audio-preview-public(.min).js, public/js/soundcloud.min.js",
+    "public_css": "public/css/wc-audio-preview-public(.min).css (+ css-rtl)",
+    "asset_resolver": "get_asset_filename() picks min/RTL variant with fallback"
+  },
+  "primary_flows": {
+    "owner_set_preview": "Edit product -> Audio Preview Items metabox -> enter name + upload/paste URL (up to 3) -> Save -> URL validated (validate_audio_url) -> stored in wcap_audio meta",
+    "shopper_play": "Visit single product -> player renders before Add to Cart -> click play -> HTML5 audio (or Google Drive / SoundCloud iframe) streams preview"
+  },
+  "free_vs_pro": {
+    "free_owns": "Up to 3 previews per product, single-product player before add-to-cart, CDN URL detection + playback, Media Library upload, shared wcap_audio meta contract",
+    "pro_adds": "Unlimited previews, per-track duration limits, watermarking, player themes (classic/dark/minimal/colorful), archive/shop-loop badge, bulk import, drag-reorder, display-position control, multivendor (Dokan / WCFM / WC Vendors)"
+  }
+}
