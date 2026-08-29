@@ -794,16 +794,14 @@ class Wc_Audio_Preview_Admin {
 		if ( file_exists( $uploaded_file ) && is_writable( $uploaded_file ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
 			$result = wp_delete_file( $uploaded_file );
 			if ( false !== $result ) {
-				update_post_meta( $post_id, 'wcap_preview_attachment', '' );
 				wp_send_json_success( 'File deleted successfully' );
 			} else {
 				$this->wcap_log_error( 'Failed to delete file: ' . $uploaded_file );
 				wp_send_json_error( 'Could not delete file' );
 			}
 		} else {
-			// File doesn't exist or isn't writable, just update the meta.
-			update_post_meta( $post_id, 'wcap_preview_attachment', '' );
-			wp_send_json_success( 'Metadata updated' );
+			// File doesn't exist or isn't writable; nothing left to remove.
+			wp_send_json_success( 'File already removed' );
 		}
 		exit;
 	}

@@ -20,4 +20,3 @@ delete_option( 'woo_audio_feedback_no_bug' );
 // Delete audio preview post meta from all products.
 global $wpdb;
 $wpdb->delete( $wpdb->postmeta, array( 'meta_key' => 'wcap_audio' ) );
-$wpdb->delete( $wpdb->postmeta, array( 'meta_key' => 'wcap_preview_attachment' ) );
