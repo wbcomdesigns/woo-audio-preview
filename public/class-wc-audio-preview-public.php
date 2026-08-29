@@ -159,17 +159,8 @@ class Wc_Audio_Preview_Public {
 		$wcap_audio = get_post_meta( $product_id, 'wcap_audio', true );
 		if ( ! empty( $wcap_audio ) && isset( $wcap_audio['wcap_audio_urls'] ) && ! empty( $wcap_audio['wcap_audio_urls'] ) ) {
 
-			// Filter out empty entries.
-			$valid_audios = array();
-			foreach ( $wcap_audio['wcap_audio_names'] as $key => $value ) {
-				if ( ! empty( $value ) && ! empty( $wcap_audio['wcap_audio_urls'][ $key ] ) ) {
-					$valid_audios[] = array(
-						'key'  => $key,
-						'name' => $value,
-						'url'  => $wcap_audio['wcap_audio_urls'][ $key ],
-					);
-				}
-			}
+			// Read through the shared reader so free and Pro interpret storage identically.
+			$valid_audios = WCAP_Audio::get( $product_id );
 
 			if ( empty( $valid_audios ) ) {
 				return;
