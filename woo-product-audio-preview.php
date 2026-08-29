@@ -46,6 +46,16 @@ if ( ! defined( 'WCAP_PLUGIN_FILE' ) ) {
 	define( 'WCAP_PLUGIN_FILE', __FILE__ );
 }
 
+/*
+ * Offer this plugin's copy of the shared Wbcom settings screen. Every suite plugin ships the same
+ * bundled library and registers its version; the newest copy on the site is the only one that
+ * loads, so a fix shipped in any one plugin becomes the implementation the others use. The screen
+ * gives Audio Preview the same wrapper, header and tab navigation as every other Wbcom plugin, and
+ * the Pro add-on adds its watermark/player/advanced tabs into the same shell.
+ */
+require_once plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/loader.php';
+wbcom_settings_register( '1.0.2', plugin_dir_path( __FILE__ ) . 'lib/wbcom-settings/class-wbcom-settings-page.php' );
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.

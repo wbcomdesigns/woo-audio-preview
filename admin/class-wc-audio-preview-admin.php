@@ -281,41 +281,92 @@ class Wc_Audio_Preview_Admin {
 	 * @since    1.0.0
 	 * @access public
 	 */
-	public function wcap_admin_options_page() {
-		global $allowedposttags;
-		$tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
-		?>
-	<div class="wrap">
-		<div class="wbcom-bb-plugins-offer-wrapper">
-				<div id="wb_admin_logo">
-				</div>
-			</div>
-		<div class="wbcom-wrap wbcom-plugin-wrapper">
-			<div class="bupr-header">
-				<div class="wbcom_admin_header-wrapper">
-					<div id="wb_admin_plugin_name">
-						<?php esc_html_e( 'Audio Preview for WooCommerce', 'woo-audio-preview' ); ?>
-						<span>
-					<?php
-					/* translators: %s: Plugin version number. */
-					printf( esc_html__( 'Version %s', 'woo-audio-preview' ), esc_html( WCAP_TEXT_VERSION ) );
-					?>
-					</span>
-					</div>
-					<?php echo do_shortcode( '[wbcom_admin_setting_header]' ); ?>
-				</div>
-			</div>
-			<div class="wbcom-admin-settings-page">
-				<?php
-				settings_errors();
-				$this->wcap_plugin_settings_tabs();
-				settings_fields( $tab );
-				do_settings_sections( $tab );
-				?>
-			</div>
-		</div>
-	</div>
-		<?php
+	/**
+	 * Put this screen on the shared Wbcom settings shell.
+	 *
+	 * The shell owns the menu entry, the sidebar, tab routing, assets and notice suppression, so
+	 * this screen matches every other Wbcom plugin's admin. This plugin contributes nav entries and
+	 * tab bodies through the shell's two seams, and the Pro add-on contributes its own tabs through
+	 * the same seams - so free's tabs and Pro's are drawn by one screen with one look.
+	 *
+	 * @since 1.5.2
+	 */
+	public function boot_settings_page() {
+		if ( ! class_exists( 'Wbcom_Settings_Page' ) ) {
+			return;
+		}
+
+		Wbcom_Settings_Page::boot(
+			array(
+				'prefix'     => 'wcap',
+				'slug'       => 'woo-audio-preview-settings',
+				'assets_url' => WCAP_PLUGIN_URI,
+				'version'    => WCAP_TEXT_VERSION,
+				'icon'       => 'audio-lines',
+				'labels'     => array(
+					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
+					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
+					'subtitle'   => __( 'Audio previews for WooCommerce', 'woo-audio-preview' ),
+					'nav_label'  => __( 'Audio Preview settings sections', 'woo-audio-preview' ),
+					'pro_badge'  => __( 'Pro', 'woo-audio-preview' ),
+				),
+			)
+		);
+
+		// Priority 5 so free's core tabs (Welcome first) lead the nav and Pro's tabs follow.
+		add_filter( 'wcap_settings_nav_groups', array( $this, 'settings_nav_groups' ), 5 );
+		add_action( 'wcap_settings_tab_content', array( $this, 'render_settings_tab' ) );
+	}
+
+	/**
+	 * Declare the settings nav.
+	 *
+	 * Built from the same tab list the old screen used, so the entries and their order are
+	 * unchanged; only the chrome around them moved to the shared shell.
+	 *
+	 * @since  1.5.2
+	 * @param  array $groups Groups declared so far.
+	 * @return array
+	 */
+	public function settings_nav_groups( $groups ) {
+		$icons = array(
+			'woo-audio-preview-welcome' => 'layout-dashboard',
+			'woo-audio-preview-pro'     => 'star',
+			'woo-audio-preview-faq'     => 'help-circle',
+		);
+
+		$items = array();
+
+		foreach ( (array) $this->plugin_settings_tabs as $tab_id => $label ) {
+			$items[ $tab_id ] = array(
+				'title' => $label,
+				'icon'  => isset( $icons[ $tab_id ] ) ? $icons[ $tab_id ] : 'circle-dot',
+			);
+		}
+
+		$groups['main'] = array(
+			'label' => __( 'Audio Preview', 'woo-audio-preview' ),
+			'items' => $items,
+		);
+
+		return $groups;
+	}
+
+	/**
+	 * Render one settings tab.
+	 *
+	 * Each tab's body is still a registered settings section, so this hands off to the same
+	 * callbacks the old screen used - including any an add-on registered.
+	 *
+	 * @since 1.5.2
+	 * @param string $tab Current tab id.
+	 */
+	public function render_settings_tab( $tab ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		do_settings_sections( $tab );
 	}
 
 	/**
@@ -351,17 +402,27 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Actions performed to create tabs on the sub menu page.
+	 * Create the shared "WB Plugins" parent menu when no other suite plugin has.
+	 *
+	 * The shell hangs the settings page under this parent; whichever suite plugin loads first
+	 * creates it, and the rest stand down.
+	 *
+	 * @since 1.5.2
 	 */
-	public function wcap_plugin_settings_tabs() {
-		$current_tab = filter_input( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : 'woo-audio-preview-welcome';
-		// Plugin settings tabs.
-		echo '<div class="wbcom-tabs-section"><div class="nav-tab-wrapper"><div class="wb-responsive-menu"><span>' . esc_html( 'Menu' ) . '</span><input class="wb-toggle-btn" type="checkbox" id="wb-toggle-btn"><label class="wb-toggle-icon" for="wb-toggle-btn"><span class="wb-icon-bars"></span></label></div><ul>';
-		foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
-			$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
-			echo '<li class="' . esc_attr( $tab_key ) . '"><a class="nav-tab ' . esc_attr( $active ) . '" id="' . esc_attr( $tab_key ) . '-tab" href="?page=woo-audio-preview-settings&tab=' . esc_attr( $tab_key ) . '">' . esc_attr( $tab_caption ) . '</a></li>';
+	public function register_parent_menu() {
+		if ( ! class_exists( 'Wbcom_Settings_Page' ) || ! empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
+			return;
 		}
-		echo '</div></ul></div>';
+
+		add_menu_page(
+			esc_html__( 'WB Plugins', 'woo-audio-preview' ),
+			esc_html__( 'WB Plugins', 'woo-audio-preview' ),
+			'manage_options',
+			'wbcomplugins',
+			array( 'Wbcom_Settings_Page', 'render_welcome' ),
+			'dashicons-lightbulb',
+			59
+		);
 	}
 
 	/**
@@ -391,21 +452,12 @@ class Wc_Audio_Preview_Admin {
 		include plugin_dir_path( __DIR__ ) . 'admin/partials/woo-audio-preview-general-pro.php';
 	}
 
-	/**
-	 * Actions performed on loading admin_menu.
-	 *
-	 * @since    1.0.0
-	 * @access   public
-	 * @author   Wbcom Designs
+	/*
+	 * wcap_views_add_admin_settings() registered this plugin's own top-level menu and its
+	 * hand-rolled settings page. Both are the shared Wbcom_Settings_Page shell's job now:
+	 * register_parent_menu() creates the WB Plugins parent (if no suite plugin has yet) and the
+	 * shell registers the settings submenu under it. See boot_settings_page().
 	 */
-	public function wcap_views_add_admin_settings() {
-		if ( empty( $GLOBALS['admin_page_hooks']['wbcomplugins'] ) ) {
-			add_menu_page( esc_html__( 'WB Plugins', 'woo-audio-preview' ), esc_html__( 'WB Plugins', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins', array( $this, 'wcap_admin_options_page' ), 'dashicons-lightbulb', 59 );
-			add_submenu_page( 'wbcomplugins', esc_html__( 'Welcome', 'woo-audio-preview' ), esc_html__( 'Welcome', 'woo-audio-preview' ), 'manage_options', 'wbcomplugins' );
-
-		}
-		add_submenu_page( 'wbcomplugins', esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ), esc_html__( 'Audio Preview for WooCommerce', 'woo-audio-preview' ), 'manage_options', 'woo-audio-preview-settings', array( $this, 'wcap_admin_options_page' ) );
-	}
 
 
 	/**
