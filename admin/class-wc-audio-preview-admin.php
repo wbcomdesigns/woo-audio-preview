@@ -298,12 +298,14 @@ class Wc_Audio_Preview_Admin {
 
 		Wbcom_Settings_Page::boot(
 			array(
-				'prefix'     => 'wcap',
-				'slug'       => 'woo-audio-preview-settings',
-				'assets_url' => WCAP_PLUGIN_URI,
-				'version'    => WCAP_TEXT_VERSION,
-				'icon'       => 'audio-lines',
-				'labels'     => array(
+				'prefix'       => 'wcap',
+				'slug'         => 'woo-audio-preview-settings',
+				// Retired slugs (Pro's old standalone screen) redirect here instead of 404ing.
+				'legacy_slugs' => array( 'wcap-pro-settings', 'wcap-settings' ),
+				'assets_url'   => WCAP_PLUGIN_URI,
+				'version'      => WCAP_TEXT_VERSION,
+				'icon'         => 'audio-lines',
+				'labels'       => array(
 					'menu_title' => __( 'Audio Preview', 'woo-audio-preview' ),
 					'brand'      => __( 'Audio Preview', 'woo-audio-preview' ),
 					'subtitle'   => __( 'Audio previews for WooCommerce', 'woo-audio-preview' ),

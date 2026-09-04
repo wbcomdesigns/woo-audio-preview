@@ -4,7 +4,7 @@ Tags: audio, woocommerce, preview, music, audio player
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,15 @@ Free support is available through the WordPress.org support forum at wordpress.o
 6. **Mobile view of the audio player**: The player displayed on a mobile device, showing the responsive layout with touch-friendly controls that adapt to smaller screen sizes.
 
 == Changelog ==
+
+= 1.5.2 - September 2026 =
+
+Restores the free/Pro seams the Pro add-on depends on, so Pro settings take effect on the front end.
+
+* New      - Filters wcap_public_instance, wcap_preview_hook, wcap_should_load_assets and wcap_soundcloud_embed_url, plus a should_load_assets() method, so the Pro add-on supplies its own player, asset loading and render position through the free plugin.
+* Improve  - Preview assets load on product pages by default and can be widened to shop and category archives by the Pro add-on.
+* Fix      - Player renderer helpers are protected so the Pro subclass extends one renderer instead of drawing a second player.
+* Compat   - Aligned with Audio Preview Pro 2.2.2. Install both updates together.
 
 = 1.5.1 =
 * Fixed: WordPress Coding Standards (WPCS) compliance issues

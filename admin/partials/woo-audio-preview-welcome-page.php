@@ -90,15 +90,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php Wbcom_Settings_Page::card_close(); ?>
 
-	<?php Wbcom_Settings_Page::card_open( __( 'Need help?', 'woo-audio-preview' ), __( 'Documentation and support for Audio Preview.', 'woo-audio-preview' ) ); ?>
+	<?php Wbcom_Settings_Page::card_open( __( 'Need help?', 'woo-audio-preview' ), __( 'Support for Audio Preview.', 'woo-audio-preview' ) ); ?>
 		<ul class="wbcom-feature-list">
 			<li>
 				<i data-lucide="help-circle"></i>
 				<a href="?page=woo-audio-preview-settings&tab=woo-audio-preview-faq"><?php esc_html_e( 'Read the FAQ', 'woo-audio-preview' ); ?></a>
-			</li>
-			<li>
-				<i data-lucide="book-open"></i>
-				<a href="https://docs.wbcomdesigns.com/doc_category/woo-audio-preview/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Documentation', 'woo-audio-preview' ); ?></a>
 			</li>
 			<li>
 				<i data-lucide="users"></i>

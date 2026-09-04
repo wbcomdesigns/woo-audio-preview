@@ -131,10 +131,24 @@ class Wc_Audio_Preview {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Wc_Audio_Preview_Public( 'woo-audio-preview', '1.0.0' );
+		/*
+		 * Pro answers this filter with its own subclass instance so there is one renderer and
+		 * one set of enqueues, its premium behaviour overriding free's. Without the filter Pro's
+		 * player, assets and settings never reach the front end.
+		 */
+		$plugin_public = apply_filters(
+			'wcap_public_instance',
+			new Wc_Audio_Preview_Public( 'woo-audio-preview', WCAP_TEXT_VERSION )
+		);
 
 		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_scripts' ) );
-		add_action( 'woocommerce_before_add_to_cart_form', array( $plugin_public, 'wcap_add_preview_field' ), 0 );
+
+		/*
+		 * Where the preview renders is a Pro setting, so the hook is filterable. Free defaults to
+		 * before the add-to-cart form; Pro returns the position the owner chose.
+		 */
+		$hook = apply_filters( 'wcap_preview_hook', 'woocommerce_before_add_to_cart_form' );
+		add_action( $hook, array( $plugin_public, 'wcap_add_preview_field' ), 0 );
 	}
 }

@@ -45,6 +45,19 @@ class Wc_Audio_Preview_Public {
 	private $version;
 
 	/**
+	 * Products whose preview has already been rendered this request.
+	 *
+	 * Shared with the Pro subclass (which sets self::$rendered[ $product_id ]) so a fallback
+	 * render on a second hook can skip a product the primary hook already drew. Declared here
+	 * so both plugins read and write one store instead of the Pro write hitting an undeclared
+	 * static property.
+	 *
+	 * @since 1.5.2
+	 * @var   array
+	 */
+	protected static $rendered = array();
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -58,23 +71,32 @@ class Wc_Audio_Preview_Public {
 	}
 
 	/**
+	 * Whether preview assets should load on the current request.
+	 *
+	 * Product pages by default. Pro widens this to shop and category archives through the
+	 * wcap_should_load_assets filter when its archive badge is switched on, so both plugins
+	 * share one decision instead of each keeping its own idea of where assets belong.
+	 *
+	 * @since  1.5.2
+	 * @return bool
+	 */
+	public function should_load_assets() {
+		$is_product = function_exists( 'is_product' ) ? is_product() : false;
+
+		return (bool) apply_filters( 'wcap_should_load_assets', $is_product );
+	}
+
+	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Wc_Audio_Preview_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Wc_Audio_Preview_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		if ( ! $this->should_load_assets() ) {
+			return;
+		}
+
 		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public' );
 		if ( $css_file ) {
 			wp_enqueue_style(
@@ -94,17 +116,9 @@ class Wc_Audio_Preview_Public {
 	 */
 	public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Wc_Audio_Preview_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Wc_Audio_Preview_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		if ( ! $this->should_load_assets() ) {
+			return;
+		}
 
 		// Build the JS filename with intelligent fallback.
 		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public' );
@@ -248,7 +262,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $audio_url Audio URL.
 	 * @param array  $is_cdn    CDN info.
 	 */
-	private function render_audio_player( $key, $name, $audio_url, $is_cdn ) {
+	protected function render_audio_player( $key, $name, $audio_url, $is_cdn ) {
 		// Convert CDN URLs to playable format.
 		$playable_url = $this->wcap_convert_cdn_url_for_playback( $audio_url );
 		$mime_type    = $this->wcap_get_audio_mime_type( $playable_url );
@@ -312,7 +326,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $name      Audio name.
 	 * @param string $audio_url Audio URL.
 	 */
-	private function render_google_drive_player( $key, $name, $audio_url ) {
+	protected function render_google_drive_player( $key, $name, $audio_url ) {
 		// Extract Google Drive file ID.
 		$file_id = $this->extract_google_drive_id( $audio_url );
 		if ( ! $file_id ) {
@@ -379,9 +393,23 @@ class Wc_Audio_Preview_Public {
 	 * @param string $name      Audio name.
 	 * @param string $audio_url Audio URL.
 	 */
-	private function render_sound_cloud_player( $key, $name, $audio_url ) {
+	protected function render_sound_cloud_player( $key, $name, $audio_url ) {
 
 		$embed_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $audio_url );
+
+		/**
+		 * Filters the SoundCloud embed URL before it is printed.
+		 *
+		 * Pro answers this to add its player parameters (colour, hidden related tracks, etc.)
+		 * instead of forking the whole renderer, so free's aria-label and data-soundcloud-key
+		 * markup stay intact.
+		 *
+		 * @since 1.5.2
+		 *
+		 * @param string $embed_url The SoundCloud widget URL.
+		 * @param string $audio_url The original track URL.
+		 */
+		$embed_url = apply_filters( 'wcap_soundcloud_embed_url', $embed_url, $audio_url );
 
 		?>
 		<div class="wcap-preview-item wcap-soundcloud-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-soundcloud-key="<?php echo esc_attr( $key ); ?>">
@@ -451,7 +479,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url Audio URL.
 	 * @return bool
 	 */
-	private function wcap_needs_iframe_player( $url ) {
+	protected function wcap_needs_iframe_player( $url ) {
 		// Currently only Google Drive and SoundCloud need iframe.
 		return false !== strpos( $url, 'drive.google.com' ) || false !== strpos( $url, 'soundcloud.com' );
 	}
@@ -462,7 +490,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url The original URL.
 	 * @return string The playable URL.
 	 */
-	private function wcap_convert_cdn_url_for_playback( $url ) {
+	protected function wcap_convert_cdn_url_for_playback( $url ) {
 		if ( empty( $url ) ) {
 			return $url;
 		}
@@ -509,7 +537,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url The URL to check.
 	 * @return array|false Service info or false.
 	 */
-	private function wcap_is_cdn_url( $url ) {
+	protected function wcap_is_cdn_url( $url ) {
 		if ( empty( $url ) ) {
 			return false;
 		}
@@ -589,7 +617,7 @@ class Wc_Audio_Preview_Public {
 	 * @param string $url The audio URL.
 	 * @return string The MIME type.
 	 */
-	private function wcap_get_audio_mime_type( $url ) {
+	protected function wcap_get_audio_mime_type( $url ) {
 		// For CDN URLs where we can't determine extension.
 		if ( false !== strpos( $url, 'drive.google.com' ) ||
 			false !== strpos( $url, 'dropbox.com' ) ||
@@ -626,19 +654,24 @@ class Wc_Audio_Preview_Public {
 	 * Get asset filename with intelligent fallback.
 	 *
 	 * @since    1.6.0
-	 * @param    string $type     Asset type ('css' or 'js').
-	 * @param    string $filename Base filename without extension.
-	 * @return   string|false     Full filename with path or false if not found.
+	 * @param    string      $type      Asset type ('css' or 'js').
+	 * @param    string      $filename  Base filename without extension.
+	 * @param    string|null $base_path Directory to resolve against. Defaults to this file's dir;
+	 *                                  the Pro subclass passes its own so it finds its own assets.
+	 * @return   string|false           Full filename with path or false if not found.
 	 */
-	private function get_asset_filename( $type, $filename ) {
+	protected function get_asset_filename( $type, $filename, $base_path = null ) {
 		// Determine if we should use minified files.
 		$use_minified = ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
 
 		// Determine if RTL is needed (only for CSS).
 		$is_rtl = ( 'css' === $type ) ? is_rtl() : false;
 
+		// Resolve against the caller's directory when provided, else this file's own.
+		$dir = $base_path ? trailingslashit( $base_path ) : plugin_dir_path( __FILE__ );
+
 		// Build the base directory path.
-		$base_dir        = plugin_dir_path( __FILE__ ) . $type . '/';
+		$base_dir        = $dir . $type . '/';
 		$actual_type     = $type;
 		$actual_base_dir = $base_dir;
 
@@ -666,7 +699,7 @@ class Wc_Audio_Preview_Public {
 
 		if ( 'css' === $type && $is_rtl ) {
 			$actual_type     = 'css-rtl';
-			$actual_base_dir = plugin_dir_path( __FILE__ ) . 'css-rtl/';
+			$actual_base_dir = $dir . 'css-rtl/';
 		}
 
 		// Check each variant in order.
