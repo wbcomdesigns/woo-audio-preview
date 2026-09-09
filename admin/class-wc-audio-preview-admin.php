@@ -498,113 +498,133 @@ class Wc_Audio_Preview_Admin {
 		wp_nonce_field( 'wcap_nonce_action', 'wcap_nonce' );
 
 		$wcap_audio = get_post_meta( $post->ID, 'wcap_audio', true );
+
+		$saved_names = ( is_array( $wcap_audio ) && isset( $wcap_audio['wcap_audio_names'] ) && is_array( $wcap_audio['wcap_audio_names'] ) )
+			? $wcap_audio['wcap_audio_names']
+			: array();
+
+		/**
+		 * How many preview rows the box renders.
+		 *
+		 * Free ships three. Pro raises this (and adds the row/theme/action fields through the
+		 * hooks below) so a store is not capped at three - the seam Pro was written against but
+		 * that this box never exposed.
+		 *
+		 * @since 1.5.3
+		 * @param int $rows  Number of rows to render.
+		 * @param int $saved Number of rows already saved.
+		 */
+		$max_rows = (int) apply_filters( 'wcap_metabox_max_rows', 3, count( $saved_names ) );
+		if ( $max_rows < 1 ) {
+			$max_rows = 3;
+		}
+
+		// Pro contributes a player-theme control above the rows.
+		do_action( 'wcap_metabox_before_rows', $post );
 		?>
 		<div class="form-field preview_files">
 			<div class="wcap-error-messages"></div>
-			
+
 			<!-- Enhanced help section -->
 			<div class="wcap-help-section">
-				<h4><?php esc_html_e( '🎵 Add Up to 3 Audio Previews', 'woo-audio-preview' ); ?></h4>
-				<p><?php esc_html_e( 'You can add up to 3 audio preview files for this product. Leave fields empty if you need fewer previews.', 'woo-audio-preview' ); ?></p>
+				<h4><?php esc_html_e( 'Audio Previews', 'woo-audio-preview' ); ?></h4>
+				<p><?php esc_html_e( 'Add audio preview files for this product. Leave a row empty to skip it.', 'woo-audio-preview' ); ?></p>
 				<div class="wcap-supported-formats">
 					<strong><?php esc_html_e( 'Supported:', 'woo-audio-preview' ); ?></strong>
 					<?php esc_html_e( 'MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files • Direct URLs • CDN links (Google Drive, Dropbox, SoundCloud, etc.)', 'woo-audio-preview' ); ?>
 				</div>
 			</div>
-			
-			<div class="wcap-fixed-audio-fields">
-				<?php
-				// Always show exactly 3 fields.
-				for ( $i = 0; $i < 3; $i++ ) :
-					$audio_name   = isset( $wcap_audio['wcap_audio_names'][ $i ] ) ? $wcap_audio['wcap_audio_names'][ $i ] : '';
-					$audio_url    = isset( $wcap_audio['wcap_audio_urls'][ $i ] ) ? $wcap_audio['wcap_audio_urls'][ $i ] : '';
-					$field_number = $i + 1;
-					?>
-					<div class="wcap-audio-field-group">
-						<h4 class="wcap-field-title">
-							<?php
-							/* translators: %d: Audio preview field number. */
-							echo esc_html( sprintf( __( 'Audio Preview %d', 'woo-audio-preview' ), $field_number ) );
-							?>
-							<?php if ( 0 === $i ) : ?>
-								<span class="wcap-required"><?php esc_html_e( '(Primary)', 'woo-audio-preview' ); ?></span>
-							<?php else : ?>
-								<span class="wcap-optional"><?php esc_html_e( '(Optional)', 'woo-audio-preview' ); ?></span>
-							<?php endif; ?>
-						</h4>
-						
-						<div class="wcap-field-row">
-							<label for="wcap_audio_name_<?php echo esc_attr( $i ); ?>">
-								<?php esc_html_e( 'Audio Name:', 'woo-audio-preview' ); ?>
-							</label>
-							<input type="text" 
-								id="wcap_audio_name_<?php echo esc_attr( $i ); ?>"
-								class="wcap-audio-name widefat" 
-								name="wcap_audio[wcap_audio_names][]" 
-								value="<?php echo esc_attr( $audio_name ); ?>" 
-								placeholder="
-								<?php
-								/* translators: %d: Track number. */
-								echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'woo-audio-preview' ), $field_number ) );
-								?>
-							" />
-						</div>
-						
-						<div class="wcap-field-row">
-							<label for="wcap_audio_url_<?php echo esc_attr( $i ); ?>">
-								<?php esc_html_e( 'Audio URL:', 'woo-audio-preview' ); ?>
-							</label>
-							<div class="wcap-url-input-group">
-								<input type="url" 
-									id="wcap_audio_url_<?php echo esc_attr( $i ); ?>"
-									class="wcap-audio-url widefat" 
-									name="wcap_audio[wcap_audio_urls][]" 
-									value="<?php echo esc_url( $audio_url ); ?>" 
-									placeholder="<?php esc_attr_e( 'https://example.com/audio.mp3 or CDN link', 'woo-audio-preview' ); ?>" />
-								<button type="button" 
-										class="button wcap-media-button" 
-										data-field-index="<?php echo esc_attr( $i ); ?>">
-									<?php esc_html_e( 'Media Library', 'woo-audio-preview' ); ?>
-								</button>
-								<?php if ( ! empty( $audio_url ) ) : ?>
-									<button type="button" 
-											class="button wcap-clear-button" 
-											data-field-index="<?php echo esc_attr( $i ); ?>">
-										<?php esc_html_e( 'Clear', 'woo-audio-preview' ); ?>
-									</button>
-								<?php endif; ?>
-							</div>
-							
-							<?php
-							// Show CDN indicator if URL is from a CDN.
-							if ( ! empty( $audio_url ) ) {
-								$cdn_info = $this->is_cdn_url( $audio_url );
-								if ( $cdn_info ) :
-									?>
-									<div class="wcap-service-indicator">
-										🔗 <?php echo esc_html( ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) ) ); ?> link detected
-									</div>
-									<?php
-								endif;
-							}
-							?>
-						</div>
-					</div>
-				<?php endfor; ?>
-			</div>
-			
-			<div class="wcap-pro-notice">
-				<p>
-					<strong><?php esc_html_e( '💎 Need more than 3 audio previews?', 'woo-audio-preview' ); ?></strong><br>
+
+			<table class="wcap-audio-fields widefat">
+				<thead>
+					<tr>
+						<th class="wcap-col-name"><?php esc_html_e( 'Audio Name', 'woo-audio-preview' ); ?></th>
+						<th class="wcap-col-url"><?php esc_html_e( 'Audio URL', 'woo-audio-preview' ); ?></th>
+						<?php
+						// Pro adds column headings here (e.g. Preview length) to sit over its row cells.
+						do_action( 'wcap_metabox_row_headings' );
+						?>
+					</tr>
+				</thead>
+				<tbody>
 					<?php
-					printf(
-						/* translators: %s: Pro version link. */
-						esc_html__( 'Upgrade to %s for unlimited audio previews and dynamic add/remove functionality.', 'woo-audio-preview' ),
-						'<a href="https://wbcomdesigns.com/downloads/woo-audio-preview-pro/" target="_blank">' . esc_html__( 'Pro Version', 'woo-audio-preview' ) . '</a>'
-					);
-					?>
-				</p>
-			</div>
+					for ( $i = 0; $i < $max_rows; $i++ ) :
+						$audio_name = isset( $wcap_audio['wcap_audio_names'][ $i ] ) ? $wcap_audio['wcap_audio_names'][ $i ] : '';
+						$audio_url  = isset( $wcap_audio['wcap_audio_urls'][ $i ] ) ? $wcap_audio['wcap_audio_urls'][ $i ] : '';
+						?>
+						<tr class="wcap-audio-field-row">
+							<td class="wcap-col-name" data-label="<?php esc_attr_e( 'Audio Name', 'woo-audio-preview' ); ?>">
+								<input type="text"
+									id="wcap_audio_name_<?php echo esc_attr( $i ); ?>"
+									class="wcap-audio-name widefat"
+									name="wcap_audio[wcap_audio_names][]"
+									value="<?php echo esc_attr( $audio_name ); ?>"
+									placeholder="
+									<?php
+									/* translators: %d: Track number. */
+									echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'woo-audio-preview' ), $i + 1 ) );
+									?>
+								" />
+							</td>
+							<td class="wcap-col-url" data-label="<?php esc_attr_e( 'Audio URL', 'woo-audio-preview' ); ?>">
+								<div class="wcap-url-input-group">
+									<input type="url"
+										id="wcap_audio_url_<?php echo esc_attr( $i ); ?>"
+										class="wcap-audio-url widefat"
+										name="wcap_audio[wcap_audio_urls][]"
+										value="<?php echo esc_url( $audio_url ); ?>"
+										placeholder="<?php esc_attr_e( 'https://example.com/audio.mp3 or CDN link', 'woo-audio-preview' ); ?>" />
+									<button type="button" class="button wcap-media-button" data-field-index="<?php echo esc_attr( $i ); ?>">
+										<?php esc_html_e( 'Media Library', 'woo-audio-preview' ); ?>
+									</button>
+									<?php if ( ! empty( $audio_url ) ) : ?>
+										<button type="button" class="button wcap-clear-button" data-field-index="<?php echo esc_attr( $i ); ?>">
+											<?php esc_html_e( 'Clear', 'woo-audio-preview' ); ?>
+										</button>
+									<?php endif; ?>
+								</div>
+								<?php
+								if ( ! empty( $audio_url ) ) {
+									$cdn_info = $this->is_cdn_url( $audio_url );
+									if ( $cdn_info ) :
+										?>
+										<div class="wcap-service-indicator">
+											<?php echo esc_html( ucfirst( str_replace( '_', ' ', $cdn_info['service'] ) ) ); ?> link detected
+										</div>
+										<?php
+									endif;
+								}
+								?>
+							</td>
+							<?php
+							// Pro adds its per-row cells here (e.g. the preview-length input).
+							do_action( 'wcap_metabox_row_fields', $i, $audio_name, $audio_url );
+							?>
+						</tr>
+					<?php endfor; ?>
+				</tbody>
+			</table>
+
+			<?php
+			// Pro adds the add-another / bulk-import controls below the rows.
+			do_action( 'wcap_metabox_after_rows', $post );
+
+			// The upsell only makes sense when Pro is NOT extending the box.
+			if ( ! has_action( 'wcap_metabox_after_rows' ) ) :
+				?>
+				<div class="wcap-pro-notice">
+					<p>
+						<strong><?php esc_html_e( 'Need more than 3 audio previews?', 'woo-audio-preview' ); ?></strong><br>
+						<?php
+						printf(
+							/* translators: %s: Pro version link. */
+							esc_html__( 'Upgrade to %s for unlimited audio previews and dynamic add/remove functionality.', 'woo-audio-preview' ),
+							'<a href="https://wbcomdesigns.com/downloads/woo-audio-preview-pro/" target="_blank">' . esc_html__( 'Pro Version', 'woo-audio-preview' ) . '</a>'
+						);
+						?>
+					</p>
+				</div>
+			<?php endif; ?>
 		</div>
 		<?php
 	}
@@ -652,8 +672,12 @@ class Wc_Audio_Preview_Admin {
 			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized individually below.
 				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-				// Process exactly 3 fields.
-				for ( $i = 0; $i < 3; $i++ ) {
+				// Process every submitted row, not a fixed three - Pro raises the row count.
+				$submitted_rows = isset( $wcap_audio_raw['wcap_audio_names'] ) && is_array( $wcap_audio_raw['wcap_audio_names'] )
+					? count( $wcap_audio_raw['wcap_audio_names'] )
+					: 0;
+
+				for ( $i = 0; $i < $submitted_rows; $i++ ) {
 					$audio_name = isset( $wcap_audio_raw['wcap_audio_names'][ $i ] ) ?
 						sanitize_text_field( $wcap_audio_raw['wcap_audio_names'][ $i ] ) : '';
 					$audio_url  = isset( $wcap_audio_raw['wcap_audio_urls'][ $i ] ) ?
@@ -690,12 +714,26 @@ class Wc_Audio_Preview_Admin {
 				}
 			}
 
-			// Save or delete meta.
+			// Save or delete meta. Merge onto the existing row so sub-keys this box does not
+			// manage - Pro's per-track durations and player theme - survive a save from here.
 			if ( $has_valid_audio ) {
+				$existing = get_post_meta( $post_id, 'wcap_audio', true );
+				$existing = is_array( $existing ) ? $existing : array();
+				$processed_audio = array_merge( $existing, $processed_audio );
 				update_post_meta( $post_id, 'wcap_audio', $processed_audio );
 			} else {
 				delete_post_meta( $post_id, 'wcap_audio' );
 			}
+
+			/**
+			 * Fires after the box stores its names and URLs, so Pro can persist its own
+			 * sub-keys (durations, theme) into the same meta row from the same request.
+			 *
+			 * @since 1.5.3
+			 * @param int   $post_id         Product being saved.
+			 * @param array $processed_audio Names and URLs just stored.
+			 */
+			do_action( 'wcap_metabox_save', $post_id, $processed_audio );
 
 			// Persist any rejection messages so they surface on the next admin load
 			// (wcap_display_admin_errors renders them on the product/settings screen).
