@@ -57,6 +57,57 @@
      */
     bindFixedModeEvents: function() {
       $(document).on('click', '.wcap-clear-button', this.clearField);
+      // Pro renders "Add another preview" (#wcap-pro-add-more) via the metabox seam but hands
+      // the row markup to the free plugin, so the free plugin binds the handler. Clones the
+      // current table row (which already carries Pro's per-row duration cell) rather than a
+      // template, so it stays correct however Pro extends the row.
+      $(document).on('click', '#wcap-pro-add-more', function (e) {
+        e.preventDefault();
+        WCAP.wcapAddFixedRow();
+      });
+    },
+
+    /**
+     * Append a fresh audio row to the fixed-mode table by cloning the last row.
+     *
+     * Reused by "Add another preview" and by Pro's bulk import, so both build rows that match
+     * the current markup (including any cell Pro injects through wcap_metabox_row_fields) and
+     * use the same input names the save handler reads.
+     *
+     * @param {string} name Optional name to prefill.
+     * @param {string} url  Optional URL to prefill.
+     * @return {jQuery|null} The new row, or null when there is no row to clone.
+     */
+    wcapAddFixedRow: function (name, url) {
+      const $tbody = $('table.wcap-audio-fields tbody');
+      const $rows = $tbody.find('tr.wcap-audio-field-row');
+      if (!$rows.length) {
+        return null;
+      }
+
+      const index = $rows.length; // zero-based next index.
+      const $row = $rows.last().clone();
+
+      // Reset values and re-point ids / for / data-field-index at the new index.
+      $row.find('input').val('');
+      $row.find('.wcap-audio-name').attr('id', 'wcap_audio_name_' + index);
+      $row.find('.wcap-audio-url').attr('id', 'wcap_audio_url_' + index);
+      $row.find('label[for^="wcap_audio_name_"]').attr('for', 'wcap_audio_name_' + index);
+      $row.find('label[for^="wcap_audio_url_"]').attr('for', 'wcap_audio_url_' + index);
+      $row.find('[data-field-index]').attr('data-field-index', index);
+      // A cloned row starts empty, so drop the leftover Clear button / CDN hint.
+      $row.find('.wcap-clear-button').remove();
+      $row.find('.wcap-service-indicator').remove();
+
+      if (name) {
+        $row.find('.wcap-audio-name').val(name);
+      }
+      if (url) {
+        $row.find('.wcap-audio-url').val(url).trigger('input');
+      }
+
+      $tbody.append($row);
+      return $row;
     },
 
     /**
