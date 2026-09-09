@@ -36,13 +36,21 @@ if ( ! class_exists( 'WCAP_Audio' ) ) {
 				return array();
 			}
 
+			// Per-track preview length lives under its own sub-key, written by Pro. Surface it
+			// here so the one reader both tiers share also carries duration, instead of Pro
+			// reading a key this list never populated (every track fell back to the global default).
+			$durations = isset( $wcap_audio['wcap_audio_durations'] ) && is_array( $wcap_audio['wcap_audio_durations'] )
+				? $wcap_audio['wcap_audio_durations']
+				: array();
+
 			$valid_audios = array();
 			foreach ( (array) $wcap_audio['wcap_audio_names'] as $key => $value ) {
 				if ( ! empty( $value ) && ! empty( $wcap_audio['wcap_audio_urls'][ $key ] ) ) {
 					$valid_audios[] = array(
-						'key'  => $key,
-						'name' => $value,
-						'url'  => $wcap_audio['wcap_audio_urls'][ $key ],
+						'key'      => $key,
+						'name'     => $value,
+						'url'      => $wcap_audio['wcap_audio_urls'][ $key ],
+						'duration' => isset( $durations[ $key ] ) ? (int) $durations[ $key ] : 0,
 					);
 				}
 			}
