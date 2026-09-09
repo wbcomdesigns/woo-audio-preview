@@ -535,7 +535,7 @@ class Wc_Audio_Preview_Admin {
 				</div>
 			</div>
 
-			<table class="wcap-audio-fields widefat">
+			<table class="wcap-audio-fields wcap-fixed-audio-fields widefat"><!-- wcap-fixed-audio-fields: JS anchor for fixed-mode (media/clear) handlers -->
 				<thead>
 					<tr>
 						<th class="wcap-col-name"><?php esc_html_e( 'Audio Name', 'woo-audio-preview' ); ?></th>
@@ -566,7 +566,7 @@ class Wc_Audio_Preview_Admin {
 									?>
 								" />
 							</td>
-							<td class="wcap-col-url" data-label="<?php esc_attr_e( 'Audio URL', 'woo-audio-preview' ); ?>">
+							<td class="wcap-col-url wcap-field-row" data-label="<?php esc_attr_e( 'Audio URL', 'woo-audio-preview' ); ?>"><!-- wcap-field-row: JS hook the admin script's closest() relies on -->
 								<div class="wcap-url-input-group">
 									<input type="url"
 										id="wcap_audio_url_<?php echo esc_attr( $i ); ?>"
@@ -668,6 +668,11 @@ class Wc_Audio_Preview_Admin {
 
 			$has_valid_audio   = false;
 			$validation_errors = array();
+			// Original submitted-row index of each kept row, in kept order. $processed_audio is
+			// compacted (empty/invalid rows dropped), so a consumer that reads per-row POST data
+			// keyed by position - Pro's durations - needs this map to avoid shifting values onto
+			// the wrong track.
+			$kept_indices = array();
 
 			if ( isset( $_POST['wcap_audio'] ) && is_array( $_POST['wcap_audio'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized individually below.
 				$wcap_audio_raw = wp_unslash( $_POST['wcap_audio'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -692,6 +697,7 @@ class Wc_Audio_Preview_Admin {
 							$processed_audio['wcap_audio_names'][]  = $audio_name;
 							$processed_audio['wcap_audio_urls'][]   = $audio_url;
 							$processed_audio['wcap_audio_source'][] = $validation['source'];
+							$kept_indices[]                         = $i;
 							$has_valid_audio                        = true;
 						} else {
 							// Surface the rejection instead of silently dropping the row.
@@ -731,9 +737,13 @@ class Wc_Audio_Preview_Admin {
 			 *
 			 * @since 1.5.3
 			 * @param int   $post_id         Product being saved.
-			 * @param array $processed_audio Names and URLs just stored.
+			 * @param array $processed_audio Names and URLs just stored (compacted).
+			 * @param array $kept_indices    Original submitted-row index of each kept row, in
+			 *                               kept order. Lets a consumer read its own per-row POST
+			 *                               values (e.g. durations) without shifting them when an
+			 *                               earlier row was empty or failed validation.
 			 */
-			do_action( 'wcap_metabox_save', $post_id, $processed_audio );
+			do_action( 'wcap_metabox_save', $post_id, $processed_audio, $kept_indices );
 
 			// Persist any rejection messages so they surface on the next admin load
 			// (wcap_display_admin_errors renders them on the product/settings screen).
