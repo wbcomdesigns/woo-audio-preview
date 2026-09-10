@@ -559,12 +559,8 @@ class Wc_Audio_Preview_Admin {
 									class="wcap-audio-name widefat"
 									name="wcap_audio[wcap_audio_names][]"
 									value="<?php echo esc_attr( $audio_name ); ?>"
-									placeholder="
-									<?php
-									/* translators: %d: Track number. */
-									echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'woo-audio-preview' ), $i + 1 ) );
-									?>
-								" />
+									<?php /* translators: %d: Track number. Placeholder must stay on one line - a leading newline makes the attribute invalid and the browser renders nothing. */ ?>
+									placeholder="<?php echo esc_attr( sprintf( __( 'e.g., Track %d Preview', 'woo-audio-preview' ), $i + 1 ) ); ?>" />
 							</td>
 							<td class="wcap-col-url wcap-field-row" data-label="<?php esc_attr_e( 'Audio URL', 'woo-audio-preview' ); ?>"><!-- wcap-field-row: JS hook the admin script's closest() relies on -->
 								<div class="wcap-url-input-group">
