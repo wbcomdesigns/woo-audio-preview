@@ -95,6 +95,15 @@
       $row.find('label[for^="wcap_audio_name_"]').attr('for', 'wcap_audio_name_' + index);
       $row.find('label[for^="wcap_audio_url_"]').attr('for', 'wcap_audio_url_' + index);
       $row.find('[data-field-index]').attr('data-field-index', index);
+      // The clone copies the last row's placeholder ("Track 4 Preview"), so every new
+      // row showed the same number. Re-derive it from the first row's (localized)
+      // placeholder, swapping the digit for this row's 1-based number.
+      var $name = $row.find('.wcap-audio-name');
+      var basePlaceholder = $rows.first().find('.wcap-audio-name').attr('placeholder');
+      if (basePlaceholder) {
+        // Trim: a leading newline would make the placeholder attribute invalid (blank).
+        $name.attr('placeholder', basePlaceholder.replace(/\d+/, index + 1).trim());
+      }
       // A cloned row starts empty, so drop the leftover Clear button / CDN hint.
       $row.find('.wcap-clear-button').remove();
       $row.find('.wcap-service-indicator').remove();
