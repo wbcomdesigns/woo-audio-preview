@@ -83,7 +83,11 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-wcap-audio.php';
  * A class definition has no side effects, so defining it here - during the plugin-include phase,
  * before any plugins_loaded hook fires - costs nothing and removes the ordering problem. The
  * core class also require_once's this file during its own boot, so this does not load it twice.
+ *
+ * The shared trait is required first because the public class (and, later, the admin class) uses
+ * it; it must exist before either class is defined.
  */
+require_once plugin_dir_path( __FILE__ ) . 'includes/trait-wc-audio-preview-shared.php';
 require_once plugin_dir_path( __FILE__ ) . 'public/class-wc-audio-preview-public.php';
 
 /**

@@ -26,6 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Wc_Audio_Preview_Public {
 
+	use Wc_Audio_Preview_Shared;
+
 	/**
 	 * The ID of this plugin.
 	 *
@@ -97,7 +99,7 @@ class Wc_Audio_Preview_Public {
 			return;
 		}
 
-		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public' );
+		$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-public', plugin_dir_path( __FILE__ ) );
 		if ( $css_file ) {
 			wp_enqueue_style(
 				$this->plugin_name,
@@ -121,7 +123,7 @@ class Wc_Audio_Preview_Public {
 		}
 
 		// Build the JS filename with intelligent fallback.
-		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public' );
+		$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-public', plugin_dir_path( __FILE__ ) );
 
 		if ( $js_file ) {
 			wp_enqueue_script(
@@ -458,13 +460,7 @@ class Wc_Audio_Preview_Public {
 	 * @return string|false File ID or false.
 	 */
 	private function extract_google_drive_id( $url ) {
-		$patterns = array(
-			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
-			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
-			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i',
-		);
-
-		foreach ( $patterns as $pattern ) {
+		foreach ( self::wcap_google_drive_id_patterns() as $pattern ) {
 			if ( preg_match( $pattern, $url, $matches ) ) {
 				return $matches[1];
 			}
@@ -496,13 +492,7 @@ class Wc_Audio_Preview_Public {
 		}
 
 		// Google Drive conversion (for non-iframe fallback).
-		$google_drive_patterns = array(
-			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
-			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
-			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i',
-		);
-
-		foreach ( $google_drive_patterns as $pattern ) {
+		foreach ( self::wcap_google_drive_id_patterns() as $pattern ) {
 			if ( preg_match( $pattern, $url, $matches ) ) {
 				$file_id = $matches[1];
 				// Try direct download URL (may not work for all files).
@@ -650,67 +640,6 @@ class Wc_Audio_Preview_Public {
 		return isset( $mime_types[ $extension ] ) ? $mime_types[ $extension ] : 'audio/mpeg';
 	}
 
-	/**
-	 * Get asset filename with intelligent fallback.
-	 *
-	 * @since    1.6.0
-	 * @param    string      $type      Asset type ('css' or 'js').
-	 * @param    string      $filename  Base filename without extension.
-	 * @param    string|null $base_path Directory to resolve against. Defaults to this file's dir;
-	 *                                  the Pro subclass passes its own so it finds its own assets.
-	 * @return   string|false           Full filename with path or false if not found.
-	 */
-	protected function get_asset_filename( $type, $filename, $base_path = null ) {
-		// Determine if we should use minified files.
-		$use_minified = ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
-
-		// Determine if RTL is needed (only for CSS).
-		$is_rtl = ( 'css' === $type ) ? is_rtl() : false;
-
-		// Resolve against the caller's directory when provided, else this file's own.
-		$dir = $base_path ? trailingslashit( $base_path ) : plugin_dir_path( __FILE__ );
-
-		// Build the base directory path.
-		$base_dir        = $dir . $type . '/';
-		$actual_type     = $type;
-		$actual_base_dir = $base_dir;
-
-		// Array of file variants to try in order of preference.
-		$variants = array();
-
-		if ( 'css' === $type ) {
-			if ( $is_rtl && $use_minified ) {
-				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified.
-				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified.
-			} elseif ( $is_rtl && ! $use_minified ) {
-				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified.
-			} elseif ( ! $is_rtl && $use_minified ) {
-				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified.
-				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified.
-			} else {
-				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified.
-			}
-		} elseif ( $use_minified ) {
-				$variants[] = $filename . '.min.js';           // 1st preference: minified.
-				$variants[] = $filename . '.js';               // 2nd preference: non-minified.
-		} else {
-			$variants[] = $filename . '.js';               // 1st preference: non-minified.
-		}
-
-		if ( 'css' === $type && $is_rtl ) {
-			$actual_type     = 'css-rtl';
-			$actual_base_dir = $dir . 'css-rtl/';
-		}
-
-		// Check each variant in order.
-		foreach ( $variants as $variant ) {
-			if ( file_exists( $actual_base_dir . $variant ) ) {
-				return $actual_type . '/' . $variant;
-			}
-		}
-
-		return false;
-	}
 }
 
 // Google Drive and SoundCloud styles are now in the main CSS file.
