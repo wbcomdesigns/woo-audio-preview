@@ -1,0 +1,7 @@
+{
+  "generated": "2026-09-12T05:59:05+00:00",
+  "suppressions": [
+    { "id": "hook-consumed-never-fired:wcap_settings_nav_groups", "reason": "Fired dynamically by the vendored settings shell as $prefix . '_settings_nav_groups' / '_settings_tab_content' (lib/wbcom-settings/class-wbcom-settings-page.php); lib/ is out of audit scope and the hook name is built at runtime, so the static scan cannot match the firer. The plugin's listener runs - the settings nav and tab bodies render.", "severity": "error" },
+    { "id": "hook-consumed-never-fired:wcap_settings_tab_content", "reason": "Fired dynamically by the vendored settings shell as $prefix . '_settings_nav_groups' / '_settings_tab_content' (lib/wbcom-settings/class-wbcom-settings-page.php); lib/ is out of audit scope and the hook name is built at runtime, so the static scan cannot match the firer. The plugin's listener runs - the settings nav and tab bodies render.", "severity": "error" }
+  ]
+}
