@@ -26,6 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Wc_Audio_Preview_Admin {
 
+	use Wc_Audio_Preview_Shared;
+
 	/**
 	 * The ID of this plugin.
 	 *
@@ -107,14 +109,7 @@ class Wc_Audio_Preview_Admin {
 		'cloudfront'   => array(
 			'/[a-zA-Z0-9]+\.cloudfront\.net\/.+\.(mp3|wav|ogg|m4a)/i',
 		),
-		'google_drive' => array(
-			// Standard sharing link pattern (with or without /view and query params).
-			'/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)(?:\/view)?(?:\?.*)?/i',
-			// Direct download pattern.
-			'/drive\.google\.com\/uc\?(?:.*&)?id=([a-zA-Z0-9-_]+)(?:&.*)?/i',
-			// Open link pattern.
-			'/drive\.google\.com\/open\?id=([a-zA-Z0-9-_]+)/i',
-		),
+		// 'google_drive' is added in the constructor from the shared pattern set.
 		'dropbox'      => array(
 			'/dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i',
 			'/dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i',
@@ -132,6 +127,9 @@ class Wc_Audio_Preview_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
+
+		// Google Drive patterns come from the shared helper so the regex set is authored once.
+		$this->cdn_patterns['google_drive'] = self::wcap_google_drive_id_patterns();
 	}
 
 	/**
@@ -155,7 +153,7 @@ class Wc_Audio_Preview_Admin {
 		$screen = get_current_screen();
 		if ( ( $screen->id === 'product' && ( $screen->action === 'add' || $screen->action === '' ) ) || ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'woo-audio-preview-settings' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-			$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-admin' );
+			$css_file = $this->get_asset_filename( 'css', 'wc-audio-preview-admin', plugin_dir_path( __FILE__ ) );
 			if ( $css_file ) {
 				wp_enqueue_style(
 					$this->plugin_name,
@@ -164,9 +162,6 @@ class Wc_Audio_Preview_Admin {
 					$this->version,
 					'all'
 				);
-
-				// Add enhanced styles for better UI.
-				wp_add_inline_style( $this->plugin_name, $this->get_enhanced_styles() );
 			}
 		}
 	}
@@ -195,7 +190,7 @@ class Wc_Audio_Preview_Admin {
 
 			// Enqueue media uploader.
 			wp_enqueue_media();
-			$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-admin' );
+			$js_file = $this->get_asset_filename( 'js', 'wc-audio-preview-admin', plugin_dir_path( __FILE__ ) );
 			if ( $js_file ) {
 				wp_enqueue_script(
 					$this->plugin_name,
@@ -213,7 +208,6 @@ class Wc_Audio_Preview_Admin {
 						'ajax_url'           => admin_url( 'admin-ajax.php' ),
 						'nonce'              => wp_create_nonce( 'ajax-nonce' ),
 						'allowedExtensions'  => apply_filters( 'wcap_allowed_audio_extensions', $this->allowed_file_types ),
-						'cdn_patterns'       => $this->get_cdn_patterns_for_js(),
 						'error_messages'     => array(
 							'invalid_file_type' => __( 'Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services.', 'woo-audio-preview' ),
 							'file_required'     => __( 'Please select a file or enter a file URL.', 'woo-audio-preview' ),
@@ -227,17 +221,6 @@ class Wc_Audio_Preview_Admin {
 				);
 			}
 		}
-	}
-
-	/**
-	 * Get CDN patterns formatted for JavaScript
-	 *
-	 * @since    1.5.0
-	 * @return   array    Patterns for JS.
-	 */
-	private function get_cdn_patterns_for_js() {
-		// Return empty array since we're using hardcoded patterns in JS.
-		return array();
 	}
 
 	/**
@@ -869,26 +852,6 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Display admin notice.
-	 *
-	 * @since    1.5.0
-	 * @param    string $message Message to display.
-	 * @param    string $type    Notice type.
-	 */
-	private function add_admin_notice( $message, $type = 'error' ) {
-		add_action(
-			'admin_notices',
-			function () use ( $message, $type ) {
-				printf(
-					'<div class="notice notice-%s wcap-admin-notice is-dismissible"><p>%s</p></div>',
-					esc_attr( $type ),
-					esc_html( $message )
-				);
-			}
-		);
-	}
-
-	/**
 	 * Function contains the audio delete functionality.
 	 *
 	 * @return void
@@ -935,23 +898,6 @@ class Wc_Audio_Preview_Admin {
 	}
 
 	/**
-	 * Set Upload Directory.
-	 *
-	 * Sets the upload dir to edd. This function is called from
-	 * wcap_change_audio_upload_dir().
-	 *
-	 * @since 1.0
-	 * @param array $upload Upload directory information.
-	 * @return array Upload directory information.
-	 */
-	public function wcap_set_upload_dir( $upload ) {
-		$upload['subdir'] = '/wcap_files';
-		$upload['path']   = $upload['basedir'] . $upload['subdir'];
-		$upload['url']    = $upload['baseurl'] . $upload['subdir'];
-		return $upload;
-	}
-
-	/**
 	 * Display admin errors.
 	 */
 	public function wcap_display_admin_errors() {
@@ -993,154 +939,4 @@ class Wc_Audio_Preview_Admin {
 		}
 	}
 
-	/**
-	 * Get enhanced styles for the admin area
-	 *
-	 * @since    1.5.0
-	 * @return   string    CSS styles.
-	 */
-	private function get_enhanced_styles() {
-		return '
-			.wcap-help-section {
-				margin-bottom: 20px;
-				padding: 15px;
-				background: #f0f8ff;
-				border-left: 4px solid #0073aa;
-				border-radius: 4px;
-			}
-			
-			.wcap-help-section h4 {
-				margin: 0 0 10px 0;
-				color: #0073aa;
-			}
-			
-			.wcap-supported-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-				gap: 15px;
-				font-size: 13px;
-			}
-			
-			.wcap-help-tip {
-				margin: 10px 0 0 0;
-				font-style: italic;
-				color: #666;
-			}
-			
-			.wcap-cdn-row {
-				background-color: #f0f8ff;
-			}
-			
-			.wcap-service-indicator {
-				font-size: 11px;
-				color: #0073aa;
-				margin-top: 3px;
-				font-style: italic;
-			}
-			
-			.wcap-usage-examples {
-				margin-top: 15px;
-				padding: 12px;
-				background: #f9f9f9;
-				border-radius: 4px;
-				font-size: 13px;
-			}
-			
-			.wcap-usage-examples h4 {
-				margin: 0 0 8px 0;
-				color: #333;
-			}
-			
-			.wcap-usage-examples ul {
-				margin: 0;
-				padding-left: 20px;
-				color: #666;
-			}
-			
-			.woo-audio-preview-table .wcap-media-button {
-				white-space: nowrap;
-				min-width: 100px;
-			}
-			
-			.woo-audio-preview-table .sort {
-				cursor: move;
-				width: 20px;
-				text-align: center;
-				background: url("data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'><path d=\'M9 3h6v2H9zm0 4h6v2H9zm0 4h6v2H9zm0 4h6v2H9z\' fill=\'%23666\'/></svg>") no-repeat center;
-				background-size: 16px;
-				opacity: 0.6;
-				transition: opacity 0.3s ease;
-			}
-			
-			.woo-audio-preview-table .sort:hover {
-				opacity: 1;
-			}
-			
-			/* Google Drive specific styling */
-			.wcap-service-google_drive {
-				background: #e8f5e9;
-				border-color: #4caf50;
-			}
-			
-			.wcap-service-google_drive .service-icon {
-				color: #4caf50;
-			}
-		';
-	}
-
-	/**
-	 * Get asset filename with intelligent fallback.
-	 *
-	 * @since    1.6.0
-	 * @param    string $type     Asset type ('css' or 'js').
-	 * @param    string $filename Base filename without extension.
-	 * @return   string|false     Full filename with path or false if not found.
-	 */
-	private function get_asset_filename( $type, $filename ) {
-		// Determine if we should use minified files.
-		$use_minified = ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
-
-		// Determine if RTL is needed (only for CSS).
-		$is_rtl = ( 'css' === $type ) ? is_rtl() : false;
-
-		// Build the base directory path.
-		$base_dir        = plugin_dir_path( __FILE__ ) . $type . '/';
-		$actual_type     = $type;
-		$actual_base_dir = $base_dir;
-
-		// Array of file variants to try in order of preference.
-		$variants = array();
-
-		if ( 'css' === $type ) {
-			if ( $is_rtl && $use_minified ) {
-				$variants[] = $filename . '.min.css';      // 1st preference: RTL minified.
-				$variants[] = $filename . '.css';          // 2nd preference: RTL non-minified.
-			} elseif ( $is_rtl && ! $use_minified ) {
-				$variants[] = $filename . '.css';          // 1st preference: RTL non-minified.
-			} elseif ( ! $is_rtl && $use_minified ) {
-				$variants[] = $filename . '.min.css';          // 1st preference: LTR minified.
-				$variants[] = $filename . '.css';              // 2nd preference: LTR non-minified.
-			} else {
-				$variants[] = $filename . '.css';              // 1st preference: LTR non-minified.
-			}
-		} elseif ( $use_minified ) {
-				$variants[] = $filename . '.min.js';           // 1st preference: minified.
-				$variants[] = $filename . '.js';               // 2nd preference: non-minified.
-		} else {
-			$variants[] = $filename . '.js';               // 1st preference: non-minified.
-		}
-		if ( 'css' === $type && $is_rtl ) {
-			$actual_type     = 'css-rtl';
-			$actual_base_dir = plugin_dir_path( __FILE__ ) . 'css-rtl/';
-		}
-
-		// Check each variant in order.
-		foreach ( $variants as $variant ) {
-			if ( file_exists( $actual_base_dir . $variant ) ) {
-				return $actual_type . '/' . $variant;
-			}
-		}
-
-		return false;
-	}
 }

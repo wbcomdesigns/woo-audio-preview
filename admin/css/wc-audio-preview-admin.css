@@ -646,3 +646,35 @@
     display: block;
     margin-top: 3px;
 }
+
+/*--------------------------------------------------------------
+# Media button, drag handle and Google Drive indicator
+# (moved here from the former get_enhanced_styles() inline block)
+--------------------------------------------------------------*/
+.woo-audio-preview-table .wcap-media-button {
+    white-space: nowrap;
+    min-width: 100px;
+}
+
+.woo-audio-preview-table .sort {
+    cursor: move;
+    width: 20px;
+    text-align: center;
+    background: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 3h6v2H9zm0 4h6v2H9zm0 4h6v2H9zm0 4h6v2H9z' fill='%23666'/></svg>") no-repeat center;
+    background-size: 16px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.woo-audio-preview-table .sort:hover {
+    opacity: 1;
+}
+
+.wcap-service-google_drive {
+    background: #e8f5e9;
+    border-color: #4caf50;
+}
+
+.wcap-service-google_drive .service-icon {
+    color: #4caf50;
+}

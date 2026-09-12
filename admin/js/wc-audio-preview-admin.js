@@ -14,9 +14,6 @@
       isFixedMode: true // Set to true for free version with 3 fixed fields
     },
 
-    // CDN patterns from PHP
-    cdnPatterns: wcap_ajax_object.cdn_patterns || {},
-
     // Store media uploader instances
     mediaUploaders: new Map(),
 
