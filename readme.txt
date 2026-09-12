@@ -4,7 +4,7 @@ Tags: audio, woocommerce, preview, music, audio player
 Requires at least: 5.0
 Tested up to: 6.9.1
 Requires PHP: 7.4
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -176,6 +176,11 @@ Yes. The plugin exposes 14 filters and actions for developers and for the Pro ad
 6. **Mobile view of the audio player**: The player displayed on a mobile device, showing the responsive layout with touch-friendly controls that adapt to smaller screen sizes.
 
 == Changelog ==
+
+= 1.5.3 - September 2026 =
+
+* Improve  - Admin settings radio options no longer wrap mid-label and stack cleanly on phones.
+* Dev      - Added a developer hooks reference, refreshed the translation template, and removed duplicated internal code.
 
 = 1.5.2 - September 2026 =
 
