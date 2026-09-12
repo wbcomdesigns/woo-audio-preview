@@ -1,0 +1,914 @@
+# Copyright (C) 2026 Wbcom Designs <admin@wbcomdesigns.com>
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Audio Preview for WooCommerce 1.5.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woo-audio-preview\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-12T05:35:50+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: woo-audio-preview\n"
+
+#. Plugin Name of the plugin
+#: woo-product-audio-preview.php
+#: admin/class-admin-review.php:276
+#: admin/class-admin-review.php:319
+#: woo-product-audio-preview.php:130
+msgid "Audio Preview for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: woo-product-audio-preview.php
+msgid "https://wbcomdesigns.com"
+msgstr ""
+
+#. Description of the plugin
+#: woo-product-audio-preview.php
+msgid "Add audio previews to WooCommerce products. Let customers listen before they buy with major audio formats and CDN support."
+msgstr ""
+
+#. Author of the plugin
+#: woo-product-audio-preview.php
+msgid "Wbcom Designs <admin@wbcomdesigns.com>"
+msgstr ""
+
+#. Author URI of the plugin
+#: woo-product-audio-preview.php
+msgid "http://wbcomdesigns.com"
+msgstr ""
+
+#. translators: Number of years
+#: admin/class-admin-review.php:93
+#, php-format
+msgid "%s years"
+msgstr ""
+
+#: admin/class-admin-review.php:95
+msgid "a year"
+msgstr ""
+
+#. translators: Number of weeks
+#: admin/class-admin-review.php:102
+#, php-format
+msgid "%s weeks"
+msgstr ""
+
+#: admin/class-admin-review.php:104
+msgid "a week"
+msgstr ""
+
+#. translators: Number of days
+#: admin/class-admin-review.php:111
+#, php-format
+msgid "%s days"
+msgstr ""
+
+#: admin/class-admin-review.php:113
+msgid "a day"
+msgstr ""
+
+#. translators: Number of hours
+#: admin/class-admin-review.php:120
+#, php-format
+msgid "%s hours"
+msgstr ""
+
+#: admin/class-admin-review.php:122
+msgid "an hour"
+msgstr ""
+
+#. translators: Number of minutes
+#: admin/class-admin-review.php:129
+#, php-format
+msgid "%s minutes"
+msgstr ""
+
+#: admin/class-admin-review.php:131
+msgid "a minute"
+msgstr ""
+
+#. translators: Number of seconds
+#: admin/class-admin-review.php:138
+#, php-format
+msgid "%s seconds"
+msgstr ""
+
+#: admin/class-admin-review.php:140
+msgid "a second"
+msgstr ""
+
+#: admin/class-admin-review.php:279
+msgid "Are you enjoying Audio Preview for WooCommerce?"
+msgstr ""
+
+#. translators: %1$s: BuddyPress Ads ;  %2$s: BuddyPress
+#: admin/class-admin-review.php:282
+#, php-format
+msgid "We hope you're enjoying %1$s! Would you kindly give it a 5-star rating on WordPress? Your feedback helps us improve and reach more users."
+msgstr ""
+
+#: admin/class-admin-review.php:286
+msgid "Leave a Review"
+msgstr ""
+
+#: admin/class-admin-review.php:287
+msgid "No thanks / I already have"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:218
+msgid "Invalid audio file type. Supported formats: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM, or direct links from supported services."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:219
+msgid "Please select a file or enter a file URL."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:220
+msgid "Audio name is required."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:221
+#: admin/class-wc-audio-preview-admin.php:827
+msgid "Please enter a valid URL."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:222
+msgid "File size is too large. Maximum allowed size is 50MB."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:223
+msgid "CDN/streaming service link detected! This will work great for preview."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:309
+#: admin/class-wc-audio-preview-admin.php:310
+#: admin/class-wc-audio-preview-admin.php:350
+msgid "Audio Preview"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:311
+msgid "Audio previews for WooCommerce"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:312
+msgid "Audio Preview settings sections"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:313
+#: admin/partials/woo-audio-preview-general-pro.php:35
+msgid "Pro"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:382
+msgid "Welcome"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:392
+msgid "General (PRO)"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:395
+msgid "FAQ"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:420
+#: admin/class-wc-audio-preview-admin.php:421
+msgid "WB Plugins"
+msgstr ""
+
+#. translators: %s: Supported audio format information.
+#: admin/class-wc-audio-preview-admin.php:479
+#, php-format
+msgid "Audio Preview Items %s"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:480
+msgid "(Supports: MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files. CDN and streaming service URLs supported.)"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:530
+#: public/class-wc-audio-preview-public.php:208
+msgid "Audio Previews"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:531
+msgid "Add audio preview files for this product. Leave a row empty to skip it."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:533
+msgid "Supported:"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:534
+msgid "MP3, WAV, OGG, M4A, AAC, FLAC, WMA, WEBM files • Direct URLs • CDN links (Google Drive, Dropbox, SoundCloud, etc.)"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:541
+#: admin/class-wc-audio-preview-admin.php:556
+msgid "Audio Name"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:542
+#: admin/class-wc-audio-preview-admin.php:565
+msgid "Audio URL"
+msgstr ""
+
+#. translators: %d: Track number. Placeholder must stay on one line - a leading newline makes the attribute invalid and the browser renders nothing.
+#: admin/class-wc-audio-preview-admin.php:563
+#, php-format
+msgid "e.g., Track %d Preview"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:572
+msgid "https://example.com/audio.mp3 or CDN link"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:574
+msgid "Media Library"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:578
+msgid "Clear"
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:613
+msgid "Need more than 3 audio previews?"
+msgstr ""
+
+#. translators: %s: Pro version link.
+#: admin/class-wc-audio-preview-admin.php:617
+#, php-format
+msgid "Upgrade to %s for unlimited audio previews and dynamic add/remove functionality."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:618
+msgid "Pro Version"
+msgstr ""
+
+#. translators: 1: row number, 2: audio track name, 3: reason the URL was rejected.
+#: admin/class-wc-audio-preview-admin.php:702
+#, php-format
+msgid "Audio row %1$d (\"%2$s\") was not saved: %3$s"
+msgstr ""
+
+#. translators: %d: row number.
+#: admin/class-wc-audio-preview-admin.php:712
+#, php-format
+msgid "Audio row %d was not saved: please add a name for the track."
+msgstr ""
+
+#: admin/class-wc-audio-preview-admin.php:822
+msgid "Audio URL cannot be empty."
+msgstr ""
+
+#. translators: %s: CDN service name.
+#: admin/class-wc-audio-preview-admin.php:839
+#, php-format
+msgid "CDN %s link detected and validated."
+msgstr ""
+
+#. translators: %s: Comma-separated list of supported audio formats.
+#: admin/class-wc-audio-preview-admin.php:860
+#, php-format
+msgid "Invalid audio file type. Supported formats: %s, or direct links from CDN/streaming services."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:17
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:18
+msgid "Answers to the most common questions about Audio Preview for WooCommerce."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:22
+msgid "What is the difference between Free and Pro versions?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:23
+#: admin/partials/woo-audio-preview-faq.php:149
+msgid "Free Version:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:25
+msgid "Up to 3 audio previews per product (fixed fields)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:26
+msgid "Support for all major audio formats"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:27
+msgid "CDN and streaming service support"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:28
+msgid "Basic audio player"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:30
+msgid "Pro Version:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:32
+msgid "Unlimited audio previews per product"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:33
+msgid "Dynamic add/remove audio files"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:34
+msgid "Multi-vendor marketplace support (Dokan, WCFM, WC Vendors)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:35
+msgid "Custom player themes and colors"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:36
+#: admin/partials/woo-audio-preview-general-pro.php:21
+msgid "Preview duration control"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:37
+#: admin/partials/woo-audio-preview-faq.php:128
+msgid "Audio watermarking"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:38
+msgid "Bulk import features"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:39
+#: admin/partials/woo-audio-preview-general-pro.php:24
+msgid "Priority support"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:44
+msgid "How do I add audio previews to my products?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:45
+msgid "Adding audio previews is simple:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:47
+msgid "Edit your WooCommerce product"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:48
+msgid "Scroll to the \"Audio Preview Items\" section"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:49
+msgid "Add up to 3 audio files:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:51
+msgid "Enter a name for each audio preview"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:52
+msgid "Either upload from Media Library or paste a URL"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:53
+msgid "You can use CDN links (Google Drive, Dropbox, etc.)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:56
+msgid "Save your product"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:58
+msgid "Pro tip: Leave fields empty if you need fewer than 3 previews."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:62
+msgid "What audio formats are supported?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:63
+msgid "The plugin supports all major audio formats:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:65
+msgid "Universal compatibility (recommended)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:66
+msgid "High quality, larger files"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:67
+msgid "Open format, good compression (not supported on iOS)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:68
+msgid "Apple's format, good quality"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:69
+msgid "Advanced audio coding"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:70
+msgid "Lossless compression"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:71
+msgid "Windows Media Audio"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:72
+msgid "Web-optimized format"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:74
+msgid "CDN & Streaming Services:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:76
+msgid "Google Drive"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:77
+msgid "Dropbox"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:78
+msgid "SoundCloud"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:79
+msgid "Amazon S3"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:80
+msgid "CloudFront"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:85
+msgid "Does this work with multi-vendor marketplaces?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:86
+msgid "The Pro version includes full multi-vendor support for:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:88
+msgid "Dokan Multivendor Marketplace"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:89
+msgid "WCFM Marketplace"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:90
+msgid "WC Vendors"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:91
+msgid "WC Marketplace"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:93
+msgid "Vendors can manage their own audio previews from their dashboard, making it perfect for music marketplaces, audiobook stores, and digital audio platforms."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:96
+msgid "Get Multi-vendor Support"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:102
+msgid "Why can I only add 3 audio previews?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:103
+msgid "The free version is limited to 3 audio previews per product to cover most common use cases:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:105
+msgid "Main track preview"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:106
+msgid "Intro/verse preview"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:107
+msgid "Chorus/highlight preview"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:109
+msgid "If you need more previews (for albums, audiobooks, or sound packs), the Pro version offers:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:111
+msgid "Unlimited audio previews"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:112
+msgid "Dynamic add/remove buttons"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:113
+msgid "Bulk import options"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:114
+msgid "Organized playlist display"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:119
+msgid "How can I protect my audio files from downloading?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:120
+msgid "Free Version Protection:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:122
+msgid "Use short preview clips (30-60 seconds)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:123
+msgid "Upload lower quality versions for preview"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:124
+msgid "Use streaming services like SoundCloud"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:126
+msgid "Pro Version Advanced Protection:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:129
+msgid "Voice-over protection"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:130
+msgid "Time-limited previews"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:131
+msgid "Secure streaming options"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:132
+msgid "Right-click protection"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:137
+msgid "Is the audio player mobile-friendly?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:138
+msgid "Yes! The audio player is fully responsive and works great on:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:140
+msgid "iOS devices (iPhone, iPad)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:141
+msgid "Android phones and tablets"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:142
+msgid "All modern browsers"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:144
+msgid "Note:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:144
+msgid "OGG format is not supported on iOS devices. We recommend using MP3 for maximum compatibility."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:148
+msgid "Can I customize the player appearance?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:150
+msgid "The player uses a neutral design that adapts to your theme colors automatically."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:151
+msgid "Pro Version Customization:"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:153
+msgid "Multiple player themes"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:154
+msgid "Custom color schemes"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:155
+msgid "Button style options"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:156
+msgid "Progress bar styles"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-faq.php:157
+msgid "Custom CSS support"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:16
+msgid "Number of audio previews per product"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:16
+msgid "3 (fixed)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:16
+msgid "Unlimited"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:17
+msgid "Add / remove audio files dynamically"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:17
+#: admin/partials/woo-audio-preview-general-pro.php:19
+#: admin/partials/woo-audio-preview-general-pro.php:20
+#: admin/partials/woo-audio-preview-general-pro.php:21
+#: admin/partials/woo-audio-preview-general-pro.php:22
+#: admin/partials/woo-audio-preview-general-pro.php:23
+msgid "No"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:17
+#: admin/partials/woo-audio-preview-general-pro.php:18
+#: admin/partials/woo-audio-preview-general-pro.php:19
+#: admin/partials/woo-audio-preview-general-pro.php:20
+#: admin/partials/woo-audio-preview-general-pro.php:21
+#: admin/partials/woo-audio-preview-general-pro.php:22
+#: admin/partials/woo-audio-preview-general-pro.php:23
+msgid "Yes"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:18
+msgid "Support for external URLs & CDNs"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:19
+msgid "Multi-vendor support (Dokan, WCFM, etc.)"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:20
+msgid "Custom audio player themes"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:22
+msgid "Watermark / voice-over protection"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:23
+msgid "Bulk import audio files"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:24
+msgid "Community"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:24
+msgid "Priority email"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:29
+msgid "Free vs Pro"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:29
+msgid "Everything the free plugin does, plus what Pro adds on top."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:33
+msgid "Feature"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:34
+msgid "Free"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:50
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:53
+msgid "Perfect for music stores with large catalogs"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:54
+msgid "Essential for multi-vendor marketplaces"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:55
+msgid "Advanced protection for your audio content"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:56
+msgid "Save time with bulk operations"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:59
+msgid "Starting at"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:61
+msgid "Upgrade to Pro Now"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-general-pro.php:63
+msgid "30-day money-back guarantee"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:18
+msgid "Welcome to Audio Preview for WooCommerce"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:18
+msgid "Thank you for installing Audio Preview! Follow these simple steps to start adding audio previews to your products."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:23
+msgid "Edit a Product"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:24
+msgid "Go to WooCommerce -> Products and edit any product where you want to add audio previews."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:30
+msgid "Find Audio Preview Section"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:31
+msgid "Scroll down to find the \"Audio Preview Items\" meta box below the product description."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:37
+msgid "Add Your Audio Files"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:38
+msgid "Add up to 3 audio previews by entering a name and URL, or uploading from Media Library."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:44
+msgid "Save & Preview"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:45
+msgid "Save your product and view it on the frontend. Your audio previews will appear before the Add to Cart button!"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:51
+msgid "Key Features"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:54
+msgid "Multiple Formats"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:55
+msgid "Supports MP3, WAV, OGG, M4A, AAC, FLAC, WMA, and WEBM audio formats."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:58
+msgid "CDN Support"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:59
+msgid "Use audio files from Google Drive, Dropbox, SoundCloud, Amazon S3, and more."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:62
+msgid "Mobile Friendly"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:63
+msgid "Responsive audio player works perfectly on all devices and screen sizes."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:66
+msgid "Theme Compatible"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:67
+msgid "Neutral design automatically adapts to your theme colors and style."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:72
+msgid "Tips & Best Practices"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:75
+msgid "Optimal Preview Length"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:76
+msgid "Keep previews between 30-60 seconds. Long enough to showcase quality, short enough to encourage purchase."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:79
+msgid "Protect Your Content"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:80
+msgid "Use lower quality versions (128kbps) for previews and save high quality files for customers only."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:83
+msgid "Descriptive Names"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:84
+msgid "Use clear names like \"Intro Preview\", \"Chorus Sample\", or \"Chapter 1 Excerpt\" to guide customers."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:87
+msgid "CDN Benefits"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:88
+msgid "Host large audio files on CDN services to improve page load times and reduce server bandwidth."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:93
+msgid "Need help?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:93
+msgid "Support for Audio Preview."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:97
+msgid "Read the FAQ"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:101
+msgid "Community forum"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:105
+msgid "Premium support"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:110
+msgid "Need more features?"
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:113
+msgid "Upgrade to Pro for unlimited audio previews, multi-vendor support, advanced protection, and more."
+msgstr ""
+
+#: admin/partials/woo-audio-preview-welcome-page.php:117
+msgid "View Pro Features"
+msgstr ""
+
+#: public/class-wc-audio-preview-public.php:149
+msgid "Loading..."
+msgstr ""
+
+#: public/class-wc-audio-preview-public.php:150
+msgid "Error loading audio"
+msgstr ""
+
+#: public/class-wc-audio-preview-public.php:151
+msgid "Play"
+msgstr ""
+
+#: public/class-wc-audio-preview-public.php:152
+msgid "Pause"
+msgstr ""
+
+#. translators: %s: Audio track name.
+#: public/class-wc-audio-preview-public.php:272
+#: public/class-wc-audio-preview-public.php:351
+#: public/class-wc-audio-preview-public.php:417
+#, php-format
+msgid "Play %s"
+msgstr ""
+
+#: public/class-wc-audio-preview-public.php:315
+msgid "Your browser does not support the audio element."
+msgstr ""
+
+#: woo-product-audio-preview.php:131
+msgid "WooCommerce"
+msgstr ""
