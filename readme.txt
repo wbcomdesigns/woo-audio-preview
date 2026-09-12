@@ -2,7 +2,7 @@
 Contributors: wbcomdesigns, vapvarun
 Tags: audio, woocommerce, preview, music, audio player
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 6.9.1
 Requires PHP: 7.4
 Stable tag: 1.5.2
 License: GPLv2 or later
@@ -160,7 +160,11 @@ In the free version the player uses a neutral style that adapts to your theme au
 
 = Where can I get support? =
 
-Free support is available through the WordPress.org support forum at wordpress.org/support/plugin/woo-audio-preview/. Documentation is available at docs.wbcomdesigns.com. Pro users receive priority email support with faster response times.
+Free support is available through the WordPress.org support forum at wordpress.org/support/plugin/woo-audio-preview/. Pro users receive priority email support with faster response times.
+
+= Are there developer hooks I can use? =
+
+Yes. The plugin exposes 14 filters and actions for developers and for the Pro add-on, including the Free-to-Pro seam filters (`wcap_public_instance`, `wcap_preview_hook`, `wcap_should_load_assets`, `wcap_soundcloud_embed_url`), the product meta box hooks, and the front-end render hooks. Each one is documented with its arguments and purpose in `docs/HOOKS.md` in the GitHub repository at github.com/wbcomdesigns/woo-audio-preview.
 
 == Screenshots ==
 
