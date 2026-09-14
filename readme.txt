@@ -207,55 +207,70 @@ Restores the free/Pro seams the Pro add-on depends on, so Pro settings take effe
 * Tested: Confirmed compatibility with WordPress 6.9.1 and popular themes (Storefront, Astra, OceanWP, Kadence, GeneratePress)
 
 = 1.5.0 =
-* New: Google Drive integration with iframe-based audio player
-* New: SoundCloud native embed using the SoundCloud Widget API
-* New: Enhanced Dropbox integration with automatic URL conversion to direct download links
-* New: Amazon S3 and CloudFront direct URL support
-* New: Automatic CDN service detection with visual confirmation in admin
-* New: Support for FLAC, WMA, and WEBM audio formats
-* New: OneDrive and Box.com URL detection and conversion
-* Improved: Modern, responsive audio player design with play/pause and progress bar
-* Improved: Fixed 3-field layout for streamlined product-level management
-* Improved: Real-time URL validation with clear error messages in admin
-* Improved: Mobile optimisation with touch-friendly player controls
-* Fixed: Audio player conflicts when multiple products appear on the same page
-* Fixed: Progress bar accuracy across different screen sizes and resolutions
-* Fixed: Accessibility issues with screen readers and keyboard navigation
+* Added: Support for multiple audio formats, including external URLs.
+* Improved: Frontend audio player and admin labels for better format handling.
+* Added: Secure file upload validation and enhanced input sanitization.
+* Fixed: AJAX security vulnerabilities and error handling during file uploads.
+* Fixed: Debug log issues and PHP warnings on plugin activation.
+* Updated: JavaScript validation logic to support various file types.
+* Improved: FAQ section with clearer file format details.
+* Optimized: Table layout responsiveness and overall performance.
+* Cleaned: Removed unused code and resolved PHPCS issues.
+* Improved: Language strings and code structure for better maintainability.
+* Added: Minified CSS/JS and RTL compatibility for improved loading and accessibility.
+
+= 1.4.5 =
+* Fix: (#26) Compatibility check with PHP 8.0
+* Fix: (#27) Fixed check for dependency plugin 
+* Fix: (#28) Update Faq
+* Fix: (#29) Fixed added tooltip for meta boxes  
+* Fix: Compatibility check with WordPress 6.5.0  
+
+= 1.4.4 =
+* Managed: (#24)  Frontend audio player UI
+* Managed: (#24) Preview item button UI
+* Fix: Plugin redirect issue when multiple plugins activate at the same time
+
+= 1.4.3 =
+* Fix - (#22)Fixed audio listing with Audio Preview for WooCommerce Pro plugins
+* Fix - Update compatibility with WooCommerce latest version
 
 = 1.4.2 =
-* Fixed: Compatibility issue with WooCommerce 8.0+ hooks
-* Improved: Audio file loading performance
-* Fixed: CSS conflicts with certain third-party themes
+* Fix - updated admin ui
 
 = 1.4.1 =
-* Fixed: Audio preview not displaying on some themes due to hook priority
-* Improved: Mobile responsiveness for the player container
-* Tested: WordPress 6.4 compatibility confirmed
+* Fix - phpcs fixes
+* Fix - Updated name
 
 = 1.4.0 =
-* Added: Drag and drop file upload support in the meta box
-* Improved: Admin interface with improved UX and field layout
-* Added: Audio format validation with user-facing error messages
-* Fixed: Multiple audio players on the same page interfering with each other
+* Fix - phpcs fixes
+* Fix - Removed install plugin button from wrapper
 
 = 1.3.0 =
-* Added: Support for external audio URLs in addition to Media Library uploads
-* Improved: Audio player controls design
-* Added: Progress bar with elapsed time display
-* Improved: Mobile device compatibility
+* Fix - Update frontend UI without playlist
+* Fix - #Fix audio player clickable issue
 
 = 1.2.0 =
-* Added: Support for multiple audio previews per product
-* Improved: Admin interface design and usability
-* Fixed: Audio loading failures on certain server configurations
-* Improved: Error handling for unsupported formats
+* Fix - Fixed #12 - Add link is not clickable
+* Fix - Fixed #14 - Notices and warnings
 
 = 1.1.0 =
-* Added: Core audio preview functionality
-* Improved: Initial user interface
+* Fix - WooCommerce v4.0.0 Compatible.
+
+= 1.0.4 =
+* Fix - WooCommerce v3.6.2 Compatible.
+
+= 1.0.3 =
+* Fix - WooCommerce v3.5.2 Compatible.
+
+= 1.0.2 =
+* Fix - Compatible with latest WordPress.
+
+= 1.0.1 =
+* Plugin Testing with current version of the WordPress and WooCommerce.
 
 = 1.0.0 =
-* Initial release
+* first version.
 
 == Upgrade Notice ==
 
