@@ -60,7 +60,7 @@ these before adding a hook, service or helper; reuse what exists.
 
 ## Branching
 
-One development branch named for the next version (Free `1.5.4`, Pro `2.2.3`).
+One development branch named for the next version (Free `1.5.5`, Pro `2.2.4`).
 Commit fixes straight to it; PR to the default branch only at release, tag
 `vX.Y.Z`, then delete the development branch. Free and Pro release independently.
 
