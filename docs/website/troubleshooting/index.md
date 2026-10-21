@@ -15,15 +15,16 @@ The editor shows a notice explaining why:
   supported extension (mp3, wav, ogg, m4a, aac, flac, wma, webm) and was not
   recognised as a supported service. Upload the file to the Media Library, or
   use a direct file URL, or a supported service (Google Drive, SoundCloud,
-  Dropbox, Amazon S3, CloudFront).
+  Spotify, Dropbox, Amazon S3, CloudFront, OneDrive, Box.com).
 
-## A OneDrive, Box.com, MediaFire, or Spotify link will not save or will not play
+## A cloud or streaming link will not play
 
-These services are not reliably supported. OneDrive, Box.com, and MediaFire
-sharing links usually fail validation on save because they carry no audio file
-extension. Spotify links may save but will not play, because there is no
-Spotify playback path. Use one of the fully supported services, upload the file
-to the Media Library, or host it somewhere that returns a direct audio file URL.
+Confirm the link is from a supported service - Google Drive, SoundCloud,
+Spotify, Dropbox, Amazon S3, CloudFront, OneDrive, or Box.com - and that the
+file or track is publicly accessible. Spotify links render Spotify's own
+embedded player (a 30-second preview for logged-out visitors). For any other
+host, use a direct audio file URL, upload the file to the Media Library, or
+switch to one of the supported services. MediaFire is not supported.
 
 ## The player does not appear on the product page
 

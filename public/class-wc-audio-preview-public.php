@@ -230,6 +230,9 @@ class Wc_Audio_Preview_Public {
 						} elseif ( $needs_iframe && $is_cdn && 'soundcloud' === $is_cdn['service'] ) {
 							// Use iframe for Sound Cloud.
 								$this->render_sound_cloud_player( $key, $value, $audio_url );
+						} elseif ( $needs_iframe && $is_cdn && 'spotify' === $is_cdn['service'] ) {
+							// Use Spotify's own embed player.
+							$this->render_spotify_player( $key, $value, $audio_url );
 						} else {
 							// Use regular audio player.
 							$this->render_audio_player( $key, $value, $audio_url, $is_cdn );
@@ -454,6 +457,87 @@ class Wc_Audio_Preview_Public {
 	}
 
 	/**
+	 * Render Spotify player with its own embed iframe.
+	 *
+	 * Spotify tracks cannot stream through an HTML5 <audio> element, so - like SoundCloud and
+	 * Google Drive - they render as an embed. The Spotify iframe ships its own transport controls
+	 * and plays a 30-second preview for logged-out visitors, which is exactly the preview use case.
+	 *
+	 * @since 1.5.4
+	 * @param int    $key       Audio key.
+	 * @param string $name      Audio name.
+	 * @param string $audio_url Audio URL.
+	 */
+	protected function render_spotify_player( $key, $name, $audio_url ) {
+		$track_id = $this->extract_spotify_track_id( $audio_url );
+		if ( ! $track_id ) {
+			// No track ID means we cannot build an embed; fall back to the regular player.
+			$this->render_audio_player(
+				$key,
+				$name,
+				$audio_url,
+				array(
+					'service'      => 'spotify',
+					'service_name' => 'Spotify',
+				)
+			);
+			return;
+		}
+
+		$embed_url = 'https://open.spotify.com/embed/track/' . $track_id;
+
+		/**
+		 * Filters the Spotify embed URL before it is printed.
+		 *
+		 * Mirrors wcap_soundcloud_embed_url so Pro can tune the embed (theme, etc.) instead of
+		 * forking the renderer.
+		 *
+		 * @since 1.5.4
+		 *
+		 * @param string $embed_url The Spotify embed URL.
+		 * @param string $audio_url The original track URL.
+		 */
+		$embed_url = apply_filters( 'wcap_spotify_embed_url', $embed_url, $audio_url );
+		?>
+		<div class="wcap-preview-item wcap-spotify-item" data-audio-id="wcap-audio-<?php echo esc_attr( $key ); ?>" data-spotify-key="<?php echo esc_attr( $key ); ?>">
+			<div class="wcap-preview-info">
+				<span class="wcap-preview-name"><?php echo esc_html( $name ); ?></span>
+				<span class="wcap-preview-badge">Spotify</span>
+			</div>
+			<div class="wcap-spotify-player">
+				<iframe
+					src="<?php echo esc_url( $embed_url ); ?>"
+					width="100%"
+					height="152"
+					frameborder="0"
+					loading="lazy"
+					allow="autoplay; encrypted-media"
+					allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Extract Spotify track ID from a track URL or URI.
+	 *
+	 * @since 1.5.4
+	 * @param string $url Spotify URL or URI.
+	 * @return string|false Track ID or false.
+	 */
+	private function extract_spotify_track_id( $url ) {
+		if ( preg_match( '/open\.spotify\.com\/track\/([a-zA-Z0-9]+)/i', $url, $matches ) ) {
+			return $matches[1];
+		}
+		if ( preg_match( '/spotify:track:([a-zA-Z0-9]+)/i', $url, $matches ) ) {
+			return $matches[1];
+		}
+
+		return false;
+	}
+
+	/**
 	 * Extract Google Drive file ID from URL.
 	 *
 	 * @param string $url Google Drive URL.
@@ -476,8 +560,10 @@ class Wc_Audio_Preview_Public {
 	 * @return bool
 	 */
 	protected function wcap_needs_iframe_player( $url ) {
-		// Currently only Google Drive and SoundCloud need iframe.
-		return false !== strpos( $url, 'drive.google.com' ) || false !== strpos( $url, 'soundcloud.com' );
+		// Google Drive, SoundCloud and Spotify all render as an embed rather than <audio>.
+		return false !== strpos( $url, 'drive.google.com' )
+			|| false !== strpos( $url, 'soundcloud.com' )
+			|| false !== strpos( $url, 'spotify.com' );
 	}
 
 	/**
@@ -565,6 +651,12 @@ class Wc_Audio_Preview_Public {
 					'/soundcloud\.com/i',
 				),
 			),
+			'spotify'      => array(
+				'name'     => 'Spotify',
+				'patterns' => array(
+					'/open\.spotify\.com\/track\//i',
+				),
+			),
 			's3'           => array(
 				'name'     => 'Amazon S3',
 				'patterns' => array(
@@ -577,12 +669,6 @@ class Wc_Audio_Preview_Public {
 				'name'     => 'CloudFront',
 				'patterns' => array(
 					'/cloudfront\.net/i',
-				),
-			),
-			'mediafire'    => array(
-				'name'     => 'MediaFire',
-				'patterns' => array(
-					'/mediafire\.com/i',
 				),
 			),
 		);
@@ -613,8 +699,7 @@ class Wc_Audio_Preview_Public {
 			false !== strpos( $url, 'dropbox.com' ) ||
 			false !== strpos( $url, 'soundcloud.com' ) ||
 			false !== strpos( $url, '1drv.ms' ) ||
-			false !== strpos( $url, 'box.com' ) ||
-			false !== strpos( $url, 'mediafire.com' ) ) {
+			false !== strpos( $url, 'box.com' ) ) {
 			return 'audio/mpeg'; // Default to MP3 as most compatible.
 		}
 

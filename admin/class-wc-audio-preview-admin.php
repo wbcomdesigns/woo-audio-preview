@@ -114,6 +114,15 @@ class Wc_Audio_Preview_Admin {
 			'/dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+\.(mp3|wav|ogg|m4a))/i',
 			'/dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/([^?]+)/i',
 		),
+		// OneDrive, Box and their extension-less share links are playable on the public side
+		// (the renderer rewrites them to a direct URL), so they must pass validation here too.
+		'onedrive'     => array(
+			'/1drv\.ms\/.+/i',
+			'/onedrive\.live\.com\/.+/i',
+		),
+		'box'          => array(
+			'/(?:app\.)?box\.com\/s\/.+/i',
+		),
 	);
 
 	/**
@@ -237,6 +246,8 @@ class Wc_Audio_Preview_Admin {
 			'cloudfront'   => 'CloudFront',
 			'google_drive' => 'Google Drive',
 			'dropbox'      => 'Dropbox',
+			'onedrive'     => 'OneDrive',
+			'box'          => 'Box',
 		);
 	}
 
@@ -878,20 +889,35 @@ class Wc_Audio_Preview_Admin {
 			exit;
 		}
 
+		/*
+		 * This handler only ever removes files the plugin itself created, under
+		 * uploads/wcap_files/. Media Library attachments live elsewhere in the uploads tree and
+		 * are owned by WordPress - the same audio file can back other products or posts - so they
+		 * are intentionally left for WordPress to manage and are never deleted from here.
+		 *
+		 * Defense in depth against path traversal: basename() strips any directory component from
+		 * the submitted URL, and the realpath() containment check below guarantees the resolved
+		 * file sits inside wcap_files/ even if that directory is a symlink.
+		 */
 		$filename      = basename( $fileurl );
 		$upload_dir    = wp_upload_dir();
-		$upload_path   = $upload_dir['basedir'];
-		$uploaded_file = $upload_path . '/wcap_files/' . $filename;
-		if ( file_exists( $uploaded_file ) && is_writable( $uploaded_file ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
-			$result = wp_delete_file( $uploaded_file );
+		$wcap_dir      = trailingslashit( $upload_dir['basedir'] ) . 'wcap_files/';
+		$uploaded_file = $wcap_dir . $filename;
+
+		$real_base = realpath( $wcap_dir );
+		$real_file = realpath( $uploaded_file );
+
+		if ( $real_base && $real_file && 0 === strpos( $real_file, trailingslashit( $real_base ) )
+			&& is_writable( $real_file ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
+			$result = wp_delete_file( $real_file );
 			if ( false !== $result ) {
 				wp_send_json_success( 'File deleted successfully' );
 			} else {
-				$this->wcap_log_error( 'Failed to delete file: ' . $uploaded_file );
+				$this->wcap_log_error( 'Failed to delete file: ' . $real_file );
 				wp_send_json_error( 'Could not delete file' );
 			}
 		} else {
-			// File doesn't exist or isn't writable; nothing left to remove.
+			// Not a plugin-created file (or already gone); nothing for us to remove.
 			wp_send_json_success( 'File already removed' );
 		}
 		exit;

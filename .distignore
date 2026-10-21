@@ -46,3 +46,7 @@ Thumbs.db
 bin
 .distignore
 dist
+
+# Repo-level QA catalog - not shipped
+audit
+plan
