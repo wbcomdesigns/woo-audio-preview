@@ -105,7 +105,8 @@ rm -rf "$STAGE"
 mkdir -p "$STAGE"
 
 EXCLUDES=()
-while IFS= read -r line; do
+# `|| [ -n "$line" ]` keeps a last line with no trailing newline.
+while IFS= read -r line || [ -n "$line" ]; do
 	[ -z "$line" ] && continue
 	case "$line" in \#*) continue ;; esac
 	EXCLUDES+=( --exclude "$line" )
@@ -114,7 +115,7 @@ done < .distignore
 rsync -a "${EXCLUDES[@]}" --exclude "/$DIST" ./ "$STAGE/"
 
 # Sweep OS metadata as a second guard behind the .distignore rule.
-find "$STAGE" \( -name '.DS_Store' -o -name 'Thumbs.db' \) -delete
+find "$STAGE" \( -name 'Thumbs.db' -o \( -name '.*' -type f \) \) -delete
 
 ( cd "$DIST" && zip -qr "$SLUG-$VERSION.zip" "$SLUG" )
 

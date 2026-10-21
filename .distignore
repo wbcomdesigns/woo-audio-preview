@@ -17,7 +17,7 @@ composer.lock
 .editorconfig
 # Composer dependencies are dev-only here (phpunit / phpcs). This is a
 # WordPress.org plugin with no bundled runtime SDK, so the whole tree is excluded.
-vendor
+/vendor
 
 # Coding-standard + test config
 phpcs.xml
