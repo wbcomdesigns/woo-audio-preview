@@ -1,0 +1,35 @@
+version: 1
+plugin: woo-audio-preview
+invariants:
+  - id: A1
+    group: packaging
+    title: "assets/vendor/lucide.min.js ships in the release zip"
+    why: "An unanchored .distignore 'vendor' rule stripped it, so the WB Plugins hub icons 404 when no other Wbcom plugin provides the shared script (card 10299581099)."
+    severity: error
+    status: manual-review
+    gate: "bin/build-release.sh zip contains assets/vendor/lucide.min.js; docs/qa checks.states hub-icons-render"
+    added_in: 2026-10-21
+  - id: A2
+    group: data-flow
+    title: "The advertised, accepted-on-save and rendered service/CDN lists agree"
+    why: "Spotify was advertised and accepted but had no playback path; OneDrive/Box/MediaFire were rendered but rejected on save (card 10323207441)."
+    severity: error
+    status: manual-review
+    gate: "docs/qa checks.states supported-url-saves"
+    added_in: 2026-10-21
+  - id: A3
+    group: data-safety
+    title: "uninstall removes network options with delete_site_option and per-site with delete_option; file cleanup never leaves or deletes outside wp-upload"
+    why: "Multisite network options were orphaned; the cleanup path missed Media Library files (card 10323207441)."
+    severity: warning
+    status: manual-review
+    gate: null
+    added_in: 2026-10-21
+  - id: U1
+    group: universal
+    title: "PHP 8.1-8.5 supported; header, readme and any enforcement agree"
+    why: "Pro enforced PHP 8.0 while the readme said 7.2 - a 7.2 store got a dead plugin (card 10323210155)."
+    severity: error
+    status: manual-review
+    gate: null
+    added_in: 2026-10-21

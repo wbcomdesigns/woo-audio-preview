@@ -1,145 +1,907 @@
 {
-  "schema_version": "1.0.0",
-  "generated": "2026-08-29",
-  "source_ref": "master @ 1.5.1",
-  "plugin": {
-    "slug": "woo-audio-preview",
+  "header": {
     "name": "Audio Preview for WooCommerce",
-    "role": "free",
-    "pairs_with": "woo-audio-preview-pro",
-    "main_file": "woo-product-audio-preview.php",
-    "version": "1.5.1",
-    "text_domain": "woo-audio-preview",
-    "requires_plugins": ["woocommerce"],
-    "requires_php": "7.4",
-    "requires_wp": "5.0",
-    "constants": [
-      "WCAP_TEXT_VERSION",
-      "WCAP_TEXT_DOMAIN",
-      "WCAP_PLUGIN_URI",
-      "WCAP_PLUGIN_DIR",
-      "WCAP_PLUGIN_FILE"
-    ]
+    "slug": ".",
+    "version": "1.5.4",
+    "textDomain": "woo-audio-preview",
+    "domainPath": "/languages",
+    "requiresWP": "",
+    "requiresPHP": "",
+    "description": "Add audio previews to WooCommerce products. Let customers listen before they buy with major audio formats and CDN support.",
+    "author": "Wbcom Designs <admin@wbcomdesigns.com>",
+    "pluginURI": "https://wbcomdesigns.com",
+    "network": false
   },
-  "bootstrap": {
-    "entry": "run_wc_audio_preview() on plugins_loaded",
-    "core_class": "Wc_Audio_Preview",
-    "loader": "Wc_Audio_Preview_Loader (hook registry pattern)",
-    "wc_dependency": "wcap_check_require_plugins() on admin_init self-deactivates if WooCommerce absent; Requires Plugins header also declares woocommerce",
-    "activation_redirect": "wcap_activation_redirect_settings + wcap_do_activation_redirect -> admin.php?page=woo-audio-preview-settings",
-    "pro_coexistence": "admin_menu for settings is NOT registered when woo-audio-preview-pro is active (free defers to Pro)"
-  },
-  "admin_surfaces": [
-    {
-      "id": "settings_page",
-      "menu": "WB Plugins (wbcomplugins) > Audio Preview for WooCommerce",
-      "page_slug": "woo-audio-preview-settings",
-      "capability": "manage_options",
-      "render": "Wc_Audio_Preview_Admin::wcap_admin_options_page",
-      "tabs": {
-        "woo-audio-preview-welcome": "Welcome (partials/woo-audio-preview-welcome-page.php)",
-        "woo-audio-preview-pro": "General (PRO) upsell (partials/woo-audio-preview-general-pro.php)",
-        "woo-audio-preview-faq": "FAQ (partials/woo-audio-preview-faq.php)"
+  "pluginPath": ".",
+  "cssPrefix": "wbcom",
+  "hasEnqueueCalls": true,
+  "hasIntegrationConditionals": true,
+  "features": {
+    "cpts": [],
+    "taxonomies": [],
+    "shortcodes": [],
+    "blocks": [],
+    "restRoutes": [],
+    "ajaxHandlers": [
+      {
+        "action": "wcap_delete_audio_ajax",
+        "callback": "wcap_delete_audio_ajax",
+        "loggedIn": true,
+        "loggedOut": false,
+        "hasNonceCheck": true,
+        "file": "includes/class-wc-audio-preview.php",
+        "line": 109
+      }
+    ],
+    "adminPages": [
+      {
+        "slug": "wbcomplugins",
+        "title": "WB Plugins",
+        "capability": "manage_options",
+        "callback": "render_welcome",
+        "file": "admin/class-wc-audio-preview-admin.php",
+        "line": 413
+      }
+    ],
+    "settings": [
+      {
+        "optionName": "woo_audio_preview_admin_welcome_options",
+        "group": "woo_audio_preview_admin_welcome_options",
+        "sanitizeCallback": "sanitize_text_field",
+        "file": "admin/class-wc-audio-preview-admin.php",
+        "line": 377
       },
-      "note": "Uses shared wbcom admin settings shell (admin/wbcom/wbcom-admin-settings.php). Settings tabs are informational/upsell; there are no functional storefront options in free."
+      {
+        "optionName": "woo_audio_preview_general_options",
+        "group": "woo_audio_preview_general_options",
+        "sanitizeCallback": "sanitize_text_field",
+        "file": "admin/class-wc-audio-preview-admin.php",
+        "line": 390
+      }
+    ],
+    "optionsWiring": [
+      {
+        "optionName": "wcap_admin_errors",
+        "defaultValue": "array()",
+        "writtenAt": [
+          {
+            "file": "admin/class-wc-audio-preview-admin.php",
+            "line": 748,
+            "kind": "write",
+            "enforces": false
+          },
+          {
+            "file": "admin/class-wc-audio-preview-admin.php",
+            "line": 944,
+            "kind": "write",
+            "enforces": false
+          },
+          {
+            "file": "admin/class-wc-audio-preview-admin.php",
+            "line": 963,
+            "kind": "write",
+            "enforces": false
+          },
+          {
+            "file": "uninstall.php",
+            "line": 16,
+            "kind": "delete",
+            "enforces": false
+          }
+        ],
+        "readAt": [
+          {
+            "file": "admin/class-wc-audio-preview-admin.php",
+            "line": 743,
+            "kind": "read",
+            "enforces": false
+          },
+          {
+            "file": "admin/class-wc-audio-preview-admin.php",
+            "line": 934,
+            "kind": "read",
+            "enforces": false
+          },
+          {
+            "file": "admin/class-wc-audio-preview-admin.php",
+            "line": 959,
+            "kind": "read",
+            "enforces": false
+          }
+        ],
+        "enforcedAt": []
+      },
+      {
+        "optionName": "active_plugins",
+        "defaultValue": "",
+        "writtenAt": [],
+        "readAt": [
+          {
+            "file": "woo-product-audio-preview.php",
+            "line": 155,
+            "kind": "read",
+            "enforces": false
+          }
+        ],
+        "enforcedAt": []
+      }
+    ],
+    "hookListeners": [
+      {
+        "hook": "wcap_allowed_audio_extensions",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_metabox_max_rows",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_metabox_before_rows",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_metabox_row_headings",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_metabox_row_fields",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_metabox_after_rows",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_metabox_save",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_public_instance",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_preview_hook",
+        "listeners": []
+      },
+      {
+        "hook": "wbcom_hub_wrapper_helper_slugs",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_should_load_assets",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_before_audio_preview",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_after_audio_preview",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_soundcloud_embed_url",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_spotify_embed_url",
+        "listeners": []
+      },
+      {
+        "hook": "wcap_audio_mime_types",
+        "listeners": []
+      }
+    ],
+    "featureGroups": [],
+    "frontendJs": [],
+    "widgets": [],
+    "metaBoxes": [],
+    "cronJobs": [],
+    "cliCommands": [],
+    "dbTables": [],
+    "templates": [],
+    "hooks": {
+      "provided": [
+        {
+          "type": "filter",
+          "hookName": "wcap_allowed_audio_extensions",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 219
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_metabox_max_rows",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 511
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_metabox_before_rows",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 517
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_metabox_row_headings",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 539
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_metabox_row_fields",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 591
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_metabox_after_rows",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 600
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_metabox_save",
+          "file": "admin/class-wc-audio-preview-admin.php",
+          "line": 736
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_public_instance",
+          "file": "includes/class-wc-audio-preview.php",
+          "line": 139
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_preview_hook",
+          "file": "includes/class-wc-audio-preview.php",
+          "line": 151
+        },
+        {
+          "type": "filter",
+          "hookName": "wbcom_hub_wrapper_helper_slugs",
+          "file": "lib/wbcom-settings/class-wbcom-settings-page.php",
+          "line": 181
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_should_load_assets",
+          "file": "public/class-wc-audio-preview-public.php",
+          "line": 88
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_before_audio_preview",
+          "file": "public/class-wc-audio-preview-public.php",
+          "line": 199
+        },
+        {
+          "type": "action",
+          "hookName": "wcap_after_audio_preview",
+          "file": "public/class-wc-audio-preview-public.php",
+          "line": 255
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_soundcloud_embed_url",
+          "file": "public/class-wc-audio-preview-public.php",
+          "line": 417
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_spotify_embed_url",
+          "file": "public/class-wc-audio-preview-public.php",
+          "line": 500
+        },
+        {
+          "type": "filter",
+          "hookName": "wcap_audio_mime_types",
+          "file": "public/class-wc-audio-preview-public.php",
+          "line": 724
+        }
+      ],
+      "consumed": [
+        {
+          "type": "action",
+          "hookName": "init",
+          "callback": "wcap_audio_feedback_cb",
+          "file": "admin/class-admin-review.php",
+          "line": 325,
+          "priority": 10,
+          "acceptedArgs": 1
+        },
+        {
+          "type": "action",
+          "hookName": "plugins_loaded",
+          "callback": "wbcom_settings_load",
+          "file": "lib/wbcom-settings/loader.php",
+          "line": 49,
+          "priority": 10,
+          "acceptedArgs": 1
+        },
+        {
+          "type": "action",
+          "hookName": "plugins_loaded",
+          "callback": "wcap_plugin_init",
+          "file": "woo-product-audio-preview.php",
+          "line": 113,
+          "priority": 10,
+          "acceptedArgs": 1
+        },
+        {
+          "type": "action",
+          "hookName": "admin_notices",
+          "callback": "wcap_plugin_admin_notice",
+          "file": "woo-product-audio-preview.php",
+          "line": 120,
+          "priority": 10,
+          "acceptedArgs": 1
+        },
+        {
+          "type": "action",
+          "hookName": "admin_init",
+          "callback": "wcap_check_require_plugins",
+          "file": "woo-product-audio-preview.php",
+          "line": 129,
+          "priority": 10,
+          "acceptedArgs": 1
+        },
+        {
+          "type": "action",
+          "hookName": "activated_plugin",
+          "callback": "wcap_activation_redirect_settings",
+          "file": "woo-product-audio-preview.php",
+          "line": 146,
+          "priority": 10,
+          "acceptedArgs": 1
+        },
+        {
+          "type": "action",
+          "hookName": "admin_init",
+          "callback": "wcap_do_activation_redirect",
+          "file": "woo-product-audio-preview.php",
+          "line": 179,
+          "priority": 10,
+          "acceptedArgs": 1
+        }
+      ]
     },
-    {
-      "id": "product_metabox",
-      "hook": "add_meta_boxes -> wcap_register_meta_boxes",
-      "metabox_id": "wc-preview-audio-mata-id",
-      "screen": "product",
-      "render": "Wc_Audio_Preview_Admin::wcap_display_callback",
-      "save": "Wc_Audio_Preview_Admin::wcap_save_meta_box on save_post",
-      "fields": "Exactly 3 fixed rows (name + URL). Row 1 primary, rows 2-3 optional. Media Library button (wp_enqueue_media) + Clear button. Live CDN detection indicator.",
-      "nonce": "wcap_nonce / wcap_nonce_action",
-      "cap_check": "current_user_can('edit_post', $post_id)",
-      "enctype": "post_edit_form_tag -> wcap_update_edit_form adds multipart/form-data"
-    }
-  ],
-  "frontend_surfaces": [
-    {
-      "id": "single_product_player",
-      "hook": "woocommerce_before_add_to_cart_form (priority 0)",
-      "render": "Wc_Audio_Preview_Public::wcap_add_preview_field",
-      "placement": "Single product page, just before the Add to Cart form",
-      "player": "Custom HTML5 <audio> player with play/pause, progress bar, elapsed time; preload=none. Google Drive + SoundCloud rendered via iframe embed instead.",
-      "product_retrieval": "wc_get_product(get_the_ID()) fallback for page builders / custom loops"
-    }
-  ],
-  "shortcodes": [],
+    "activationHooks": [],
+    "customRoles": [],
+    "imageSizes": [],
+    "blockPatterns": [],
+    "integrations": []
+  },
+  "wiring": {
+    "jsAjaxCalls": [
+      {
+        "action": "wcap_delete_audio_ajax",
+        "nonceKey": "wcap_ajax_object.nonce",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 251
+      }
+    ],
+    "jsEventHandlers": [
+      {
+        "selector": ".wcap-media-button",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 45
+      },
+      {
+        "selector": ".wcap_audio_urls, .wcap-audio-url",
+        "event": "blur",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 47
+      },
+      {
+        "selector": ".wcap_audio_urls, .wcap-audio-url",
+        "event": "input",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 48
+      },
+      {
+        "selector": ".wcap-file-name, .wcap-audio-name",
+        "event": "blur",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 49
+      },
+      {
+        "selector": ".wcap-clear-button",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 56
+      },
+      {
+        "selector": "#wcap-pro-add-more",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 61
+      },
+      {
+        "selector": ".wcap-add-audio-cl",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 123
+      },
+      {
+        "selector": ".wcap-delete-audio-cl",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 124
+      },
+      {
+        "selector": ".wcap-media-button",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 45
+      },
+      {
+        "selector": ".wcap_audio_urls, .wcap-audio-url",
+        "event": "blur",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 47
+      },
+      {
+        "selector": ".wcap_audio_urls, .wcap-audio-url",
+        "event": "input",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 48
+      },
+      {
+        "selector": ".wcap-file-name, .wcap-audio-name",
+        "event": "blur",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 49
+      },
+      {
+        "selector": ".wcap-clear-button",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 56
+      },
+      {
+        "selector": "#wcap-pro-add-more",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 61
+      },
+      {
+        "selector": ".wcap-add-audio-cl",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 123
+      },
+      {
+        "selector": ".wcap-delete-audio-cl",
+        "event": "click",
+        "file": "admin/js/wc-audio-preview-admin.js",
+        "line": 124
+      },
+      {
+        "selector": "document",
+        "event": "click",
+        "file": "lib/wbcom-settings/settings.js",
+        "line": 39
+      },
+      {
+        "selector": "document",
+        "event": "submit",
+        "file": "lib/wbcom-settings/settings.js",
+        "line": 56
+      },
+      {
+        "selector": ".wcap-preview-button:not(.wcap-gdrive-button):not(.wcap-soundcloud-button)",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 20
+      },
+      {
+        "selector": ".wcap-gdrive-button",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 23
+      },
+      {
+        "selector": ".wcap-soundcloud-button",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 26
+      },
+      {
+        "selector": ".wcap-progress-bar",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 29
+      },
+      {
+        "selector": ".wcap-preview-button",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 32
+      },
+      {
+        "selector": ".wcap-preview-button:not(.wcap-gdrive-button):not(.wcap-soundcloud-button)",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 20
+      },
+      {
+        "selector": ".wcap-gdrive-button",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 23
+      },
+      {
+        "selector": ".wcap-soundcloud-button",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 26
+      },
+      {
+        "selector": ".wcap-progress-bar",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 29
+      },
+      {
+        "selector": ".wcap-preview-button",
+        "event": "click",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 32
+      },
+      {
+        "selector": "document",
+        "event": "loadstart",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 54
+      },
+      {
+        "selector": "document",
+        "event": "canplay",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 55
+      },
+      {
+        "selector": "document",
+        "event": "play",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 56
+      },
+      {
+        "selector": "document",
+        "event": "pause",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 57
+      },
+      {
+        "selector": "document",
+        "event": "ended",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 58
+      },
+      {
+        "selector": "document",
+        "event": "timeupdate",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 59
+      },
+      {
+        "selector": "document",
+        "event": "error",
+        "file": "public/js/wc-audio-preview-public.js",
+        "line": 60
+      }
+    ],
+    "localizeScripts": [],
+    "issues": []
+  },
+  "stats": {
+    "phpFiles": 17,
+    "jsFiles": 4,
+    "cssFiles": 10,
+    "totalLines": 5340
+  },
+  "generated": {
+    "generator": "wp-plugin-qa scanner",
+    "schema": "v3-functional"
+  },
+  "rest": {
+    "namespace": "",
+    "endpoints": []
+  },
   "ajax": [
     {
       "action": "wcap_delete_audio_ajax",
-      "nopriv": true,
-      "handler": "Wc_Audio_Preview_Admin::wcap_delete_audio_ajax",
-      "nonce": "ajax-nonce (check_ajax_referer)",
-      "cap_check": "current_user_can('edit_posts') AND edit_post($post_id)",
-      "note": "nopriv variant is registered but handler enforces capability checks and bails for guests; deletes uploaded file under uploads/wcap_files and clears wcap_preview_attachment meta"
+      "callback": "wcap_delete_audio_ajax",
+      "loggedIn": true,
+      "loggedOut": false,
+      "hasNonceCheck": true,
+      "file": "includes/class-wc-audio-preview.php",
+      "line": 109
     }
   ],
-  "rest": [],
-  "data_stores": {
-    "post_meta": [
+  "admin_pages": [
+    {
+      "page": "wbcomplugins",
+      "type": "menu",
+      "capability": "manage_options",
+      "title": "WB Plugins",
+      "file": "admin/class-wc-audio-preview-admin.php:413"
+    }
+  ],
+  "tables": [],
+  "hooks_fired": [
+    {
+      "hook": "wcap_allowed_audio_extensions",
+      "type": "filter",
+      "file": "admin/class-wc-audio-preview-admin.php:219"
+    },
+    {
+      "hook": "wcap_metabox_max_rows",
+      "type": "filter",
+      "file": "admin/class-wc-audio-preview-admin.php:511"
+    },
+    {
+      "hook": "wcap_metabox_before_rows",
+      "type": "action",
+      "file": "admin/class-wc-audio-preview-admin.php:517"
+    },
+    {
+      "hook": "wcap_metabox_row_headings",
+      "type": "action",
+      "file": "admin/class-wc-audio-preview-admin.php:539"
+    },
+    {
+      "hook": "wcap_metabox_row_fields",
+      "type": "action",
+      "file": "admin/class-wc-audio-preview-admin.php:591"
+    },
+    {
+      "hook": "wcap_metabox_after_rows",
+      "type": "action",
+      "file": "admin/class-wc-audio-preview-admin.php:600"
+    },
+    {
+      "hook": "wcap_metabox_save",
+      "type": "action",
+      "file": "admin/class-wc-audio-preview-admin.php:736"
+    },
+    {
+      "hook": "wcap_public_instance",
+      "type": "filter",
+      "file": "includes/class-wc-audio-preview.php:139"
+    },
+    {
+      "hook": "wcap_preview_hook",
+      "type": "filter",
+      "file": "includes/class-wc-audio-preview.php:151"
+    },
+    {
+      "hook": "wbcom_hub_wrapper_helper_slugs",
+      "type": "filter",
+      "file": "lib/wbcom-settings/class-wbcom-settings-page.php:181"
+    },
+    {
+      "hook": "wcap_should_load_assets",
+      "type": "filter",
+      "file": "public/class-wc-audio-preview-public.php:88"
+    },
+    {
+      "hook": "wcap_before_audio_preview",
+      "type": "action",
+      "file": "public/class-wc-audio-preview-public.php:199"
+    },
+    {
+      "hook": "wcap_after_audio_preview",
+      "type": "action",
+      "file": "public/class-wc-audio-preview-public.php:255"
+    },
+    {
+      "hook": "wcap_soundcloud_embed_url",
+      "type": "filter",
+      "file": "public/class-wc-audio-preview-public.php:417"
+    },
+    {
+      "hook": "wcap_spotify_embed_url",
+      "type": "filter",
+      "file": "public/class-wc-audio-preview-public.php:500"
+    },
+    {
+      "hook": "wcap_audio_mime_types",
+      "type": "filter",
+      "file": "public/class-wc-audio-preview-public.php:724"
+    }
+  ],
+  "cron": [],
+  "blocks": [],
+  "shortcodes": [],
+  "frontend_assets": {
+    "js": [],
+    "css": []
+  },
+  "template_contract": {
+    "mode": "none",
+    "checked": 0,
+    "pass": 0,
+    "fail": 0,
+    "skipped": 1,
+    "findings": []
+  },
+  "template_zero_logic": {
+    "checked_files": 0,
+    "fail": 0,
+    "findings": []
+  },
+  "template_components": {
+    "checked_files": 0,
+    "fail": 0,
+    "findings": []
+  },
+  "readiness": {
+    "score": 71,
+    "requiredMet": false,
+    "barVerdict": "below-bar",
+    "counts": {
+      "pass": 10,
+      "missing": 4,
+      "fail": 0,
+      "na": 2
+    },
+    "groups": {
+      "Standards": {
+        "pass": 3,
+        "total": 3
+      },
+      "CI & Quality": {
+        "pass": 1,
+        "total": 3
+      },
+      "Architecture": {
+        "pass": 0,
+        "total": 1
+      },
+      "Contracts": {
+        "pass": 1,
+        "total": 1
+      },
+      "QA system": {
+        "pass": 4,
+        "total": 5
+      },
+      "Docs": {
+        "pass": 1,
+        "total": 1
+      }
+    },
+    "items": [
       {
-        "key": "wcap_audio",
-        "type": "array",
-        "shape": {
-          "wcap_audio_names": "string[]",
-          "wcap_audio_urls": "string[] (esc_url_raw)",
-          "wcap_audio_source": "string[] (direct|cdn)"
-        },
-        "written_by": "wcap_save_meta_box",
-        "read_by": "wcap_add_preview_field (frontend)",
-        "shared_with_pro": true,
-        "note": "SAME meta key as Pro. Pro extends the array with wcap_audio_durations and wcap_audio_theme; free ignores those extra keys."
+        "id": "uninstall",
+        "group": "Standards",
+        "label": "uninstall.php / uninstall hook",
+        "required": true,
+        "status": "pass",
+        "detail": "cleanup on delete present"
       },
       {
-        "key": "wcap_preview_attachment",
-        "type": "string",
-        "written_by": "wcap_delete_audio_ajax (cleared)",
-        "read_by": "none in current source",
-        "status": "legacy / vestigial"
+        "id": "readme",
+        "group": "Standards",
+        "label": "readme.txt with changelog",
+        "required": true,
+        "status": "pass",
+        "detail": "changelog present"
+      },
+      {
+        "id": "i18n",
+        "group": "Standards",
+        "label": "i18n: .pot file",
+        "required": true,
+        "status": "pass",
+        "detail": "translation template present"
+      },
+      {
+        "id": "wpcs",
+        "group": "CI & Quality",
+        "label": "WPCS config (phpcs.xml)",
+        "required": true,
+        "status": "missing",
+        "detail": "no phpcs config"
+      },
+      {
+        "id": "phpstan",
+        "group": "CI & Quality",
+        "label": "PHPStan config",
+        "required": true,
+        "status": "missing",
+        "detail": "no phpstan.neon"
+      },
+      {
+        "id": "ci",
+        "group": "CI & Quality",
+        "label": "CI pipeline (workflow or local-ci)",
+        "required": true,
+        "status": "pass",
+        "detail": "CI gate present"
+      },
+      {
+        "id": "rest",
+        "group": "Architecture",
+        "label": "REST API (app/integration surface)",
+        "required": false,
+        "status": "missing",
+        "detail": "no REST routes"
+      },
+      {
+        "id": "caps",
+        "group": "Architecture",
+        "label": "Custom capabilities registered",
+        "required": false,
+        "status": "n/a",
+        "detail": "no custom roles"
+      },
+      {
+        "id": "template-contract",
+        "group": "Contracts",
+        "label": "Template contract (TC2) clean",
+        "required": true,
+        "status": "n/a",
+        "detail": "no detectable template loader"
+      },
+      {
+        "id": "template-zero-logic",
+        "group": "Contracts",
+        "label": "Templates are logic-free (TC1)",
+        "required": false,
+        "status": "pass",
+        "detail": "no data fetching in templates"
+      },
+      {
+        "id": "qa-runbook",
+        "group": "QA system",
+        "label": "docs/qa smoke runbook",
+        "required": true,
+        "status": "missing",
+        "detail": "no docs/qa/AGENT_SMOKE_RUNBOOK.md"
+      },
+      {
+        "id": "qa-config",
+        "group": "QA system",
+        "label": "docs/qa/qa-config.json",
+        "required": true,
+        "status": "pass",
+        "detail": "qa-config present"
+      },
+      {
+        "id": "manifest",
+        "group": "QA system",
+        "label": "audit/manifest.json",
+        "required": true,
+        "status": "pass",
+        "detail": "manifest present"
+      },
+      {
+        "id": "contract-baseline",
+        "group": "QA system",
+        "label": "contract-audit baseline",
+        "required": false,
+        "status": "pass",
+        "detail": "baseline present"
+      },
+      {
+        "id": "journeys",
+        "group": "QA system",
+        "label": "audit/journeys catalogue",
+        "required": false,
+        "status": "pass",
+        "detail": "journeys present"
+      },
+      {
+        "id": "docs",
+        "group": "Docs",
+        "label": "docs/ tree",
+        "required": false,
+        "status": "pass",
+        "detail": "docs/ present"
       }
-    ],
-    "options": [
-      {"key": "woo_audio_preview_admin_welcome_options", "purpose": "registered setting for Welcome tab (no functional payload)"},
-      {"key": "woo_audio_preview_general_options", "purpose": "registered setting for FAQ tab (no functional payload)"},
-      {"key": "wcap_admin_errors", "purpose": "transient-style error queue displayed via admin_notices, autoload=false"}
-    ],
-    "transients": [
-      {"key": "_woo_audio_preview_is_new_install", "purpose": "activation redirect flag (BuddyPress activation path)"}
-    ],
-    "uploads": "uploads/wcap_files/ (custom upload subdir via wcap_set_upload_dir)"
-  },
-  "cdn_support": {
-    "detected_in_admin_validation": ["soundcloud", "spotify", "amazon_s3", "cloudfront", "google_drive", "dropbox"],
-    "playback_conversion_frontend": ["google_drive (iframe)", "soundcloud (iframe/widget API)", "dropbox", "onedrive", "box", "amazon_s3", "cloudfront", "mediafire"],
-    "soundcloud_widget": "public/js/soundcloud.min.js (SoundCloud Widget API)"
-  },
-  "hooks_exposed": {
-    "actions": [
-      {"name": "wcap_before_audio_preview", "args": ["product_id", "wcap_audio", "valid_audios"], "since": "1.5.1"},
-      {"name": "wcap_after_audio_preview", "args": ["product_id", "wcap_audio", "valid_audios"], "since": "1.5.1"}
-    ],
-    "filters": [
-      {"name": "wcap_allowed_audio_extensions", "purpose": "admin allowed upload extensions"},
-      {"name": "wcap_audio_mime_types", "purpose": "frontend extension->MIME map"}
     ]
-  },
-  "integrations": [],
-  "assets": {
-    "admin_js": "admin/js/wc-audio-preview-admin(.min).js",
-    "admin_css": "admin/css/wc-audio-preview-admin(.min).css (+ css-rtl)",
-    "public_js": "public/js/wc-audio-preview-public(.min).js, public/js/soundcloud.min.js",
-    "public_css": "public/css/wc-audio-preview-public(.min).css (+ css-rtl)",
-    "asset_resolver": "get_asset_filename() picks min/RTL variant with fallback"
-  },
-  "primary_flows": {
-    "owner_set_preview": "Edit product -> Audio Preview Items metabox -> enter name + upload/paste URL (up to 3) -> Save -> URL validated (validate_audio_url) -> stored in wcap_audio meta",
-    "shopper_play": "Visit single product -> player renders before Add to Cart -> click play -> HTML5 audio (or Google Drive / SoundCloud iframe) streams preview"
-  },
-  "free_vs_pro": {
-    "free_owns": "Up to 3 previews per product, single-product player before add-to-cart, CDN URL detection + playback, Media Library upload, shared wcap_audio meta contract",
-    "pro_adds": "Unlimited previews, per-track duration limits, watermarking, player themes (classic/dark/minimal/colorful), archive/shop-loop badge, bulk import, drag-reorder, display-position control, multivendor (Dokan / WCFM / WC Vendors)"
   }
 }

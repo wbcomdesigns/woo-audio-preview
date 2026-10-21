@@ -1,0 +1,5 @@
+{
+  "escapes": [
+    { "card": "10299581099", "title": "lucide.min.js stripped from the zip by an unanchored .distignore vendor rule; hub icons 404", "guard": "states:hub-icons-render", "added": "2026-10-21" }
+  ]
+}
