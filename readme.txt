@@ -2,9 +2,10 @@
 Contributors: wbcomdesigns, vapvarun
 Tags: audio, woocommerce, preview, music, audio player
 Requires at least: 5.0
-Tested up to: 6.9.1
-Requires PHP: 7.4
-Stable tag: 1.5.3
+Tested up to: 7.1
+Requires PHP: 8.1
+WC tested up to: 11.2
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +21,7 @@ The free version supports up to 3 audio previews per product. Audio files can be
 
 1. Edit any WooCommerce product in your admin
 2. Scroll down to the "Audio Preview Items" meta box
-3. Add up to 3 audio previews — enter a name and either upload a file or paste a URL
+3. Add up to 3 audio previews - enter a name and either upload a file or paste a URL
 4. Save the product
 5. The audio player appears on the product page automatically, just before the Add to Cart button
 
@@ -28,25 +29,26 @@ The free version supports up to 3 audio previews per product. Audio files can be
 
 **Audio Format Support**
 
-* MP3 — universal compatibility, recommended for broadest device support
-* WAV — high quality, uncompressed audio
-* OGG — open format with good compression (note: not supported on iOS devices)
-* M4A — Apple's audio format, excellent quality
-* AAC — Advanced Audio Coding, widely supported
-* FLAC — lossless audio compression for audiophile stores
-* WMA — Windows Media Audio
-* WEBM — web-optimised audio format
+* MP3 - universal compatibility, recommended for broadest device support
+* WAV - high quality, uncompressed audio
+* OGG - open format with good compression (note: not supported on iOS devices)
+* M4A - Apple's audio format, excellent quality
+* AAC - Advanced Audio Coding, widely supported
+* FLAC - lossless audio compression for audiophile stores
+* WMA - Windows Media Audio
+* WEBM - web-optimised audio format
 
 **CDN and Streaming Service Support**
 
-* Google Drive — link shared audio files directly from your Drive
-* SoundCloud — embed tracks via the SoundCloud Widget API with native controls
-* Dropbox — shared Dropbox links are automatically converted to direct download URLs
-* Amazon S3 — professional cloud storage, served directly
-* CloudFront — CDN-optimised delivery from AWS CloudFront distributions
-* OneDrive — Microsoft OneDrive shared links
-* Box.com — Box shared file links
-* Any direct public URL — paste any publicly accessible audio file URL
+* Google Drive - link shared audio files directly from your Drive
+* SoundCloud - embed tracks via the SoundCloud Widget API with native controls
+* Spotify - paste a Spotify track link to embed its player (30-second preview for logged-out visitors)
+* Dropbox - shared Dropbox links are automatically converted to direct download URLs
+* Amazon S3 - professional cloud storage, served directly
+* CloudFront - CDN-optimised delivery from AWS CloudFront distributions
+* OneDrive - Microsoft OneDrive shared links
+* Box.com - Box shared file links
+* Any direct public URL - paste any publicly accessible audio file URL
 
 **Audio Player**
 
@@ -61,7 +63,7 @@ The free version supports up to 3 audio previews per product. Audio files can be
 
 * Simple 3-field layout in the product editor meta box (name + URL per track)
 * Upload audio directly from the WordPress Media Library
-* Paste external URLs — CDN service is detected automatically
+* Paste external URLs - CDN service is detected automatically
 * Real-time URL validation with error display in the admin
 * Settings page under WB Plugins > Audio Preview for WooCommerce
 
@@ -70,7 +72,7 @@ The free version supports up to 3 audio previews per product. Audio files can be
 * Audio files are not loaded until the user interacts with the player
 * Minified CSS and JavaScript assets included
 * RTL stylesheet support for right-to-left languages
-* Mobile and tablet optimised — touch-friendly controls on all screen sizes
+* Mobile and tablet optimised - touch-friendly controls on all screen sizes
 
 = Perfect For =
 
@@ -86,7 +88,7 @@ The free version supports up to 3 audio previews per product. Audio files can be
 Upgrade to **Audio Preview for WooCommerce Pro** for advanced features:
 
 * Unlimited audio previews per product (dynamic add/remove)
-* Multi-vendor marketplace support — Dokan, WCFM, WC Vendors, WC Marketplace
+* Multi-vendor marketplace support - Dokan, WCFM, WC Vendors, WC Marketplace
 * Audio watermarking and voice-over protection
 * Custom player themes and colour schemes
 * Preview duration control (time-limited previews)
@@ -106,7 +108,7 @@ Upgrade to **Audio Preview for WooCommerce Pro** for advanced features:
    * Scroll down to find the **Audio Preview Items** meta box below the product description
    * For each preview track, enter a descriptive name (e.g. "Intro Sample", "Chorus Preview")
    * Either click **Media Library** to upload or select an audio file, or paste an external URL
-   * Leave a field set empty to skip it — you do not need to use all three fields
+   * Leave a field set empty to skip it - you do not need to use all three fields
 7. Click **Update** to save the product. The audio player will appear on the product page immediately.
 
 **Tips for Best Results**
@@ -124,11 +126,11 @@ The plugin supports MP3, WAV, OGG, M4A, AAC, FLAC, WMA, and WEBM audio formats. 
 
 = How many audio previews can I add per product? =
 
-The free version supports up to 3 audio previews per product. If you need more than 3 — for example, for albums, full audiobook chapter lists, or sound packs — the Pro version offers unlimited previews with dynamic add/remove functionality.
+The free version supports up to 3 audio previews per product. If you need more than 3 - for example, for albums, full audiobook chapter lists, or sound packs - the Pro version offers unlimited previews with dynamic add/remove functionality.
 
 = Can I use audio files hosted on Google Drive, SoundCloud, or Dropbox? =
 
-Yes. The plugin automatically detects URLs from Google Drive, SoundCloud, Dropbox, Amazon S3, CloudFront, OneDrive, and Box.com, and uses the appropriate playback method for each service. Simply paste the sharing URL from any of these services into the URL field — no extra configuration is needed.
+Yes. The plugin automatically detects URLs from Google Drive, SoundCloud, Spotify, Dropbox, Amazon S3, CloudFront, OneDrive, and Box.com, and uses the appropriate playback method for each service. Simply paste the sharing URL from any of these services into the URL field - no extra configuration is needed.
 
 = Will the audio player work with my theme? =
 
@@ -168,14 +170,23 @@ Yes. The plugin exposes 14 filters and actions for developers and for the Pro ad
 
 == Screenshots ==
 
-1. **Audio player on the product page**: The responsive audio player displayed on a WooCommerce single product page, showing track name, play/pause button, and progress bar — positioned before the Add to Cart form.
-2. **Audio Preview Items meta box — admin**: The product editor meta box showing the 3-field layout with track name inputs, URL fields, and Media Library upload buttons for each preview slot.
+1. **Audio player on the product page**: The responsive audio player displayed on a WooCommerce single product page, showing track name, play/pause button, and progress bar - positioned before the Add to Cart form.
+2. **Audio Preview Items meta box - admin**: The product editor meta box showing the 3-field layout with track name inputs, URL fields, and Media Library upload buttons for each preview slot.
 3. **CDN URL detection**: The admin interface automatically detecting a pasted Google Drive or SoundCloud URL and confirming the service type with a visual indicator.
 4. **Multiple previews on the product page**: A product page displaying all three configured audio previews, each with its own player, allowing customers to sample different sections.
 5. **Welcome and setup screen**: The plugin welcome page showing the Quick Start Guide, Key Features summary, and tips for best practices, displayed after activation.
 6. **Mobile view of the audio player**: The player displayed on a mobile device, showing the responsive layout with touch-friendly controls that adapt to smaller screen sizes.
 
 == Changelog ==
+
+= 1.5.4 - October 2026 =
+
+* Improve  - Spotify preview URLs now play through Spotify's own embed, matching the other streaming services.
+* Fix      - The WB Plugins hub icons no longer disappear: the bundled Lucide library is shipped in the release package again.
+* Fix      - OneDrive and Box share links are accepted when you save a product, matching what the player can actually play.
+* Fix      - Removed MediaFire from the supported list, which was advertised but never played.
+* Fix      - On multisite, uninstalling now removes the plugin's network options instead of leaving them behind.
+* Fix      - The audio file cleanup only touches files the plugin created and never deletes Media Library files, which WordPress manages.
 
 = 1.5.3 - September 2026 =
 
@@ -263,7 +274,7 @@ Restores the free/Pro seams the Pro add-on depends on, so Pro settings take effe
 Security, quality, and theme compatibility release. Fixes page builder conflicts (Elementor, Divi), moves inline scripts to bundled JS, adds developer hooks, and improves uninstall cleanup. Safe to upgrade with no data changes.
 
 = 1.5.0 =
-Major update adding CDN support for Google Drive, SoundCloud, Dropbox, and more, along with a redesigned audio player and improved mobile experience. No data loss — existing audio configurations are preserved. Safe to upgrade.
+Major update adding CDN support for Google Drive, SoundCloud, Dropbox, and more, along with a redesigned audio player and improved mobile experience. No data loss - existing audio configurations are preserved. Safe to upgrade.
 
 = 1.4.2 =
 Important compatibility fix for WooCommerce 8.0+. Recommended for all stores running WooCommerce 8.x or higher.

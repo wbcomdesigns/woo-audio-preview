@@ -16,7 +16,8 @@ Adds an audio player to WooCommerce product pages so shoppers can listen to a sa
 | HTML5 audio player | Stable | Play/pause, progress bar, elapsed time, `preload=none` (no load until interaction) |
 | Google Drive playback | Stable | Rendered via Drive `/preview` iframe |
 | SoundCloud playback | Stable | Rendered via SoundCloud Widget API (`soundcloud.min.js`) iframe |
-| Dropbox / OneDrive / Box / S3 / CloudFront / MediaFire | Stable | URL rewritten to a direct-download form and played in the HTML5 element |
+| Spotify playback | Stable | Rendered via the Spotify embed player (open.spotify.com/embed/track) |
+| Dropbox / OneDrive / Box / S3 / CloudFront | Stable | URL rewritten to a direct-download form and played in the HTML5 element |
 | URL / MIME validation | Stable | `validate_audio_url()`; supported extensions mp3, wav, ogg, m4a, aac, flac, wma, webm |
 | RTL + minified assets | Stable | `get_asset_filename()` resolves min / RTL / fallback variants |
 | Delete uploaded preview (AJAX) | Stable | `wcap_delete_audio_ajax`, nonce + capability gated |

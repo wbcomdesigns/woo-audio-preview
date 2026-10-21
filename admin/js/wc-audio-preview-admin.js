@@ -407,6 +407,13 @@
           /dropbox\.com\/s\/([a-zA-Z0-9_-]+)\/(.+\.(mp3|wav|ogg|m4a|flac))(?:\?.*)?/i,
           /dropbox\.com\/scl\/fi\/([a-zA-Z0-9_-]+)\/(.+\.(mp3|wav|ogg|m4a|flac))(?:\?.*)?/i,
           /dl\.dropbox(?:usercontent)?\.com\/s\/([a-zA-Z0-9_-]+)\/(.+\.(mp3|wav|ogg|m4a|flac))(?:\?.*)?/i
+        ],
+        onedrive: [
+          /1drv\.ms\/.+/i,
+          /onedrive\.live\.com\/.+/i
+        ],
+        box: [
+          /(?:app\.)?box\.com\/s\/.+/i
         ]
       };
       
