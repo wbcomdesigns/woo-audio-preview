@@ -50,3 +50,6 @@ dist
 # Repo-level QA catalog - not shipped
 audit
 plan
+
+# WordPress.org directory assets (published to SVN assets/, never in the zip)
+.wordpress-org
