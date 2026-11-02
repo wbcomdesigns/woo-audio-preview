@@ -97,6 +97,13 @@ Upgrade to **Audio Preview for WooCommerce Pro** for advanced features:
 
 [Learn more about the Pro version](https://wbcomdesigns.com/downloads/woo-audio-preview-pro/)
 
+== More from Wbcom Designs ==
+
+Audio Preview for WooCommerce helps a listener decide before they buy a file. If your store also sells audio work as a service, or needs a theme built around a community, two more Wbcom Designs products fit next to it.
+
+* **[WP Sell Services](https://wpsellservices.com/sell-services-online/)** - For producers who sell mixing, mastering or voice-over as a service: a services marketplace with packages, an order workflow, revisions and reviews, and its own Stripe and PayPal checkout.
+* **[Reign](https://reigntheme.com/docs/integrations/woocommerce/)** - A community theme that carries its own WooCommerce templates for the shop archive, cart, checkout and My Account pages.
+
 == Installation ==
 
 1. Upload the `woo-audio-preview` folder to the `/wp-content/plugins/` directory, or install directly through Dashboard > Plugins > Add New.
@@ -162,7 +169,7 @@ In the free version the player uses a neutral style that adapts to your theme au
 
 = Where can I get support? =
 
-Free support is available through the WordPress.org support forum at wordpress.org/support/plugin/woo-audio-preview/. Pro users receive priority email support with faster response times.
+Free support is available through the WordPress.org support forum at wordpress.org/support/plugin/woo-audio-preview/. Pro users receive priority email support with faster response times. Setup guides and troubleshooting live in the [Audio Preview documentation](https://docs.wbcomdesigns.com/woo-family/audio-preview-for-woocommerce/).
 
 = Are there developer hooks I can use? =
 
