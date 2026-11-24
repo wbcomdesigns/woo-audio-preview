@@ -15,7 +15,8 @@ set -euo pipefail
 
 cd "$( dirname "$0" )/.."
 
-SLUG="$( basename "$PWD" )"
+slug=woo-audio-preview          # WordPress.org slug = zip folder. Locked by CI (wporg-folder-lock.yml).
+SLUG="$slug"
 
 # --- Discover the main file (the one carrying the plugin header). -----------
 MAIN_FILE=""
@@ -27,6 +28,7 @@ if [ -z "$MAIN_FILE" ]; then
 	echo "build-release: could not find the plugin main file (no 'Plugin Name:' header)" >&2
 	exit 1
 fi
+main="$MAIN_FILE"
 
 VERSION="$( grep -m1 -iE '^[[:space:]]*\*?[[:space:]]*Version:' "$MAIN_FILE" | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?([-.][0-9A-Za-z]+)*' | head -1 )"
 if [ -z "$VERSION" ]; then
@@ -117,7 +119,22 @@ rsync -a "${EXCLUDES[@]}" --exclude "/$DIST" ./ "$STAGE/"
 # Sweep OS metadata as a second guard behind the .distignore rule.
 find "$STAGE" \( -name 'Thumbs.db' -o \( -name '.*' -type f \) \) -delete
 
-( cd "$DIST" && zip -qr "$SLUG-$VERSION.zip" "$SLUG" )
+zip="$ZIP"
+rm -f "$zip"
+# Deflate every entry: a PHP file stored uncompressed trips the store's upload firewall.
+( cd "$DIST" && python3 -I -c 'import os,sys,zipfile
+out,top=sys.argv[1],sys.argv[2]
+with zipfile.ZipFile(out,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+    for r,d,f in os.walk(top):
+        d.sort()
+        for n in sorted(f): z.write(os.path.join(r,n))' "$SLUG-$VERSION.zip" "$SLUG" )
+
+# --- WordPress.org folder lock (Wbcom standard - do not edit) ----------------------
+top=$(unzip -Z1 "$zip" | head -1 | cut -d/ -f1)
+[ "$top" = "$slug" ] || { echo "Zip folder '$top' is not the WordPress.org slug '$slug'"; exit 1; }
+unzip -Z1 "$zip" | grep -qx "$slug/$main" || { echo "Main file $slug/$main missing from zip"; exit 1; }
+[ "$(LC_ALL=C grep -a -c '<?php' "$zip" || true)" = 0 ] || { echo "Zip has plain-text PHP (upload firewall)"; exit 1; }
+# -----------------------------------------------------------------------------------
 
 # --- Gate 5: the artifact must contain what the plugin needs to run. --------
 # Named files, on the ARTIFACT. Any bundled SDK's own src/ is asserted too, so
